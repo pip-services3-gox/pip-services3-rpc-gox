@@ -83,27 +83,39 @@ type CommandableHttpService struct {
 //   - baseRoute string a service base route.
 // Returns: *CommandableHttpService
 // pointer on new instance CommandableHttpService
-func NewCommandableHttpService(baseRoute string) *CommandableHttpService {
-	chs := CommandableHttpService{}
-	chs.RestService = NewRestService()
-	chs.RestService.IRegisterable = &chs
-	chs.BaseRoute = baseRoute
-	chs.SwaggerAuto = true
-	chs.DependencyResolver.Put("controller", "none")
-	return &chs
+// func NewCommandableHttpService(baseRoute string) *CommandableHttpService {
+// 	c := &CommandableHttpService{}
+// 	c.RestService = InheritRestService(c)
+// 	c.BaseRoute = baseRoute
+// 	c.SwaggerAuto = true
+// 	c.DependencyResolver.Put("controller", "none")
+// 	return c
+// }
+
+// InheritCommandableHttpService creates a new instance of the service.
+// Parameters:
+//   - overrides references to child class that overrides virtual methods
+//   - baseRoute string a service base route.
+// Returns: *CommandableHttpService
+// pointer on new instance CommandableHttpService
+func InheritCommandableHttpService(overrides IRestServiceOverrides, baseRoute string) *CommandableHttpService {
+	c := &CommandableHttpService{}
+	c.RestService = InheritRestService(overrides)
+	c.BaseRoute = baseRoute
+	c.SwaggerAuto = true
+	c.DependencyResolver.Put("controller", "none")
+	return c
 }
 
 //  Configure method configures component by passing configuration parameters.
 //   - config    configuration parameters to be set.
 func (c *CommandableHttpService) Configure(config *cconf.ConfigParams) {
 	c.RestService.Configure(config)
-
 	c.SwaggerAuto = config.GetAsBooleanWithDefault("swagger.auto", c.SwaggerAuto)
 }
 
 // Register method are registers all service routes in HTTP endpoint.
 func (c *CommandableHttpService) Register() {
-
 	resCtrl, depErr := c.DependencyResolver.GetOneRequired("controller")
 	if depErr != nil {
 		return
@@ -151,18 +163,14 @@ func (c *CommandableHttpService) Register() {
 			timing := c.Instrument(correlationId, c.BaseRoute+"."+command.Name())
 
 			execRes, execErr := command.Execute(correlationId, args)
-			timing.EndTiming()
-			instrRes, instrErr := c.InstrumentError(correlationId,
-				c.BaseRoute+"."+command.Name(),
-				execErr, execRes)
-			c.SendResult(res, req, instrRes, instrErr)
+			timing.EndTiming(execErr)
+			c.SendResult(res, req, execRes, execErr)
 
 		})
 	}
 
 	if c.SwaggerAuto {
 		var swaggerConfig = c.config.GetSection("swagger")
-
 		var doc = NewCommandableSwaggerDocument(c.BaseRoute, swaggerConfig, commands)
 		c.RegisterOpenApiSpec(doc.ToString())
 	}

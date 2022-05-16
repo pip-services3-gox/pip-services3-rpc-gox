@@ -24,10 +24,13 @@ type THttpResponseSender struct {
 //   - err  error     an error object to be sent.
 func (c *THttpResponseSender) SendError(res http.ResponseWriter, req *http.Request, err error) {
 
-	appErr := cerr.ApplicationError{}
+	appErr := cerr.ApplicationError{
+		Status: 500,
+	}
+	appErr = *appErr.Wrap(err)
 	res.Header().Add("Content-Type", "application/json")
-	res.WriteHeader(500)
-	jsonObj, jsonErr := json.Marshal(appErr.Wrap(err))
+	res.WriteHeader(appErr.Status)
+	jsonObj, jsonErr := json.Marshal(appErr)
 	if jsonErr == nil {
 		io.WriteString(res, (string)(jsonObj))
 	}

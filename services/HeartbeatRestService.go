@@ -63,11 +63,10 @@ type HeartbeatRestService struct {
   Creates a new instance of c service.
 */
 func NewHeartbeatRestService() *HeartbeatRestService {
-	c := HeartbeatRestService{}
-	c.RestService = NewRestService()
-	c.RestService.IRegisterable = &c
+	c := &HeartbeatRestService{}
+	c.RestService = InheritRestService(c)
 	c.route = "heartbeat"
-	return &c
+	return c
 }
 
 /**

@@ -5,7 +5,9 @@ import (
 	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
 	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
+	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
 	clog "github.com/pip-services3-go/pip-services3-components-go/log"
+	service "github.com/pip-services3-go/pip-services3-rpc-go/services"
 )
 
 /*
@@ -40,7 +42,7 @@ Example:
 
 		func (c *MyDirectClient) SetReferences(references cref.IReferences) {
 			c.DirectClient.SetReferences(references)
-			specificController, ok := c.Controller.(testrpc.IMyDataController)
+			specificController, ok := c.Controller.(tdata.IMyDataController)
 			if !ok {
 				panic("MyDirectClient: Cant't resolv dependency 'controller' to IMyDataController")
 			}
@@ -74,6 +76,8 @@ type DirectClient struct {
 	Counters *ccount.CompositeCounters
 	//The dependency resolver to get controller reference.
 	DependencyResolver crefer.DependencyResolver
+	// The tracer.
+    Tracer *ctrace.CompositeTracer;
 }
 
 // NewDirectClient is creates a new instance of the client.
@@ -83,6 +87,7 @@ func NewDirectClient() *DirectClient {
 		Logger:             clog.NewCompositeLogger(),
 		Counters:           ccount.NewCompositeCounters(),
 		DependencyResolver: *crefer.NewDependencyResolver(),
+		Tracer: ctrace.NewCompositeTracer(nil),
 	}
 	dc.DependencyResolver.Put("controller", "none")
 	return &dc
@@ -101,6 +106,7 @@ func (c *DirectClient) Configure(config *cconf.ConfigParams) {
 func (c *DirectClient) SetReferences(references crefer.IReferences) {
 	c.Logger.SetReferences(references)
 	c.Counters.SetReferences(references)
+	c.Tracer.SetReferences(references)
 	c.DependencyResolver.SetReferences(references)
 	res, cErr := c.DependencyResolver.GetOneRequired("controller")
 	if cErr != nil {
@@ -115,10 +121,14 @@ func (c *DirectClient) SetReferences(references crefer.IReferences) {
 //    - correlationId  string    (optional) transaction id to trace execution through call chain.
 //    - name   string           a method name.
 // Returns Timing object to end the time measurement.
-func (c *DirectClient) Instrument(correlationId string, name string) *ccount.Timing {
+func (c *DirectClient) Instrument(correlationId string, name string) *service.InstrumentTiming {
 	c.Logger.Trace(correlationId, "Calling %s method", name)
 	c.Counters.IncrementOne(name + ".call_count")
-	return c.Counters.BeginTiming(name + ".call_time")
+	
+	counterTiming := c.Counters.BeginTiming(name + ".call_time")
+    traceTiming := c.Tracer.BeginTrace(correlationId, name, "")
+    return service.NewInstrumentTiming(correlationId, name, "call",
+            c.Logger, c.Counters, counterTiming, traceTiming)
 }
 
 // InstrumentError method are adds instrumentation to error handling.
@@ -129,13 +139,13 @@ func (c *DirectClient) Instrument(correlationId string, name string) *ccount.Tim
 //    - result            (optional) an execution result
 // Retruns:          result interface{}, err error
 // an execution result and error
-func (c *DirectClient) InstrumentError(correlationId string, name string, inErr error, inRes interface{}) (result interface{}, err error) {
-	if inErr != nil {
-		c.Logger.Error(correlationId, inErr, "Failed to call %s method", name)
-		c.Counters.IncrementOne(name + ".call_errors")
-	}
-	return inRes, inErr
-}
+// func (c *DirectClient) InstrumentError(correlationId string, name string, inErr error, inRes interface{}) (result interface{}, err error) {
+// 	if inErr != nil {
+// 		c.Logger.Error(correlationId, inErr, "Failed to call %s method", name)
+// 		c.Counters.IncrementOne(name + ".call_errors")
+// 	}
+// 	return inRes, inErr
+// }
 
 // IsOpen method are checks if the component is opened.
 // Returns true if the component has been opened and false otherwise.

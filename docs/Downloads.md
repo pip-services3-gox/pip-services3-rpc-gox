@@ -7,9 +7,9 @@ To use the commons you can either include dependency into your go file:
 
     ...
     import (
-        rpcservice "github.com/pip-services3-gox/pip-services3-rpc-gox/service"
-        rpcclient "github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
-        rpccon "github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
+        rpcservice "github.com/pip-services3-go/pip-services3-rpc-go/service"
+        rpcclient "github.com/pip-services3-go/pip-services3-rpc-go/clients"
+        rpccon "github.com/pip-services3-go/pip-services3-rpc-go/connect"
     )
 
 ``` 

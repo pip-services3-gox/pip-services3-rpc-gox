@@ -1,10 +1,11 @@
-package test_rpc_clients
+package test_clients
 
 import (
 	"testing"
 
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	testrpc "github.com/pip-services3-gox/pip-services3-rpc-gox/test"
+	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
+	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,9 +19,8 @@ func NewDummyClientFixture(client IDummyClient) *DummyClientFixture {
 }
 
 func (c *DummyClientFixture) TestCrudOperations(t *testing.T) {
-
-	dummy1 := testrpc.Dummy{Id: "", Key: "Key 1", Content: "Content 1"}
-	dummy2 := testrpc.Dummy{Id: "", Key: "Key 2", Content: "Content 2"}
+	dummy1 := tdata.Dummy{Id: "", Key: "Key 1", Content: "Content 1"}
+	dummy2 := tdata.Dummy{Id: "", Key: "Key 2", Content: "Content 2"}
 
 	// Create one dummy
 	dummy, err := c.client.CreateDummy("ClientFixture", dummy1)
@@ -62,8 +62,22 @@ func (c *DummyClientFixture) TestCrudOperations(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Nil(t, dummy)
 
+	// Check correlation id propagation
 	values, err := c.client.CheckCorrelationId("test_cor_id")
 	assert.Nil(t, err)
 	assert.Equal(t, values["correlationId"], "test_cor_id")
 
+	values, err = c.client.CheckCorrelationId("test cor id")
+	assert.Nil(t, err)
+	assert.Equal(t, values["correlationId"], "test cor id")
+
+	// Check error propagation
+	err = c.client.CheckErrorPropagation("test_error_propagation")
+	appErr, ok := err.(*cerr.ApplicationError)
+
+	assert.True(t, ok)
+	assert.Equal(t, appErr.CorrelationId, "test_error_propagation")
+	assert.Equal(t, appErr.Status, 404)
+	assert.Equal(t, appErr.Code, "NOT_FOUND_TEST")
+	assert.Equal(t, appErr.Message, "Not found error")
 }

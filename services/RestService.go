@@ -14,8 +14,13 @@ import (
 	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
 	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
+	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
 	clog "github.com/pip-services3-go/pip-services3-components-go/log"
 )
+
+type IRestServiceOverrides interface {
+	Register()
+}
 
 /*
 RestService Abstract service that receives remove calls via HTTP/REST protocol.
@@ -113,7 +118,8 @@ Example:
 
 */
 type RestService struct {
-	IRegisterable
+	Overrides IRestServiceOverrides
+
 	defaultConfig *cconf.ConfigParams
 	config        *cconf.ConfigParams
 	references    crefer.IReferences
@@ -129,15 +135,19 @@ type RestService struct {
 	Logger *clog.CompositeLogger
 	//The performance counters.
 	Counters *ccount.CompositeCounters
+	// The tracer.
+    Tracer *ctrace.CompositeTracer
 
 	SwaggerService ISwaggerService
-	SwaggerEnable  bool
+	SwaggerEnabled bool
 	SwaggerRoute   string
 }
 
-// NewRestService is create new instance of RestService
-func NewRestService() *RestService {
-	rs := RestService{}
+// InheritRestService is create new instance of RestService
+func InheritRestService(overrides IRestServiceOverrides) *RestService {
+	rs := RestService{
+		Overrides: overrides,
+	}
 	rs.defaultConfig = cconf.NewConfigParamsFromTuples(
 		"base_route", "",
 		"dependencies.endpoint", "*:endpoint:http:*:1.0",
@@ -147,7 +157,8 @@ func NewRestService() *RestService {
 	rs.DependencyResolver.Configure(rs.defaultConfig)
 	rs.Logger = clog.NewCompositeLogger()
 	rs.Counters = ccount.NewCompositeCounters()
-	rs.SwaggerEnable = false
+	rs.Tracer = ctrace.NewCompositeTracer(nil)
+	rs.SwaggerEnabled = false
 	rs.SwaggerRoute = "swagger"
 	return &rs
 }
@@ -160,7 +171,8 @@ func (c *RestService) Configure(config *cconf.ConfigParams) {
 	c.config = config
 	c.DependencyResolver.Configure(config)
 	c.BaseRoute = config.GetAsStringWithDefault("base_route", c.BaseRoute)
-	c.SwaggerEnable = config.GetAsBooleanWithDefault("swagger.enable", c.SwaggerEnable)
+	c.SwaggerEnabled = config.GetAsBooleanWithDefault("swagger.enable", c.SwaggerEnabled)
+	c.SwaggerEnabled = config.GetAsBooleanWithDefault("swagger.enabled", c.SwaggerEnabled)
 	c.SwaggerRoute = config.GetAsStringWithDefault("swagger.route", c.SwaggerRoute)
 }
 
@@ -172,6 +184,7 @@ func (c *RestService) SetReferences(references crefer.IReferences) {
 
 	c.Logger.SetReferences(references)
 	c.Counters.SetReferences(references)
+	c.Tracer.SetReferences(references)
 	c.DependencyResolver.SetReferences(references)
 
 	// Get endpoint
@@ -225,10 +238,13 @@ func (c *RestService) createEndpoint() *HttpEndpoint {
 //   - correlationId     (optional) transaction id to trace execution through call chain.
 //   - name              a method name.
 // Returns Timing object to end the time measurement.
-func (c *RestService) Instrument(correlationId string, name string) *ccount.Timing {
+func (c *RestService) Instrument(correlationId string, name string) *InstrumentTiming {
 	c.Logger.Trace(correlationId, "Executing %s method", name)
 	c.Counters.IncrementOne(name + ".exec_count")
-	return c.Counters.BeginTiming(name + ".exec_time")
+	counterTiming := c.Counters.BeginTiming(name + ".exec_time")
+	traceTiming := c.Tracer.BeginTrace(correlationId, name, "")
+    return NewInstrumentTiming(correlationId, name, "exec",
+            c.Logger, c.Counters, counterTiming, traceTiming)
 }
 
 // InstrumentError method are adds instrumentation to error handling.
@@ -522,7 +538,7 @@ func (c *RestService) RegisterOpenApiSpecFromFile(path string) {
 }
 
 func (c *RestService) RegisterOpenApiSpec(content string) {
-	if c.SwaggerEnable {
+	if c.SwaggerEnabled {
 		c.RegisterRoute("get", c.SwaggerRoute, nil, func(res http.ResponseWriter, req *http.Request) {
 			res.Header().Add("Content-Length", cconv.StringConverter.ToString(len(content)))
 			res.Header().Add("Content-Type", "application/x-yaml")
@@ -534,4 +550,10 @@ func (c *RestService) RegisterOpenApiSpec(content string) {
 			c.SwaggerService.RegisterOpenApiSpec(c.BaseRoute, c.SwaggerRoute)
 		}
 	}
+}
+
+// Register method are registers all service routes in HTTP endpoint.
+func (c *RestService) Register() {
+	// Override in child classes
+	c.Overrides.Register()
 }

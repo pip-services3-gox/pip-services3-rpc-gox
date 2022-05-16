@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	services "github.com/pip-services3-gox/pip-services3-rpc-gox/services"
+	services "github.com/pip-services3-go/pip-services3-rpc-go/services"
 )
 
 type OwnerAuthManager struct {

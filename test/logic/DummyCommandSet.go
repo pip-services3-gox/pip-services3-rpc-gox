@@ -1,4 +1,4 @@
-package test_rpc
+package test_logic
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	crun "github.com/pip-services3-go/pip-services3-commons-go/run"
 	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
+	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
 )
 
 type DummyCommandSet struct {
@@ -27,6 +28,7 @@ func NewDummyCommandSet(controller IDummyController) *DummyCommandSet {
 	c.AddCommand(c.makeUpdateCommand())
 	c.AddCommand(c.makeDeleteByIdCommand())
 	c.AddCommand(c.makeCheckCorrelationIdCommand())
+	c.AddCommand(c.makeCheckErrorPropagationCommand())
 	return &c
 }
 
@@ -56,10 +58,10 @@ func (c *DummyCommandSet) makeGetOneByIdCommand() ccomand.ICommand {
 func (c *DummyCommandSet) makeCreateCommand() ccomand.ICommand {
 	return ccomand.NewCommand(
 		"create_dummy",
-		cvalid.NewObjectSchema().WithRequiredProperty("dummy", NewDummySchema()),
+		cvalid.NewObjectSchema().WithRequiredProperty("dummy", tdata.NewDummySchema()),
 		func(correlationId string, args *crun.Parameters) (result interface{}, err error) {
 			val, _ := json.Marshal(args.Get("dummy"))
-			var entity Dummy
+			var entity tdata.Dummy
 			json.Unmarshal(val, &entity)
 
 			return c.controller.Create(correlationId, entity)
@@ -70,10 +72,10 @@ func (c *DummyCommandSet) makeCreateCommand() ccomand.ICommand {
 func (c *DummyCommandSet) makeUpdateCommand() ccomand.ICommand {
 	return ccomand.NewCommand(
 		"update_dummy",
-		cvalid.NewObjectSchema().WithRequiredProperty("dummy", NewDummySchema()),
+		cvalid.NewObjectSchema().WithRequiredProperty("dummy", tdata.NewDummySchema()),
 		func(correlationId string, args *crun.Parameters) (result interface{}, err error) {
 			val, _ := json.Marshal(args.Get("dummy"))
-			var entity Dummy
+			var entity tdata.Dummy
 			json.Unmarshal(val, &entity)
 			return c.controller.Update(correlationId, entity)
 		},
@@ -97,6 +99,16 @@ func (c *DummyCommandSet) makeCheckCorrelationIdCommand() ccomand.ICommand {
 		cvalid.NewObjectSchema(),
 		func(correlationId string, args *crun.Parameters) (result interface{}, err error) {
 			return c.controller.CheckCorrelationId(correlationId)
+		},
+	)
+}
+
+func (c *DummyCommandSet) makeCheckErrorPropagationCommand() ccomand.ICommand {
+	return ccomand.NewCommand(
+		"check_error_propagation",
+		cvalid.NewObjectSchema(),
+		func(correlationId string, args *crun.Parameters) (result interface{}, err error) {
+			return nil, c.controller.CheckErrorPropagation(correlationId)
 		},
 	)
 }

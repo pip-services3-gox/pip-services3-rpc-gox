@@ -73,13 +73,12 @@ type StatusRestService struct {
 
 // NewStatusRestService method are creates a new instance of this service.
 func NewStatusRestService() *StatusRestService {
-	c := StatusRestService{}
-	c.RestService = NewRestService()
-	c.RestService.IRegisterable = &c
+	c := &StatusRestService{}
+	c.RestService = InheritRestService(c)
 	c.startTime = time.Now()
 	c.route = "status"
 	c.DependencyResolver.Put("context-info", crefer.NewDescriptor("pip-services", "context-info", "default", "*", "1.0"))
-	return &c
+	return c
 }
 
 // Configure method are configures component by passing configuration parameters.

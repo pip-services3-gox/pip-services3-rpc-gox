@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	neturl "net/url"
 	"reflect"
 	"strings"
 	"time"
@@ -15,7 +16,9 @@ import (
 	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
 	clog "github.com/pip-services3-go/pip-services3-components-go/log"
-	rpccon "github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
+	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
+	rpccon "github.com/pip-services3-go/pip-services3-rpc-go/connect"
+	service "github.com/pip-services3-go/pip-services3-rpc-go/services"
 )
 
 /*
@@ -48,7 +51,7 @@ See CommandableHttpService
 		*RestClient
 	}
     ...
-    func (c *MyRestClient) GetData(correlationId string, id string) (result *testrpc.MyDataPage, err error) {
+    func (c *MyRestClient) GetData(correlationId string, id string) (result *tdata.MyDataPage, err error) {
 
 		params := cdata.NewEmptyStringValueMap()
 		params.Set("id", id)
@@ -58,7 +61,7 @@ See CommandableHttpService
 			return nil, calErr
 		}
 
-		result, _ = calValue.(*testrpc.MyDataPage)
+		result, _ = calValue.(*tdata.MyDataPage)
 		c.Instrument(correlationId, "myData.get_page_by_filter")
 		return result, nil
 	}
@@ -81,9 +84,11 @@ type RestClient struct {
 	//The connection resolver.
 	ConnectionResolver rpccon.HttpConnectionResolver
 	//The logger.
-	Logger clog.CompositeLogger
+	Logger *clog.CompositeLogger
 	//The performance counters.
-	Counters ccount.CompositeCounters
+	Counters *ccount.CompositeCounters
+	// The tracer.
+	Tracer *ctrace.CompositeTracer
 	//The configuration options.
 	Options cconf.ConfigParams
 	//The base route.
@@ -99,7 +104,7 @@ type RestClient struct {
 	//The remote service uri which is calculated on open.
 	Uri string
 	// add correlation id to headers
-	correlationIdPlace string
+	passCorrelationId string
 }
 
 // NewRestClient creates new instance of RestClient
@@ -116,16 +121,17 @@ func NewRestClient() *RestClient {
 		"options.timeout", 10000,
 		"options.retries", 3,
 		"options.debug", true,
-		"options.correlation_id_place", "query",
+		"options.correlation_id", "query",
 	)
 	rc.ConnectionResolver = *rpccon.NewHttpConnectionResolver()
-	rc.Logger = *clog.NewCompositeLogger()
-	rc.Counters = *ccount.NewCompositeCounters()
+	rc.Logger = clog.NewCompositeLogger()
+	rc.Counters = ccount.NewCompositeCounters()
+	rc.Tracer = ctrace.NewCompositeTracer(nil)
 	rc.Options = *cconf.NewEmptyConfigParams()
 	rc.Retries = 1
 	rc.Headers = *cdata.NewEmptyStringValueMap()
 	rc.ConnectTimeout = 10000
-	rc.correlationIdPlace = "query"
+	rc.passCorrelationId = "query"
 	return &rc
 }
 
@@ -140,7 +146,7 @@ func (c *RestClient) Configure(config *cconf.ConfigParams) {
 	c.ConnectTimeout = config.GetAsIntegerWithDefault("options.connectTimeout", c.ConnectTimeout)
 	c.Timeout = config.GetAsIntegerWithDefault("options.timeout", c.Timeout)
 	c.BaseRoute = config.GetAsStringWithDefault("base_route", c.BaseRoute)
-	c.correlationIdPlace = config.GetAsStringWithDefault("options.correlation_id_place", c.correlationIdPlace)
+	c.passCorrelationId = config.GetAsStringWithDefault("options.correlation_id", c.passCorrelationId)
 }
 
 // Sets references to dependent components.
@@ -149,6 +155,7 @@ func (c *RestClient) Configure(config *cconf.ConfigParams) {
 func (c *RestClient) SetReferences(references crefer.IReferences) {
 	c.Logger.SetReferences(references)
 	c.Counters.SetReferences(references)
+	c.Tracer.SetReferences(references)
 	c.ConnectionResolver.SetReferences(references)
 }
 
@@ -158,10 +165,13 @@ func (c *RestClient) SetReferences(references crefer.IReferences) {
 // - correlationId  string   (optional) transaction id to trace execution through call chain.
 // - name    string          a method name.
 // Return Timing object to end the time measurement.
-func (c *RestClient) Instrument(correlationId string, name string) *ccount.Timing {
+func (c *RestClient) Instrument(correlationId string, name string) *service.InstrumentTiming {
 	c.Logger.Trace(correlationId, "Calling %s method", name)
 	c.Counters.IncrementOne(name + ".call_count")
-	return c.Counters.BeginTiming(name + ".call_time")
+	counterTiming := c.Counters.BeginTiming(name + ".call_time")
+	traceTiming := c.Tracer.BeginTrace(correlationId, name, "")
+	return service.NewInstrumentTiming(correlationId, name, "call",
+		c.Logger, c.Counters, counterTiming, traceTiming)
 }
 
 // InstrumentError method are dds instrumentation to error handling.
@@ -323,13 +333,13 @@ func (c *RestClient) Call(prototype reflect.Type, method string, route string, c
 		params = cdata.NewEmptyStringValueMap()
 	}
 	route = c.createRequestRoute(route)
-	if c.correlationIdPlace == "query" || c.correlationIdPlace == "both" {
+	if c.passCorrelationId == "query" || c.passCorrelationId == "both" {
 		params = c.AddCorrelationId(params, correlationId)
 	}
 	if params.Len() > 0 {
 		route += "?"
 		for k, v := range params.Value() {
-			route += (k + "=" + v + "&")
+			route += neturl.QueryEscape(k) + "=" + neturl.QueryEscape(v) + "&"
 		}
 		if strings.HasSuffix(route, "&") {
 			route = strings.TrimRight(route, "&")
@@ -345,22 +355,7 @@ func (c *RestClient) Call(prototype reflect.Type, method string, route string, c
 	if data != nil {
 		jsonStr, _ = json.Marshal(data)
 	} else {
-		jsonStr = make([]byte, 0, 0)
-	}
-	req, reqErr := http.NewRequest(method, url, bytes.NewBuffer(jsonStr))
-
-	if reqErr != nil {
-		err = cerr.NewUnknownError(correlationId, "UNSUPPORTED_METHOD", "Method is not supported by REST client").WithDetails("verb", method).WithCause(reqErr)
-		return nil, err
-	}
-	// Set headers
-	req.Header.Set("Content-Type", "application/json")
-	if c.correlationIdPlace == "headers" || c.correlationIdPlace == "both" {
-		req.Header.Set("correlation_id", correlationId)
-	}
-	//req.Header.Set("User-Agent", c.UserAgent)
-	for k, v := range c.Headers.Value() {
-		req.Header.Set(k, v)
+		jsonStr = make([]byte, 0)
 	}
 
 	retries := c.Retries
@@ -368,6 +363,21 @@ func (c *RestClient) Call(prototype reflect.Type, method string, route string, c
 	var respErr error
 
 	for retries > 0 {
+		req, reqErr := http.NewRequest(method, url, bytes.NewBuffer(jsonStr))
+
+		if reqErr != nil {
+			err = cerr.NewUnknownError(correlationId, "UNSUPPORTED_METHOD", "Method is not supported by REST client").WithDetails("verb", method).WithCause(reqErr)
+			return nil, err
+		}
+		// Set headers
+		req.Header.Set("Content-Type", "application/json")
+		if c.passCorrelationId == "headers" || c.passCorrelationId == "both" {
+			req.Header.Set("correlation_id", correlationId)
+		}
+		//req.Header.Set("User-Agent", c.UserAgent)
+		for k, v := range c.Headers.Value() {
+			req.Header.Set(k, v)
+		}
 		// Try send request
 		resp, respErr = c.Client.Do(req)
 		if respErr != nil {
@@ -406,6 +416,15 @@ func (c *RestClient) Call(prototype reflect.Type, method string, route string, c
 	if resp.StatusCode >= 400 {
 		appErr := cerr.ApplicationError{}
 		json.Unmarshal(r, &appErr)
+		if appErr.Status == 0 && len(r) > 0 { // not standart Pip.Services error
+			values := make(map[string]interface{})
+			decodeErr := json.Unmarshal(r, &values)
+			if decodeErr != nil { // not json response
+				appErr.Message = (string)(r)
+			}
+			appErr.Details = values
+		}
+		appErr.Status = resp.StatusCode
 		return nil, &appErr
 	}
 

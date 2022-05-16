@@ -80,14 +80,9 @@ func (c *THttpRequestDetector) DetectPlatform(req *http.Request) string {
 	pattern = "/Windows NT/"
 	match, _ = regexp.Match(pattern, ([]byte)(ua))
 	if match {
-		//try {
 		re := regexp.MustCompile(`/Windows NT ([0-9\._]+)[\);]/`)
 		version = re.FindAllStringSubmatch(ua, -1)[0][1]
 		return "windows " + version
-		// }
-		//catch (ex) {
-		return "unknown"
-		//}
 	}
 	return "unknown"
 }

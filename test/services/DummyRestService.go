@@ -1,4 +1,4 @@
-package test_rpc_services
+package test_services
 
 import (
 	"encoding/json"
@@ -12,25 +12,25 @@ import (
 	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
 	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
-	"github.com/pip-services3-gox/pip-services3-rpc-gox/services"
-	testrpc "github.com/pip-services3-gox/pip-services3-rpc-gox/test"
+	"github.com/pip-services3-go/pip-services3-rpc-go/services"
+	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
+	tlogic "github.com/pip-services3-go/pip-services3-rpc-go/test/logic"
 )
 
 type DummyRestService struct {
 	*services.RestService
-	controller     testrpc.IDummyController
+	controller     tlogic.IDummyController
 	numberOfCalls  int
 	openApiContent string
 	openApiFile    string
 }
 
 func NewDummyRestService() *DummyRestService {
-	c := DummyRestService{}
-	c.RestService = services.NewRestService()
-	c.RestService.IRegisterable = &c
+	c := &DummyRestService{}
+	c.RestService = services.InheritRestService(c)
 	c.numberOfCalls = 0
 	c.DependencyResolver.Put("controller", crefer.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
-	return &c
+	return c
 }
 
 func (c *DummyRestService) Configure(config *cconf.ConfigParams) {
@@ -43,7 +43,7 @@ func (c *DummyRestService) SetReferences(references crefer.IReferences) {
 	c.RestService.SetReferences(references)
 	depRes, depErr := c.DependencyResolver.GetOneRequired("controller")
 	if depErr == nil && depRes != nil {
-		c.controller = depRes.(testrpc.IDummyController)
+		c.controller = depRes.(tlogic.IDummyController)
 	}
 }
 
@@ -92,7 +92,7 @@ func (c *DummyRestService) getOneById(res http.ResponseWriter, req *http.Request
 
 func (c *DummyRestService) create(res http.ResponseWriter, req *http.Request) {
 	correlationId := c.GetCorrelationId(req)
-	var dummy testrpc.Dummy
+	var dummy tdata.Dummy
 
 	body, bodyErr := ioutil.ReadAll(req.Body)
 	if bodyErr != nil {
@@ -119,7 +119,7 @@ func (c *DummyRestService) create(res http.ResponseWriter, req *http.Request) {
 func (c *DummyRestService) update(res http.ResponseWriter, req *http.Request) {
 	correlationId := c.GetCorrelationId(req)
 
-	var dummy testrpc.Dummy
+	var dummy tdata.Dummy
 
 	body, bodyErr := ioutil.ReadAll(req.Body)
 	if bodyErr != nil {
@@ -163,8 +163,13 @@ func (c *DummyRestService) checkCorrelationId(res http.ResponseWriter, req *http
 	c.SendResult(res, req, result, err)
 }
 
+func (c *DummyRestService) checkErrorPropagation(res http.ResponseWriter, req *http.Request) {
+	err := c.controller.CheckErrorPropagation(c.GetCorrelationId(req))
+	c.SendError(res, req, err)
+}
+
 func (c *DummyRestService) Register() {
-	c.RegisterInterceptor("/dummies", c.incrementNumberOfCalls)
+	c.RegisterInterceptor("/dummies$", c.incrementNumberOfCalls)
 
 	c.RegisterRoute(
 		"get", "/dummies",
@@ -182,6 +187,12 @@ func (c *DummyRestService) Register() {
 	)
 
 	c.RegisterRoute(
+		"get", "/dummies/check/error_propagation",
+		&cvalid.NewObjectSchema().Schema,
+		c.checkErrorPropagation,
+	)
+
+	c.RegisterRoute(
 		"get", "/dummies/{dummy_id}",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("dummy_id", cconv.String).Schema,
@@ -191,14 +202,14 @@ func (c *DummyRestService) Register() {
 	c.RegisterRoute(
 		"post", "/dummies",
 		&cvalid.NewObjectSchema().
-			WithRequiredProperty("body", testrpc.NewDummySchema()).Schema,
+			WithRequiredProperty("body", tdata.NewDummySchema()).Schema,
 		c.create,
 	)
 
 	c.RegisterRoute(
 		"put", "/dummies",
 		&cvalid.NewObjectSchema().
-			WithRequiredProperty("body", testrpc.NewDummySchema()).Schema,
+			WithRequiredProperty("body", tdata.NewDummySchema()).Schema,
 		c.update,
 	)
 

@@ -1,22 +1,23 @@
-package test_rpc_clients
+package test_clients
 
 import (
 	"testing"
 
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	testrpc "github.com/pip-services3-gox/pip-services3-rpc-gox/test"
+	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
+	tlogic "github.com/pip-services3-go/pip-services3-rpc-go/test/logic"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestDummyDirectClient(t *testing.T) {
 
-	var _dummy1 testrpc.Dummy
-	var _dummy2 testrpc.Dummy
+	var _dummy1 tdata.Dummy
+	var _dummy2 tdata.Dummy
 
 	var client *DummyDirectClient
 
-	ctrl := testrpc.NewDummyController()
+	ctrl := tlogic.NewDummyController()
 	client = NewDummyDirectClient()
 	references := cref.NewReferencesFromTuples(
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
@@ -25,10 +26,10 @@ func TestDummyDirectClient(t *testing.T) {
 	client.Open("")
 	defer client.Close("")
 
-	_dummy1 = testrpc.Dummy{Id: "", Key: "Key 1", Content: "Content 1"}
-	_dummy2 = testrpc.Dummy{Id: "", Key: "Key 2", Content: "Content 2"}
+	_dummy1 = tdata.Dummy{Id: "", Key: "Key 1", Content: "Content 1"}
+	_dummy2 = tdata.Dummy{Id: "", Key: "Key 2", Content: "Content 2"}
 
-	var dummy1 testrpc.Dummy
+	var dummy1 tdata.Dummy
 
 	// Create one dummy
 	dummy, err := client.CreateDummy("", _dummy1)

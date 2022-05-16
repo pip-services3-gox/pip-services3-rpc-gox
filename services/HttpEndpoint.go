@@ -6,17 +6,19 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
 	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
 	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
 	clog "github.com/pip-services3-go/pip-services3-components-go/log"
-	"github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
+	"github.com/pip-services3-go/pip-services3-rpc-go/connect"
 )
 
 /*
@@ -36,6 +38,8 @@ Parameters to pass to the configure method for component configuration:
     - "credential.ssl_key_file" - the SSL func (c *HttpEndpoint )key in PEM
     - "credential.ssl_crt_file" - the SSL certificate in PEM
     - "credential.ssl_ca_file" - the certificate authorities (root cerfiticates) in PEM
+
+  - cors-headers - pair CORS headers: origin. Example: MyHeader1: \*.\*
 
 References:
 
@@ -66,6 +70,8 @@ type HttpEndpoint struct {
 	protocolUpgradeEnabled bool
 	uri                    string
 	registrations          []IRegisterable
+	allowedHeaders         []string
+	allowedOrigins         []string
 }
 
 // NewHttpEndpoint creates new HttpEndpoint
@@ -93,6 +99,17 @@ func NewHttpEndpoint() *HttpEndpoint {
 	c.fileMaxSize = 200 * 1024 * 1024
 	c.protocolUpgradeEnabled = false
 	c.registrations = make([]IRegisterable, 0, 0)
+	c.allowedHeaders = []string{
+		//"Accept",
+		//"Content-Type",
+		//"Content-Length",
+		//"Accept-Encoding",
+		//"X-CSRF-Token",
+		//"Authorization",
+		"correlation_id",
+		//"access_token",
+	}
+	c.allowedOrigins = make([]string, 0)
 	return &c
 }
 
@@ -115,6 +132,20 @@ func (c *HttpEndpoint) Configure(config *cconf.ConfigParams) {
 	c.maintenanceEnabled = config.GetAsBooleanWithDefault("options.maintenance_enabled", c.maintenanceEnabled)
 	c.fileMaxSize = config.GetAsLongWithDefault("options.file_max_size", c.fileMaxSize)
 	c.protocolUpgradeEnabled = config.GetAsBooleanWithDefault("options.protocol_upgrade_enabled", c.protocolUpgradeEnabled)
+
+	headers := strings.Split(config.GetAsStringWithDefault("cors_headers", ""), ",")
+	if headers != nil && len(headers) > 0 {
+		for _, header := range headers {
+			c.AddCorsHeader(strings.TrimSpace(header), "")
+		}
+	}
+
+	origins := strings.Split(config.GetAsStringWithDefault("cors_origins", ""), ",")
+	if origins != nil && len(origins) > 0 {
+		for _, origin := range origins {
+			c.AddCorsHeader("", strings.TrimSpace(origin))
+		}
+	}
 }
 
 // SetReferences method are sets references to this endpoint"s logger, counters, and connection resolver.
@@ -156,12 +187,25 @@ func (c *HttpEndpoint) Open(correlationId string) error {
 	c.server = &http.Server{Addr: url}
 	c.router = mux.NewRouter()
 
-	c.router.Use(c.addCors)
-	c.router.Use(c.addCompatibility)
+	// Add default origins
+	// if len(c.allowedOrigins) == 0 {
+	// 	c.allowedOrigins = []string{"*"}
+	// }
+
+	allowedOrigins := handlers.AllowedOrigins(c.allowedOrigins)
+	allowedMethods := handlers.AllowedMethods([]string{
+		"POST",
+		"GET",
+		"OPTIONS",
+		"PUT",
+		"DELETE",
+		"PATCH",
+	})
+	allowedHeaders := handlers.AllowedHeaders(c.allowedHeaders)
+	c.server.Handler = handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(c.router)
+
 	c.router.Use(c.noCache)
 	c.router.Use(c.doMaintenance)
-
-	c.server.Handler = c.router
 
 	c.performRegistrations()
 
@@ -191,42 +235,6 @@ func (c *HttpEndpoint) Open(correlationId string) error {
 	}
 	c.logger.Debug(correlationId, "Opened REST service at %s", c.uri)
 	return regErr
-}
-
-func (c *HttpEndpoint) addCors(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-		next.ServeHTTP(w, r)
-	})
-}
-
-func (c *HttpEndpoint) addCompatibility(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		//TODO: Write code
-
-		// req.param = (name) => {
-		//     if (req.query) {
-		//         let param = req.query[name];
-		//         if (param) return param;
-		//     }
-		//     if (req.body) {
-		//         let param = req.body[name];
-		//         if (param) return param;
-		//     }
-		//     if (req.params) {
-		//         let param = req.params[name];
-		//         if (param) return param;
-		//     }
-		//     return nil;
-
-		// }
-		// req.route.params = req.params;
-
-		next.ServeHTTP(w, r)
-	})
 }
 
 // Prevents IE from caching REST requests
@@ -409,8 +417,8 @@ func (c *HttpEndpoint) RegisterInterceptor(route string, action func(w http.Resp
 	route = c.fixRoute(route)
 	interceptorFunc := func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-			if route != "" && !strings.HasPrefix(r.URL.String(), route) {
+			matched, _ := regexp.MatchString(route, r.URL.Path)
+			if route != "" && !matched {
 				next.ServeHTTP(w, r)
 			} else {
 				action(w, r, next.ServeHTTP)
@@ -418,4 +426,34 @@ func (c *HttpEndpoint) RegisterInterceptor(route string, action func(w http.Resp
 		})
 	}
 	c.router.Use(interceptorFunc)
+}
+
+// AddCORSHeader method adds allowed header, ignore if it already exist
+// must be call before to opening endpoint
+func (c *HttpEndpoint) AddCorsHeader(header string, origin string) {
+
+	if len(header) > 0 {
+		contain := false
+		for _, allowedHeader := range c.allowedHeaders {
+			if allowedHeader == header {
+				contain = true
+				break
+			}
+		}
+		if !contain {
+			c.allowedHeaders = append(c.allowedHeaders, header)
+		}
+	}
+	if len(origin) > 0 {
+		contain := false
+		for _, allowedOrigin := range c.allowedOrigins {
+			if allowedOrigin == origin {
+				contain = true
+				break
+			}
+		}
+		if !contain {
+			c.allowedOrigins = append(c.allowedOrigins, origin)
+		}
+	}
 }

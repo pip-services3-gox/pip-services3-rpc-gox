@@ -1,16 +1,16 @@
-package test_rpc_clients
+package test_clients
 
 import (
 	"reflect"
 
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	"github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
-	testrpc "github.com/pip-services3-gox/pip-services3-rpc-gox/test"
+	"github.com/pip-services3-go/pip-services3-rpc-go/clients"
+	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
 )
 
 var (
-	dummyDataPageType = reflect.TypeOf(&testrpc.DummyDataPage{})
-	dummyType         = reflect.TypeOf(&testrpc.Dummy{})
+	dummyDataPageType = reflect.TypeOf(&tdata.DummyDataPage{})
+	dummyType         = reflect.TypeOf(&tdata.Dummy{})
 )
 
 type DummyRestClient struct {
@@ -24,7 +24,7 @@ func NewDummyRestClient() *DummyRestClient {
 }
 
 func (c *DummyRestClient) GetDummies(correlationId string, filter *cdata.FilterParams,
-	paging *cdata.PagingParams) (result *testrpc.DummyDataPage, err error) {
+	paging *cdata.PagingParams) (result *tdata.DummyDataPage, err error) {
 
 	params := cdata.NewEmptyStringValueMap()
 	c.AddFilterParams(params, filter)
@@ -35,52 +35,52 @@ func (c *DummyRestClient) GetDummies(correlationId string, filter *cdata.FilterP
 		return nil, calErr
 	}
 
-	result, _ = calValue.(*testrpc.DummyDataPage)
+	result, _ = calValue.(*tdata.DummyDataPage)
 	c.Instrument(correlationId, "dummy.get_page_by_filter")
 	return result, nil
 }
 
-func (c *DummyRestClient) GetDummyById(correlationId string, dummyId string) (result *testrpc.Dummy, err error) {
+func (c *DummyRestClient) GetDummyById(correlationId string, dummyId string) (result *tdata.Dummy, err error) {
 	calValue, calErr := c.Call(dummyType, "get", "/dummies/"+dummyId, correlationId, nil, nil)
 
 	if calErr != nil {
 		return nil, calErr
 	}
 
-	result, _ = calValue.(*testrpc.Dummy)
+	result, _ = calValue.(*tdata.Dummy)
 	c.Instrument(correlationId, "dummy.get_one_by_id")
 	return result, nil
 }
 
-func (c *DummyRestClient) CreateDummy(correlationId string, dummy testrpc.Dummy) (result *testrpc.Dummy, err error) {
+func (c *DummyRestClient) CreateDummy(correlationId string, dummy tdata.Dummy) (result *tdata.Dummy, err error) {
 	calValue, calErr := c.Call(dummyType, "post", "/dummies", correlationId, nil, dummy)
 	if calErr != nil {
 		return nil, calErr
 	}
 
-	result, _ = calValue.(*testrpc.Dummy)
+	result, _ = calValue.(*tdata.Dummy)
 	c.Instrument(correlationId, "dummy.create")
 	return result, nil
 }
 
-func (c *DummyRestClient) UpdateDummy(correlationId string, dummy testrpc.Dummy) (result *testrpc.Dummy, err error) {
+func (c *DummyRestClient) UpdateDummy(correlationId string, dummy tdata.Dummy) (result *tdata.Dummy, err error) {
 	calValue, calErr := c.Call(dummyType, "put", "/dummies", correlationId, nil, dummy)
 	if calErr != nil {
 		return nil, calErr
 	}
 
-	result, _ = calValue.(*testrpc.Dummy)
+	result, _ = calValue.(*tdata.Dummy)
 	c.Instrument(correlationId, "dummy.update")
 	return result, nil
 }
 
-func (c *DummyRestClient) DeleteDummy(correlationId string, dummyId string) (result *testrpc.Dummy, err error) {
+func (c *DummyRestClient) DeleteDummy(correlationId string, dummyId string) (result *tdata.Dummy, err error) {
 	calValue, calErr := c.Call(dummyType, "delete", "/dummies/"+dummyId, correlationId, nil, nil)
 	if calErr != nil {
 		return nil, calErr
 	}
 
-	result, _ = calValue.(*testrpc.Dummy)
+	result, _ = calValue.(*tdata.Dummy)
 	c.Instrument(correlationId, "dummy.delete_by_id")
 	return result, nil
 }
@@ -95,4 +95,11 @@ func (c *DummyRestClient) CheckCorrelationId(correlationId string) (result map[s
 	val, _ := calValue.(*(map[string]string))
 	c.Instrument(correlationId, "dummy.check_correlation_id")
 	return *val, nil
+}
+
+func (c *DummyRestClient) CheckErrorPropagation(correlationId string) error {
+
+	_, calErr := c.Call(nil, "get", "/dummies/check/error_propagation", correlationId, nil, nil)
+	c.Instrument(correlationId, "dummy.check_error_propagation")
+	return calErr
 }
