@@ -1,9 +1,9 @@
 package services
 
 import (
-	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
-	clog "github.com/pip-services3-go/pip-services3-components-go/log"
-	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
+	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
+	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
+	ctrace "github.com/pip-services3-gox/pip-services3-components-gox/trace"
 )
 
 type InstrumentTiming struct {

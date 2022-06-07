@@ -6,15 +6,15 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
-	"github.com/pip-services3-go/pip-services3-rpc-go/services"
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
-	tlogic "github.com/pip-services3-go/pip-services3-rpc-go/test/logic"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cvalid "github.com/pip-services3-gox/pip-services3-commons-gox/validate"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/services"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
+	tlogic "github.com/pip-services3-gox/pip-services3-rpc-gox/test/logic"
 )
 
 type DummyRestService struct {

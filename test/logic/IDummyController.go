@@ -1,8 +1,8 @@
 package test_logic
 
 import (
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
 )
 
 type IDummyController interface {

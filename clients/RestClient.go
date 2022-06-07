@@ -10,15 +10,15 @@ import (
 	"strings"
 	"time"
 
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
-	clog "github.com/pip-services3-go/pip-services3-components-go/log"
-	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
-	rpccon "github.com/pip-services3-go/pip-services3-rpc-go/connect"
-	service "github.com/pip-services3-go/pip-services3-rpc-go/services"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
+	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
+	ctrace "github.com/pip-services3-gox/pip-services3-components-gox/trace"
+	rpccon "github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
+	service "github.com/pip-services3-gox/pip-services3-rpc-gox/services"
 )
 
 /*

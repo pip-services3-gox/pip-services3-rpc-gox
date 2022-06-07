@@ -4,11 +4,11 @@ import (
 	"net/url"
 	"strconv"
 
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cauth "github.com/pip-services3-go/pip-services3-components-go/auth"
-	ccon "github.com/pip-services3-go/pip-services3-components-go/connect"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cauth "github.com/pip-services3-gox/pip-services3-components-gox/auth"
+	ccon "github.com/pip-services3-gox/pip-services3-components-gox/connect"
 )
 
 /*
@@ -22,7 +22,7 @@ Configuration parameters:
   - connection:
     - discovery_key:               (optional) a key to retrieve the connection from IDiscovery
     - ...                          other connection parameters
-  
+
   - connections:                   alternative to connection
     - [connection params 1]:       first connection parameters
     -  ...

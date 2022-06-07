@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
 )
 
 //HttpResponseSender helper class that handles HTTP-based responses.

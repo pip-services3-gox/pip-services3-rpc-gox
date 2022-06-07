@@ -3,8 +3,8 @@ package test_connect
 import (
 	"testing"
 
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	"github.com/pip-services3-go/pip-services3-rpc-go/connect"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
 	"github.com/stretchr/testify/assert"
 )
 

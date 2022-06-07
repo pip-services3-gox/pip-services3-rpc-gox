@@ -3,7 +3,7 @@ package clients
 import (
 	"reflect"
 
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 )
 
 /*
@@ -96,5 +96,5 @@ func (c *CommandableHttpClient) CallCommand(prototype reflect.Type, name string,
 	timing := c.Instrument(correlationId, c.BaseRoute+"."+name)
 	cRes, cErr := c.Call(prototype, "post", name, correlationId, nil, params.Value())
 	timing.EndTiming(cErr)
-    return cRes, cErr
+	return cRes, cErr
 }

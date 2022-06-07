@@ -2,10 +2,10 @@ package test_clients
 
 import (
 	"fmt"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	tlogic "github.com/pip-services3-go/pip-services3-rpc-go/test/logic"
-	test_services "github.com/pip-services3-go/pip-services3-rpc-go/test/services"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	tlogic "github.com/pip-services3-gox/pip-services3-rpc-gox/test/logic"
+	test_services "github.com/pip-services3-gox/pip-services3-rpc-gox/test/services"
 	"os"
 	"testing"
 	"time"

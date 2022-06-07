@@ -1,9 +1,9 @@
 package rpc
 
 import (
-	_ "github.com/pip-services3-go/pip-services3-rpc-go/auth"
-	_ "github.com/pip-services3-go/pip-services3-rpc-go/build"
-	_ "github.com/pip-services3-go/pip-services3-rpc-go/clients"
-	_ "github.com/pip-services3-go/pip-services3-rpc-go/connect"
-	_ "github.com/pip-services3-go/pip-services3-rpc-go/services"
+	_ "github.com/pip-services3-gox/pip-services3-rpc-gox/auth"
+	_ "github.com/pip-services3-gox/pip-services3-rpc-gox/build"
+	_ "github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
+	_ "github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
+	_ "github.com/pip-services3-gox/pip-services3-rpc-gox/services"
 )

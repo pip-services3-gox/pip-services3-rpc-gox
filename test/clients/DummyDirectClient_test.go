@@ -3,10 +3,10 @@ package test_clients
 import (
 	"testing"
 
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
-	tlogic "github.com/pip-services3-go/pip-services3-rpc-go/test/logic"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
+	tlogic "github.com/pip-services3-gox/pip-services3-rpc-gox/test/logic"
 	"github.com/stretchr/testify/assert"
 )
 

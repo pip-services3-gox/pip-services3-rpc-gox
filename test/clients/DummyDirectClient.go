@@ -1,11 +1,11 @@
 package test_clients
 
 import (
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	"github.com/pip-services3-go/pip-services3-rpc-go/clients"
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
-	tlogic "github.com/pip-services3-go/pip-services3-rpc-go/test/logic"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
+	tlogic "github.com/pip-services3-gox/pip-services3-rpc-gox/test/logic"
 )
 
 type DummyDirectClient struct {

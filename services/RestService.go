@@ -7,15 +7,15 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
-	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
-	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
-	clog "github.com/pip-services3-go/pip-services3-components-go/log"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cvalid "github.com/pip-services3-gox/pip-services3-commons-gox/validate"
+	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
+	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
+	ctrace "github.com/pip-services3-gox/pip-services3-components-gox/trace"
 )
 
 type IRestServiceOverrides interface {
@@ -136,7 +136,7 @@ type RestService struct {
 	//The performance counters.
 	Counters *ccount.CompositeCounters
 	// The tracer.
-    Tracer *ctrace.CompositeTracer
+	Tracer *ctrace.CompositeTracer
 
 	SwaggerService ISwaggerService
 	SwaggerEnabled bool
@@ -243,8 +243,8 @@ func (c *RestService) Instrument(correlationId string, name string) *InstrumentT
 	c.Counters.IncrementOne(name + ".exec_count")
 	counterTiming := c.Counters.BeginTiming(name + ".exec_time")
 	traceTiming := c.Tracer.BeginTrace(correlationId, name, "")
-    return NewInstrumentTiming(correlationId, name, "exec",
-            c.Logger, c.Counters, counterTiming, traceTiming)
+	return NewInstrumentTiming(correlationId, name, "exec",
+		c.Logger, c.Counters, counterTiming, traceTiming)
 }
 
 // InstrumentError method are adds instrumentation to error handling.

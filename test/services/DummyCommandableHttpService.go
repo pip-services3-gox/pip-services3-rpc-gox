@@ -1,8 +1,8 @@
 package test_services
 
 import (
-	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	"github.com/pip-services3-go/pip-services3-rpc-go/services"
+	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/services"
 )
 
 type DummyCommandableHttpService struct {

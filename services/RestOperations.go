@@ -6,12 +6,12 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
-	clog "github.com/pip-services3-go/pip-services3-components-go/log"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
+	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
 )
 
 /*

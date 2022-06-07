@@ -1,13 +1,13 @@
 package clients
 
 import (
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
-	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
-	clog "github.com/pip-services3-go/pip-services3-components-go/log"
-	service "github.com/pip-services3-go/pip-services3-rpc-go/services"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
+	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
+	ctrace "github.com/pip-services3-gox/pip-services3-components-gox/trace"
+	service "github.com/pip-services3-gox/pip-services3-rpc-gox/services"
 )
 
 /*
@@ -77,7 +77,7 @@ type DirectClient struct {
 	//The dependency resolver to get controller reference.
 	DependencyResolver crefer.DependencyResolver
 	// The tracer.
-    Tracer *ctrace.CompositeTracer;
+	Tracer *ctrace.CompositeTracer
 }
 
 // NewDirectClient is creates a new instance of the client.
@@ -87,7 +87,7 @@ func NewDirectClient() *DirectClient {
 		Logger:             clog.NewCompositeLogger(),
 		Counters:           ccount.NewCompositeCounters(),
 		DependencyResolver: *crefer.NewDependencyResolver(),
-		Tracer: ctrace.NewCompositeTracer(nil),
+		Tracer:             ctrace.NewCompositeTracer(nil),
 	}
 	dc.DependencyResolver.Put("controller", "none")
 	return &dc
@@ -124,11 +124,11 @@ func (c *DirectClient) SetReferences(references crefer.IReferences) {
 func (c *DirectClient) Instrument(correlationId string, name string) *service.InstrumentTiming {
 	c.Logger.Trace(correlationId, "Calling %s method", name)
 	c.Counters.IncrementOne(name + ".call_count")
-	
+
 	counterTiming := c.Counters.BeginTiming(name + ".call_time")
-    traceTiming := c.Tracer.BeginTrace(correlationId, name, "")
-    return service.NewInstrumentTiming(correlationId, name, "call",
-            c.Logger, c.Counters, counterTiming, traceTiming)
+	traceTiming := c.Tracer.BeginTrace(correlationId, name, "")
+	return service.NewInstrumentTiming(correlationId, name, "call",
+		c.Logger, c.Counters, counterTiming, traceTiming)
 }
 
 // InstrumentError method are adds instrumentation to error handling.

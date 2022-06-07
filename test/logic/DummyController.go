@@ -1,10 +1,10 @@
 package test_logic
 
 import (
-	ccomand "github.com/pip-services3-go/pip-services3-commons-go/commands"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
+	ccomand "github.com/pip-services3-gox/pip-services3-commons-gox/commands"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
 )
 
 type DummyController struct {

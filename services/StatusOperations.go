@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
-	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cinfo "github.com/pip-services3-go/pip-services3-components-go/info"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cinfo "github.com/pip-services3-gox/pip-services3-components-gox/info"
 )
 
 /*

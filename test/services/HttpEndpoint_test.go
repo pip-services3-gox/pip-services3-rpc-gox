@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"testing"
 
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -3,12 +3,12 @@ package test_logic
 import (
 	"encoding/json"
 
-	ccomand "github.com/pip-services3-go/pip-services3-commons-go/commands"
-	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	crun "github.com/pip-services3-go/pip-services3-commons-go/run"
-	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
+	ccomand "github.com/pip-services3-gox/pip-services3-commons-gox/commands"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
+	cvalid "github.com/pip-services3-gox/pip-services3-commons-gox/validate"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
 )
 
 type DummyCommandSet struct {

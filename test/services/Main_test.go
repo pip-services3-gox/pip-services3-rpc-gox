@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cinfo "github.com/pip-services3-go/pip-services3-components-go/info"
-	"github.com/pip-services3-go/pip-services3-rpc-go/services"
-	tlogic "github.com/pip-services3-go/pip-services3-rpc-go/test/logic"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cinfo "github.com/pip-services3-gox/pip-services3-components-gox/info"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/services"
+	tlogic "github.com/pip-services3-gox/pip-services3-rpc-gox/test/logic"
 )
 
 const (

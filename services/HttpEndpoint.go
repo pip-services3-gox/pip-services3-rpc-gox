@@ -13,12 +13,12 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
-	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
-	clog "github.com/pip-services3-go/pip-services3-components-go/log"
-	"github.com/pip-services3-go/pip-services3-rpc-go/connect"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cvalid "github.com/pip-services3-gox/pip-services3-commons-gox/validate"
+	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
+	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
 )
 
 /*

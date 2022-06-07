@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	ccomands "github.com/pip-services3-go/pip-services3-commons-go/commands"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	crun "github.com/pip-services3-go/pip-services3-commons-go/run"
+	ccomands "github.com/pip-services3-gox/pip-services3-commons-gox/commands"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
 )
 
 /*
