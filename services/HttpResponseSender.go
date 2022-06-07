@@ -1,28 +1,27 @@
 package services
 
 import (
-	"encoding/json"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 	"io"
 	"net/http"
 
 	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
 )
 
-//HttpResponseSender helper class that handles HTTP-based responses.
+// HttpResponseSender helper class that handles HTTP-based responses.
+var HttpResponseSender = _THttpResponseSender{}
 
-var HttpResponseSender THttpResponseSender = THttpResponseSender{}
-
-type THttpResponseSender struct {
+type _THttpResponseSender struct {
 }
 
 // SendError sends error serialized as ErrorDescription object
 // and appropriate HTTP status code.
 // If status code is not defined, it uses 500 status code.
-// Parameters:
-//   - req  *http.Request     a HTTP request object.
-//   - res  http.ResponseWriter     a HTTP response object.
-//   - err  error     an error object to be sent.
-func (c *THttpResponseSender) SendError(res http.ResponseWriter, req *http.Request, err error) {
+//	Parameters:
+//		- req  *http.Request     a HTTP request object.
+//		- res  http.ResponseWriter     a HTTP response object.
+//		- err  error     an error object to be sent.
+func (c *_THttpResponseSender) SendError(res http.ResponseWriter, req *http.Request, err error) {
 
 	appErr := cerr.ApplicationError{
 		Status: 500,
@@ -30,9 +29,9 @@ func (c *THttpResponseSender) SendError(res http.ResponseWriter, req *http.Reque
 	appErr = *appErr.Wrap(err)
 	res.Header().Add("Content-Type", "application/json")
 	res.WriteHeader(appErr.Status)
-	jsonObj, jsonErr := json.Marshal(appErr)
+	jsonObjStr, jsonErr := cconv.JsonConverter.ToJson(appErr)
 	if jsonErr == nil {
-		io.WriteString(res, (string)(jsonObj))
+		_, _ = io.WriteString(res, jsonObjStr)
 	}
 }
 
@@ -42,12 +41,12 @@ func (c *THttpResponseSender) SendError(res http.ResponseWriter, req *http.Reque
 // If object is not nil it returns 200 status code.
 // For nil results it returns 204 status code.
 // If error occur it sends ErrorDescription with approproate status code.
-// Parameters:
-//   - req  *http.Request     a HTTP request object.
-//   - res  http.ResponseWriter     a HTTP response object.
-//   - result interface{}  result object to be send
-//   - err  error     an error object to be sent.
-func (c *THttpResponseSender) SendResult(res http.ResponseWriter, req *http.Request, result interface{}, err error) {
+//	Parameters:
+//		- req  *http.Request     a HTTP request object.
+//		- res  http.ResponseWriter     a HTTP response object.
+//		- result any  result object to be send
+//		- err  error     an error object to be sent.
+func (c *_THttpResponseSender) SendResult(res http.ResponseWriter, req *http.Request, result any, err error) {
 	if err != nil {
 		HttpResponseSender.SendError(res, req, err)
 		return
@@ -57,18 +56,19 @@ func (c *THttpResponseSender) SendResult(res http.ResponseWriter, req *http.Requ
 		res.WriteHeader(204)
 	} else {
 		res.Header().Add("Content-Type", "application/json")
-		jsonObj, jsonErr := json.Marshal(result)
+		jsonObjStr, jsonErr := cconv.JsonConverter.ToJson(result)
 		if jsonErr == nil {
-			io.WriteString(res, (string)(jsonObj))
+			_, _ = io.WriteString(res, jsonObjStr)
 		}
 	}
 }
 
 // SendEmptyResult are sends an empty result with 204 status code.
-// If error occur it sends ErrorDescription with approproate status code.
-//   - req  *http.Request     a HTTP request object.
-//   - res  http.ResponseWriter     a HTTP response object.
-func (c *THttpResponseSender) SendEmptyResult(res http.ResponseWriter, req *http.Request, err error) {
+// If error occur it sends ErrorDescription with appropriate status code.
+//	Parameters:
+//		- req  *http.Request     a HTTP request object.
+//		- res  http.ResponseWriter     a HTTP response object.
+func (c *_THttpResponseSender) SendEmptyResult(res http.ResponseWriter, req *http.Request, err error) {
 	if err != nil {
 		HttpResponseSender.SendError(res, req, err)
 		return
@@ -83,10 +83,10 @@ func (c *THttpResponseSender) SendEmptyResult(res http.ResponseWriter, req *http
 // If object is not nil it returns 201 status code.
 // For nil results it returns 204 status code.
 // If error occur it sends ErrorDescription with approproate status code.
-// Parameters:
-//   - req  *http.Request     a HTTP request object.
-//   - res  http.ResponseWriter     a HTTP response object.
-func (c *THttpResponseSender) SendCreatedResult(res http.ResponseWriter, req *http.Request, result interface{}, err error) {
+//	Parameters:
+//		- req  *http.Request     a HTTP request object.
+//		- res  http.ResponseWriter     a HTTP response object.
+func (c *_THttpResponseSender) SendCreatedResult(res http.ResponseWriter, req *http.Request, result any, err error) {
 	if err != nil {
 		HttpResponseSender.SendError(res, req, err)
 		return
@@ -97,9 +97,9 @@ func (c *THttpResponseSender) SendCreatedResult(res http.ResponseWriter, req *ht
 	} else {
 		res.Header().Add("Content-Type", "application/json")
 		res.WriteHeader(201)
-		jsonObj, jsonErr := json.Marshal(result)
+		jsonObjStr, jsonErr := cconv.JsonConverter.ToJson(result)
 		if jsonErr == nil {
-			io.WriteString(res, (string)(jsonObj))
+			_, _ = io.WriteString(res, jsonObjStr)
 		}
 	}
 }
@@ -110,10 +110,10 @@ func (c *THttpResponseSender) SendCreatedResult(res http.ResponseWriter, req *ht
 // If object is not nil it returns 200 status code.
 // For nil results it returns 204 status code.
 // If error occur it sends ErrorDescription with approproate status code.
-// Parameters:
-//   - req  *http.Request     a HTTP request object.
-//   - res  http.ResponseWriter     a HTTP response object.
-func (c *THttpResponseSender) SendDeletedResult(res http.ResponseWriter, req *http.Request, result interface{}, err error) {
+//	Parameters:
+//		- req  *http.Request     a HTTP request object.
+//		- res  http.ResponseWriter     a HTTP response object.
+func (c *_THttpResponseSender) SendDeletedResult(res http.ResponseWriter, req *http.Request, result any, err error) {
 	if err != nil {
 		HttpResponseSender.SendError(res, req, err)
 		return
@@ -124,9 +124,9 @@ func (c *THttpResponseSender) SendDeletedResult(res http.ResponseWriter, req *ht
 	} else {
 		res.Header().Add("Content-Type", "application/json")
 		res.WriteHeader(200)
-		jsonObj, jsonErr := json.Marshal(result)
+		jsonObjStr, jsonErr := cconv.JsonConverter.ToJson(result)
 		if jsonErr == nil {
-			io.WriteString(res, (string)(jsonObj))
+			_, _ = io.WriteString(res, jsonObjStr)
 		}
 	}
 }

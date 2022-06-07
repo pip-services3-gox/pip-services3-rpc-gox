@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -66,7 +67,7 @@ func TestDummyRestService(t *testing.T) {
 	assert.Nil(t, bodyErr)
 	getResponse.Body.Close()
 
-	var dummies tdata.DummyDataPage
+	var dummies cdata.DataPage[tdata.Dummy]
 	jsonErr = json.Unmarshal(resBody, &dummies)
 	assert.Nil(t, jsonErr)
 	assert.NotNil(t, dummies)
@@ -100,8 +101,6 @@ func TestDummyRestService(t *testing.T) {
 	assert.Nil(t, delErr)
 
 	// Try to get delete dummy
-	dummies.Data = dummies.Data[:0]
-	*dummies.Total = 0
 	getResponse, getErr = http.Get(url + "/dummies/" + dummy1.Id)
 	assert.Nil(t, getErr)
 	resBody, bodyErr = ioutil.ReadAll(getResponse.Body)
@@ -110,7 +109,7 @@ func TestDummyRestService(t *testing.T) {
 	jsonErr = json.Unmarshal(resBody, &dummies)
 	assert.Nil(t, jsonErr)
 	assert.NotNil(t, dummies)
-	assert.Len(t, dummies.Data, 0)
+	assert.False(t, dummies.HasTotal())
 
 	// Testing transmit correlationId
 	getResponse, getErr = http.Get(url + "/dummies/check/correlation_id?correlation_id=test_cor_id")

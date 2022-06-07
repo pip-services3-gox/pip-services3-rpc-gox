@@ -3,6 +3,7 @@ package test_services
 import (
 	"encoding/json"
 	"fmt"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -19,7 +20,7 @@ func TestHttpEndpoint(t *testing.T) {
 	assert.Nil(t, getErr)
 	resBody, bodyErr := ioutil.ReadAll(getResponse.Body)
 	assert.Nil(t, bodyErr)
-	var dummies tdata.DummyDataPage
+	var dummies cdata.DataPage[tdata.Dummy]
 	jsonErr := json.Unmarshal(resBody, &dummies)
 	assert.Nil(t, jsonErr)
 	assert.NotNil(t, dummies)

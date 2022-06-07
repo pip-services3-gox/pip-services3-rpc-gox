@@ -10,13 +10,13 @@ type HeartbeatOperations struct {
 }
 
 // NewHeartbeatOperations creates new instance HeartbeatOperations
-// Returns: *HeartbeatOperations
+//	Returns: *HeartbeatOperations
 func NewHeartbeatOperations() *HeartbeatOperations {
 	hbo := HeartbeatOperations{}
 	return &hbo
 }
 
-// Heartbeat method are insert timestamp into HTTP result
+// GetHeartbeatOperation is a heartbeat method are insert timestamp into HTTP result
 func (c *HeartbeatOperations) GetHeartbeatOperation() func(res http.ResponseWriter, req *http.Request) {
 	return func(res http.ResponseWriter, req *http.Request) {
 		c.Heartbeat(res, req)

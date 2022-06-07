@@ -1,18 +1,19 @@
 package test_logic
 
 import (
+	"context"
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
 )
 
 type IDummyController interface {
-	GetPageByFilter(correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (result *tdata.DummyDataPage, err error)
-	GetOneById(correlationId string, id string) (result *tdata.Dummy, err error)
-	Create(correlationId string, entity tdata.Dummy) (result *tdata.Dummy, err error)
-	Update(correlationId string, entity tdata.Dummy) (result *tdata.Dummy, err error)
-	DeleteById(correlationId string, id string) (result *tdata.Dummy, err error)
+	GetPageByFilter(ctx context.Context, correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (result cdata.DataPage[tdata.Dummy], err error)
+	GetOneById(ctx context.Context, correlationId string, id string) (result tdata.Dummy, err error)
+	Create(ctx context.Context, correlationId string, entity tdata.Dummy) (result tdata.Dummy, err error)
+	Update(ctx context.Context, correlationId string, entity tdata.Dummy) (result tdata.Dummy, err error)
+	DeleteById(ctx context.Context, correlationId string, id string) (result tdata.Dummy, err error)
 
-	CheckCorrelationId(correlationId string) (result map[string]string, err error)
+	CheckCorrelationId(ctx context.Context, correlationId string) (result map[string]string, err error)
 
-	CheckErrorPropagation(correlationId string) error
+	CheckErrorPropagation(ctx context.Context, correlationId string) error
 }

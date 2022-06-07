@@ -1,6 +1,7 @@
 package test_logic
 
 import (
+	"context"
 	ccomand "github.com/pip-services3-gox/pip-services3-commons-gox/commands"
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
@@ -25,8 +26,8 @@ func (c *DummyController) GetCommandSet() *ccomand.CommandSet {
 	return &c.commandSet.CommandSet
 }
 
-func (c *DummyController) GetPageByFilter(correlationId string, filter *cdata.FilterParams,
-	paging *cdata.PagingParams) (items *tdata.DummyDataPage, err error) {
+func (c *DummyController) GetPageByFilter(ctx context.Context, correlationId string, filter *cdata.FilterParams,
+	paging *cdata.PagingParams) (items cdata.DataPage[tdata.Dummy], err error) {
 
 	if filter == nil {
 		filter = cdata.NewEmptyFilterParams()
@@ -59,40 +60,40 @@ func (c *DummyController) GetPageByFilter(correlationId string, filter *cdata.Fi
 		result = append(result, entity)
 	}
 	var total int64 = (int64)(len(result))
-	return tdata.NewDummyDataPage(&total, result), nil
+	return *cdata.NewDataPage[tdata.Dummy](result, int(total)), nil
 }
 
-func (c *DummyController) GetOneById(correlationId string, id string) (result *tdata.Dummy, err error) {
+func (c *DummyController) GetOneById(ctx context.Context, correlationId string, id string) (result tdata.Dummy, err error) {
 	for i := 0; i < len(c.entities); i++ {
 		var entity tdata.Dummy = c.entities[i]
 		if id == entity.Id {
-			return &entity, nil
+			return entity, nil
 		}
 	}
-	return nil, nil
+	return tdata.Dummy{}, nil
 }
 
-func (c *DummyController) Create(correlationId string, entity tdata.Dummy) (result *tdata.Dummy, err error) {
+func (c *DummyController) Create(ctx context.Context, correlationId string, entity tdata.Dummy) (result tdata.Dummy, err error) {
 	if entity.Id == "" {
 		entity.Id = cdata.IdGenerator.NextLong()
 		c.entities = append(c.entities, entity)
 	}
-	return &entity, nil
+	return entity, nil
 }
 
-func (c *DummyController) Update(correlationId string, newEntity tdata.Dummy) (result *tdata.Dummy, err error) {
+func (c *DummyController) Update(ctx context.Context, correlationId string, newEntity tdata.Dummy) (result tdata.Dummy, err error) {
 	for index := 0; index < len(c.entities); index++ {
 		var entity tdata.Dummy = c.entities[index]
 		if entity.Id == newEntity.Id {
 			c.entities[index] = newEntity
-			return &newEntity, nil
+			return newEntity, nil
 
 		}
 	}
-	return nil, nil
+	return tdata.Dummy{}, nil
 }
 
-func (c *DummyController) DeleteById(correlationId string, id string) (result *tdata.Dummy, err error) {
+func (c *DummyController) DeleteById(ctx context.Context, correlationId string, id string) (result tdata.Dummy, err error) {
 	var entity tdata.Dummy
 
 	for i := 0; i < len(c.entities); {
@@ -106,16 +107,16 @@ func (c *DummyController) DeleteById(correlationId string, id string) (result *t
 		} else {
 			i++
 		}
-		return &entity, nil
+		return entity, nil
 	}
-	return nil, nil
+	return tdata.Dummy{}, nil
 }
 
-func (c *DummyController) CheckCorrelationId(correlationId string) (result map[string]string, err error) {
+func (c *DummyController) CheckCorrelationId(ctx context.Context, correlationId string) (result map[string]string, err error) {
 	result = map[string]string{"correlationId": correlationId}
 	return result, nil
 }
 
-func (c *DummyController) CheckErrorPropagation(correlationId string) error {
+func (c *DummyController) CheckErrorPropagation(ctx context.Context, correlationId string) error {
 	return cerr.NewNotFoundError(correlationId, "NOT_FOUND_TEST", "Not found error")
 }

@@ -1,6 +1,7 @@
 package test_services
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path"
@@ -30,46 +31,46 @@ func TestMain(m *testing.M) {
 	fmt.Println("Preparing test services...")
 
 	statusRestService := BuildTestStatusRestService()
-	err := statusRestService.Open("")
+	err := statusRestService.Open(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
-	defer statusRestService.Close("")
+	defer statusRestService.Close(context.Background(), "")
 
 	heartbeatRestService := BuildTestHeartbeatRestService()
-	err = heartbeatRestService.Open("")
+	err = heartbeatRestService.Open(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
-	defer heartbeatRestService.Close("")
+	defer heartbeatRestService.Close(context.Background(), "")
 
 	httpEndpointService, endpoint := BuildTestHttpEndpointService()
-	err = endpoint.Open("")
+	err = endpoint.Open(context.Background(), "")
 	if err != nil {
 		panic(err)
 	} else {
-		err = httpEndpointService.Open("")
+		err = httpEndpointService.Open(context.Background(), "")
 		if err != nil {
 			panic(err)
 		} else {
-			defer endpoint.Close("")
-			defer httpEndpointService.Close("")
+			defer endpoint.Close(context.Background(), "")
+			defer httpEndpointService.Close(context.Background(), "")
 		}
 	}
 
 	dummyRestService := BuildTestDummyRestService()
-	err = dummyRestService.Open("")
+	err = dummyRestService.Open(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
-	defer dummyRestService.Close("")
+	defer dummyRestService.Close(context.Background(), "")
 
 	dummyOpenAPIFileRestService, filename := BuildTestDummyOpenAPIFileRestService()
-	err = dummyOpenAPIFileRestService.Open("")
+	err = dummyOpenAPIFileRestService.Open(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
-	defer dummyOpenAPIFileRestService.Close("")
+	defer dummyOpenAPIFileRestService.Close(context.Background(), "")
 	//defer os.Remove(filename)
 	defer func() {
 		err := os.Remove(filename)
@@ -79,18 +80,18 @@ func TestMain(m *testing.M) {
 	}()
 
 	dummyCommandableHttpService := BuildTestDummyCommandableHttpService()
-	err = dummyCommandableHttpService.Open("")
+	err = dummyCommandableHttpService.Open(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
-	defer dummyCommandableHttpService.Close("")
+	defer dummyCommandableHttpService.Close(context.Background(), "")
 
 	dummyCommandableSwaggerHttpService := BuildTestDummyCommandableSwaggerHttpService()
-	err = dummyCommandableSwaggerHttpService.Open("")
+	err = dummyCommandableSwaggerHttpService.Open(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
-	defer dummyCommandableSwaggerHttpService.Close("")
+	defer dummyCommandableSwaggerHttpService.Close(context.Background(), "")
 	time.Sleep(time.Second)
 	fmt.Println("All test services started!")
 
@@ -115,17 +116,18 @@ func BuildTestStatusRestService() *services.StatusRestService {
 	)
 
 	service := services.NewStatusRestService()
-	service.Configure(restConfig)
+	service.Configure(context.Background(), restConfig)
 
 	contextInfo := cinfo.NewContextInfo()
 	contextInfo.Name = "Test"
 	contextInfo.Description = "This is a test container"
 
 	references := cref.NewReferencesFromTuples(
+		context.Background(),
 		cref.NewDescriptor("pip-services", "context-info", "default", "default", "1.0"), contextInfo,
 		cref.NewDescriptor("pip-services", "status-service", "http", "default", "1.0"), service,
 	)
-	service.SetReferences(references)
+	service.SetReferences(context.Background(), references)
 	return service
 }
 
@@ -140,20 +142,21 @@ func BuildTestHttpEndpointService() (*DummyRestService, *services.HttpEndpoint) 
 
 	ctrl := tlogic.NewDummyController()
 	service := NewDummyRestService()
-	service.Configure(cconf.NewConfigParamsFromTuples(
+	service.Configure(context.Background(), cconf.NewConfigParamsFromTuples(
 		"base_route",
 		"/api/v1",
 	))
 
 	endpoint := services.NewHttpEndpoint()
-	endpoint.Configure(restConfig)
+	endpoint.Configure(context.Background(), restConfig)
 
 	references := cref.NewReferencesFromTuples(
+		context.Background(),
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
 		cref.NewDescriptor("pip-services-dummies", "service", "rest", "default", "1.0"), service,
 		cref.NewDescriptor("pip-services", "endpoint", "http", "default", "1.0"), endpoint,
 	)
-	service.SetReferences(references)
+	service.SetReferences(context.Background(), references)
 	return service, endpoint
 }
 
@@ -173,13 +176,14 @@ func BuildTestDummyRestService() *DummyRestService {
 	ctrl := tlogic.NewDummyController()
 
 	service = NewDummyRestService()
-	service.Configure(restConfig)
+	service.Configure(context.Background(), restConfig)
 
 	var references *cref.References = cref.NewReferencesFromTuples(
+		context.Background(),
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
 		cref.NewDescriptor("pip-services-dummies", "service", "rest", "default", "1.0"), service,
 	)
-	service.SetReferences(references)
+	service.SetReferences(context.Background(), references)
 	return service
 }
 
@@ -215,13 +219,14 @@ func BuildTestDummyOpenAPIFileRestService() (*DummyRestService, string) {
 	ctrl := tlogic.NewDummyController()
 
 	service = NewDummyRestService()
-	service.Configure(restConfig)
+	service.Configure(context.Background(), restConfig)
 
 	references := cref.NewReferencesFromTuples(
+		context.Background(),
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
 		cref.NewDescriptor("pip-services-dummies", "service", "rest", "default", "1.0"), service,
 	)
-	service.SetReferences(references)
+	service.SetReferences(context.Background(), references)
 	return service, filename
 }
 
@@ -240,13 +245,14 @@ func BuildTestDummyCommandableHttpService() *DummyCommandableHttpService {
 
 	service := NewDummyCommandableHttpService()
 
-	service.Configure(restConfig)
+	service.Configure(context.Background(), restConfig)
 
 	references := cref.NewReferencesFromTuples(
+		context.Background(),
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
 		cref.NewDescriptor("pip-services-dummies", "service", "http", "default", "1.0"), service,
 	)
-	service.SetReferences(references)
+	service.SetReferences(context.Background(), references)
 	return service
 }
 
@@ -266,13 +272,14 @@ func BuildTestDummyCommandableSwaggerHttpService() *DummyCommandableHttpService 
 
 	service := NewDummyCommandableHttpService()
 
-	service.Configure(restConfig)
+	service.Configure(context.Background(), restConfig)
 
 	references := cref.NewReferencesFromTuples(
+		context.Background(),
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
 		cref.NewDescriptor("pip-services-dummies", "service", "http", "default", "1.0"), service,
 	)
-	service.SetReferences(references)
+	service.SetReferences(context.Background(), references)
 	return service
 }
 
@@ -286,6 +293,6 @@ func BuildTestHeartbeatRestService() *services.HeartbeatRestService {
 	)
 
 	service := services.NewHeartbeatRestService()
-	service.Configure(restConfig)
+	service.Configure(context.Background(), restConfig)
 	return service
 }
