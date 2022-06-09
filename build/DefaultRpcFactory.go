@@ -1,22 +1,21 @@
 package build
 
 import (
-	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cbuild "github.com/pip-services3-go/pip-services3-components-go/build"
-	"github.com/pip-services3-go/pip-services3-rpc-go/services"
+	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cbuild "github.com/pip-services3-gox/pip-services3-components-gox/build"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/services"
 )
 
-// DefaultRpcFactory are creates RPC components by their descriptors.
-
-// See Factory
-// See HttpEndpoint
-// See HeartbeatRestService
-// See StatusRestService
+// DefaultRpcFactory are creates RPC components by their descriptors
+//	see Factory
+//	see HttpEndpoint
+//	see HeartbeatRestService
+//	see StatusRestService
 type DefaultRpcFactory struct {
 	cbuild.Factory
 }
 
-// NewDefaultRpcFactorymethod create a new instance of the factory.
+// NewDefaultRpcFactory creates a new instance of the factory.
 func NewDefaultRpcFactory() *DefaultRpcFactory {
 	c := DefaultRpcFactory{}
 	c.Factory = *cbuild.NewFactory()

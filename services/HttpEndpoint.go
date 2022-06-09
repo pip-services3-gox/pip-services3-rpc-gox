@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -13,51 +14,44 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
-	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
-	clog "github.com/pip-services3-go/pip-services3-components-go/log"
-	"github.com/pip-services3-go/pip-services3-rpc-go/connect"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cvalid "github.com/pip-services3-gox/pip-services3-commons-gox/validate"
+	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
+	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
 )
 
-/*
- HttpEndpoint used for creating HTTP endpoints. An endpoint is a URL, at which a given service can be accessed by a client.
-
-Configuration parameters:
-
-Parameters to pass to the configure method for component configuration:
-
-  - connection(s) - the connection resolver"s connections:
-    - "connection.discovery_key" - the key to use for connection resolving in a discovery service;
-    - "connection.protocol" - the connection"s protocol;
-    - "connection.host" - the target host;
-    - "connection.port" - the target port;
-    - "connection.uri" - the target URI.
-  - credential - the HTTPS credentials:
-    - "credential.ssl_key_file" - the SSL func (c *HttpEndpoint )key in PEM
-    - "credential.ssl_crt_file" - the SSL certificate in PEM
-    - "credential.ssl_ca_file" - the certificate authorities (root cerfiticates) in PEM
-
-  - cors-headers - pair CORS headers: origin. Example: MyHeader1: \*.\*
-
-References:
-
-A logger, counters, and a connection resolver can be referenced by passing the
-following references to the object"s setReferences method:
-
-  - logger: "*:logger:*:*:1.0";
-  - counters: "*:counters:*:*:1.0";
-  - discovery: "*:discovery:*:*:1.0" (for the connection resolver).
-
-Examples:
-
-    endpoint := NewHttpEndpoint();
-    endpoint.Configure(config);
-    endpoint.SetReferences(references);
-    ...
-	endpoint.Open(correlationId)
-*/
+// HttpEndpoint used for creating HTTP endpoints. An endpoint is a URL,
+// at which a given service can be accessed by a client.
+//
+//	Configuration parameters:
+//		Parameters to pass to the configure method for component configuration:
+//		- connection(s) - the connection resolver"s connections:
+//			- "connection.discovery_key" - the key to use for connection resolving in a discovery service;
+//			- "connection.protocol" - the connection"s protocol;
+//			- "connection.host" - the target host;
+//			- "connection.port" - the target port;
+//			- "connection.uri" - the target URI.
+//		- credential - the HTTPS credentials:
+//			- "credential.ssl_key_file" - the SSL func (c *HttpEndpoint )key in PEM
+//			- "credential.ssl_crt_file" - the SSL certificate in PEM
+//			- "credential.ssl_ca_file" - the certificate authorities (root cerfiticates) in PEM
+//		- cors-headers - pair CORS headers: origin. Example: MyHeader1: \*.\*
+//
+//	References:
+//		A logger, counters, and a connection resolver can be referenced by passing the
+//		following references to the object"s setReferences method:
+//		- logger: "*:logger:*:*:1.0";
+//		- counters: "*:counters:*:*:1.0";
+//		- discovery: "*:discovery:*:*:1.0" (for the connection resolver).
+//
+//	Examples:
+//		endpoint := NewHttpEndpoint();
+//		endpoint.Configure(config);
+//		endpoint.SetReferences(references);
+//		...
+//		endpoint.Open(correlationId)
 type HttpEndpoint struct {
 	defaultConfig          *cconf.ConfigParams
 	server                 *http.Server
@@ -74,6 +68,12 @@ type HttpEndpoint struct {
 	allowedOrigins         []string
 }
 
+const (
+	DefaultConnectionTimeout = "60000"
+	DefaultFileMaxSize       = 200 * 1024 * 1024
+	DefaultRequestMaxSize    = 1024 * 1024
+)
+
 // NewHttpEndpoint creates new HttpEndpoint
 func NewHttpEndpoint() *HttpEndpoint {
 	c := HttpEndpoint{}
@@ -87,16 +87,16 @@ func NewHttpEndpoint() *HttpEndpoint {
 		"credential.ssl_ca_file", nil,
 
 		"options.maintenance_enabled", false,
-		"options.request_max_size", 1024*1024,
-		"options.file_max_size", 200*1024*1024,
-		"options.connect_timeout", "60000",
+		"options.request_max_size", DefaultRequestMaxSize,
+		"options.file_max_size", DefaultFileMaxSize,
+		"options.connect_timeout", DefaultConnectionTimeout,
 		"options.debug", "true",
 	)
 	c.connectionResolver = connect.NewHttpConnectionResolver()
 	c.logger = clog.NewCompositeLogger()
 	c.counters = ccount.NewCompositeCounters()
 	c.maintenanceEnabled = false
-	c.fileMaxSize = 200 * 1024 * 1024
+	c.fileMaxSize = DefaultFileMaxSize
 	c.protocolUpgradeEnabled = false
 	c.registrations = make([]IRegisterable, 0, 0)
 	c.allowedHeaders = []string{
@@ -114,20 +114,22 @@ func NewHttpEndpoint() *HttpEndpoint {
 }
 
 // Configure method are configures this HttpEndpoint using the given configuration parameters.
-// Configuration parameters:
-//    - connection(s) - the connection resolver"s connections;
-//        - "connection.discovery_key" - the key to use for connection resolving in a discovery service;
-//        - "connection.protocol" - the connection"s protocol;
-//        - "connection.host" - the target host;
-//        - "connection.port" - the target port;
-//        - "connection.uri" - the target URI.
-//        - "credential.ssl_key_file" - SSL func (c *HttpEndpoint )key in PEM
-//        - "credential.ssl_crt_file" - SSL certificate in PEM
-//        - "credential.ssl_ca_file" - Certificate authority (root certificate) in PEM
-//  - config    configuration parameters, containing a "connection(s)" section.
-func (c *HttpEndpoint) Configure(config *cconf.ConfigParams) {
+//	Configuration parameters:
+//		- connection(s) - the connection resolver"s connections;
+//			- "connection.discovery_key" - the key to use for connection resolving in a discovery service;
+//			- "connection.protocol" - the connection"s protocol;
+//			- "connection.host" - the target host;
+//			- "connection.port" - the target port;
+//			- "connection.uri" - the target URI.
+//			- "credential.ssl_key_file" - SSL func (c *HttpEndpoint )key in PEM
+//			- "credential.ssl_crt_file" - SSL certificate in PEM
+//			- "credential.ssl_ca_file" - Certificate authority (root certificate) in PEM
+//	Parameters:
+//		- ctx context.Context
+//		- config    configuration parameters, containing a "connection(s)" section.
+func (c *HttpEndpoint) Configure(ctx context.Context, config *cconf.ConfigParams) {
 	config = config.SetDefaults(c.defaultConfig)
-	c.connectionResolver.Configure(config)
+	c.connectionResolver.Configure(ctx, config)
 
 	c.maintenanceEnabled = config.GetAsBooleanWithDefault("options.maintenance_enabled", c.maintenanceEnabled)
 	c.fileMaxSize = config.GetAsLongWithDefault("options.file_max_size", c.fileMaxSize)
@@ -149,31 +151,31 @@ func (c *HttpEndpoint) Configure(config *cconf.ConfigParams) {
 }
 
 // SetReferences method are sets references to this endpoint"s logger, counters, and connection resolver.
-//    References:
-//    - logger: "*:logger:*:*:1.0"
-//    - counters: "*:counters:*:*:1.0"
-//    - discovery: "*:discovery:*:*:1.0" (for the connection resolver)
-// Parameters:
-//    - references    an IReferences object, containing references to a logger, counters,
-//     and a connection resolver.
-func (c *HttpEndpoint) SetReferences(references crefer.IReferences) {
-	c.logger.SetReferences(references)
-	c.counters.SetReferences(references)
-	c.connectionResolver.SetReferences(references)
+//	References:
+//		- logger: "*:logger:*:*:1.0"
+//		- counters: "*:counters:*:*:1.0"
+//		- discovery: "*:discovery:*:*:1.0" (for the connection resolver)
+//	Parameters:
+//		- references an IReferences object, containing references to a logger, counters,
+//			and a connection resolver.
+func (c *HttpEndpoint) SetReferences(ctx context.Context, references crefer.IReferences) {
+	c.logger.SetReferences(ctx, references)
+	c.counters.SetReferences(ctx, references)
+	c.connectionResolver.SetReferences(ctx, references)
 }
 
-// IsOpen method is  whether or not this endpoint is open with an actively listening REST server.
+// IsOpen method is  whether this endpoint is open with an actively listening REST server.
 func (c *HttpEndpoint) IsOpen() bool {
 	return c.server != nil
 }
 
-// Opens a connection using the parameters resolved by the referenced connection
+// Open a connection using the parameters resolved by the referenced connection
 // resolver and creates a REST server (service) using the set options and parameters.
-// Parameters:
-//   - correlationId   string  (optional) transaction id to trace execution through call chain.
-// Returns : error
-// an error if one is raised.
-func (c *HttpEndpoint) Open(correlationId string) error {
+//	Parameters:
+//		- ctx context.Context
+//		- correlationId   string  (optional) transaction id to trace execution through call chain.
+//	Returns: error an error if one is raised.
+func (c *HttpEndpoint) Open(ctx context.Context, correlationId string) error {
 	if c.IsOpen() {
 		return nil
 	}
@@ -213,6 +215,7 @@ func (c *HttpEndpoint) Open(correlationId string) error {
 		sslKeyFile := credential.GetAsString("ssl_key_file")
 		sslCrtFile := credential.GetAsString("ssl_crt_file")
 
+		// TODO:: fix to use context
 		go func() {
 			servErr := c.server.ListenAndServeTLS(sslKeyFile, sslCrtFile)
 			if servErr != nil {
@@ -221,6 +224,7 @@ func (c *HttpEndpoint) Open(correlationId string) error {
 		}()
 
 	} else {
+		// TODO:: fix to use context
 		go func() {
 			servErr := c.server.ListenAndServe()
 			if servErr != nil {
@@ -231,13 +235,13 @@ func (c *HttpEndpoint) Open(correlationId string) error {
 
 	regErr := c.connectionResolver.Register(correlationId)
 	if regErr != nil {
-		c.logger.Error(correlationId, regErr, "ERROR_REG_SRV", "Can't register REST service at %s", c.uri)
+		c.logger.Error(ctx, correlationId, regErr, "ERROR_REG_SRV", "Can't register REST service at %s", c.uri)
 	}
-	c.logger.Debug(correlationId, "Opened REST service at %s", c.uri)
+	c.logger.Debug(ctx, correlationId, "Opened REST service at %s", c.uri)
 	return regErr
 }
 
-// Prevents IE from caching REST requests
+// noCache prevents IE from caching REST requests
 func (c *HttpEndpoint) noCache(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -247,14 +251,14 @@ func (c *HttpEndpoint) noCache(next http.Handler) http.Handler {
 	})
 }
 
-// Returns maintenance error code
+// doMaintenance returns maintenance error code
 func (c *HttpEndpoint) doMaintenance(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Make this more sophisticated
 		if c.maintenanceEnabled {
 			w.Header().Add("Retry-After", "3600")
-			jsonStr, _ := json.Marshal(503)
-			w.Write(jsonStr)
+			jsonStr, _ := cconv.JsonConverter.ToJson(503)
+			_, _ = w.Write([]byte(jsonStr))
 			next.ServeHTTP(w, r)
 		} else {
 			next.ServeHTTP(w, r)
@@ -263,40 +267,40 @@ func (c *HttpEndpoint) doMaintenance(next http.Handler) http.Handler {
 }
 
 // Close method are closes this endpoint and the REST server (service) that was opened earlier.
-// Parameters:
-//   - correlationId  string   (optional) transaction id to trace execution through call chain.
-// Returns: error
-// an error if one is raised.
-func (c *HttpEndpoint) Close(correlationId string) error {
+//	Parameters:
+//		- ctx context.Context
+//		- correlationId string (optional) transaction id to trace execution through call chain.
+//	Returns: error an error if one is raised.
+func (c *HttpEndpoint) Close(ctx context.Context, correlationId string) error {
 	if c.server != nil {
 		// Attempt a graceful shutdown
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		_ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 		defer cancel()
-		clErr := c.server.Shutdown(ctx)
+		clErr := c.server.Shutdown(_ctx)
 		if clErr != nil {
-			c.logger.Warn(correlationId, "Failed while closing REST service: %s", clErr.Error())
+			c.logger.Warn(ctx, correlationId, "Failed while closing REST service: %s", clErr.Error())
 			return clErr
 		}
-		c.logger.Debug(correlationId, "Closed REST service at %s", c.uri)
+		c.logger.Debug(ctx, correlationId, "Closed REST service at %s", c.uri)
 		c.server = nil
 		c.uri = ""
 	}
 	return nil
 }
 
-// Registers a registerable object for dynamic endpoint discovery.
-// Parameters:
-//   - registration  IRegisterable   implements of IRegisterable interface.
-// See IRegisterable
+// Register a registrable object for dynamic endpoint discovery.
+//	Parameters:
+//		- registration IRegisterable implements of IRegisterable interface.
+//	See IRegisterable
 func (c *HttpEndpoint) Register(registration IRegisterable) {
 	c.registrations = append(c.registrations, registration)
 }
 
-// Unregisters a registerable object, so that it is no longer used in dynamic
+// Unregister a registerable object, so that it is no longer used in dynamic
 // endpoint discovery.
-// Parameters:
-//   - registration  IRegisterable  the registration to remove.
-// See IRegisterable
+//	Parameters:
+//		- registration  IRegisterable  the registration to remove.
+//	See IRegisterable
 func (c *HttpEndpoint) Unregister(registration IRegisterable) {
 	for i := 0; i < len(c.registrations); {
 		if c.registrations[i] == registration {
@@ -325,10 +329,9 @@ func (c *HttpEndpoint) fixRoute(route string) string {
 }
 
 // GetCorrelationId method returns CorrelationId from request
-// Parameters:
-//   req *http.Request  request
-// Returns: string
-// retrun correlation_id or empty string
+//	Parameters:
+//		- req *http.Request  request
+//	Returns: string correlation_id or empty string
 func (c *HttpEndpoint) GetCorrelationId(req *http.Request) string {
 	correlationId := req.URL.Query().Get("correlation_id")
 	if correlationId == "" {
@@ -337,11 +340,13 @@ func (c *HttpEndpoint) GetCorrelationId(req *http.Request) string {
 	return correlationId
 }
 
-// RegisterRoute method are registers an action in this objects REST server (service) by the given method and route.
-//   - method   string     the HTTP method of the route.
-//   - route    string     the route to register in this object"s REST server (service).
-//   - schema   *cvalid.Schema     the schema to use for parameter validation.
-//   - action   http.HandlerFunc     the action to perform at the given route.
+// RegisterRoute method are registers an action in this objects REST server (service)
+// by the given method and route.
+//	Parameters:
+//		- method   string     the HTTP method of the route.
+//		- route    string     the route to register in this object"s REST server (service).
+//		- schema   *cvalid.Schema     the schema to use for parameter validation.
+//		- action   http.HandlerFunc     the action to perform at the given route.
 func (c *HttpEndpoint) RegisterRoute(method string, route string, schema *cvalid.Schema,
 	action http.HandlerFunc) {
 
@@ -350,10 +355,11 @@ func (c *HttpEndpoint) RegisterRoute(method string, route string, schema *cvalid
 		method = "delete"
 	}
 	route = c.fixRoute(route)
+	// TODO:: fix generation actionCurl
 	actionCurl := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//  Perform validation
 		if schema != nil {
-			var params map[string]interface{} = make(map[string]interface{}, 0)
+			var params = make(map[string]any, 0)
 			for k, v := range r.URL.Query() {
 				params[k] = v[0]
 			}
@@ -371,7 +377,7 @@ func (c *HttpEndpoint) RegisterRoute(method string, route string, schema *cvalid
 			r.Body.Close()
 			r.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBuf))
 			//-------------------------
-			var body interface{}
+			var body any
 			json.Unmarshal(bodyBuf, &body)
 			params["body"] = body
 
@@ -410,8 +416,9 @@ func (c *HttpEndpoint) RegisterRouteWithAuth(method string, route string, schema
 }
 
 // RegisterInterceptor method are registers a middleware action for the given route.
-//   - route         the route to register in this object"s REST server (service).
-//   - action        the middleware action to perform at the given route.
+// Parameters:
+//		- route         the route to register in this object"s REST server (service).
+//		- action        the middleware action to perform at the given route.
 func (c *HttpEndpoint) RegisterInterceptor(route string, action func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc)) {
 
 	route = c.fixRoute(route)
@@ -428,8 +435,8 @@ func (c *HttpEndpoint) RegisterInterceptor(route string, action func(w http.Resp
 	c.router.Use(interceptorFunc)
 }
 
-// AddCORSHeader method adds allowed header, ignore if it already exist
-// must be call before to opening endpoint
+// AddCorsHeader method adds allowed header, ignore if it already exists
+// must be called before to opening endpoint
 func (c *HttpEndpoint) AddCorsHeader(header string, origin string) {
 
 	if len(header) > 0 {

@@ -1,10 +1,11 @@
 package test_connect
 
 import (
+	"context"
 	"testing"
 
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	"github.com/pip-services3-go/pip-services3-rpc-go/connect"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,10 +17,11 @@ func TestHttpConnectionResolver(t *testing.T) {
 
 func ResolveURI(t *testing.T) {
 	resolver := connect.NewHttpConnectionResolver()
-	resolver.Configure(cconf.NewConfigParamsFromTuples(
-		"connection.uri",
-		"http://somewhere.com:777",
-	))
+	resolver.Configure(
+		context.Background(),
+		cconf.NewConfigParamsFromTuples(
+			"connection.uri", "http://somewhere.com:777",
+		))
 
 	connection, _, _ := resolver.Resolve("")
 
@@ -30,11 +32,13 @@ func ResolveURI(t *testing.T) {
 
 func ResolveParameters(t *testing.T) {
 	resolver := connect.NewHttpConnectionResolver()
-	resolver.Configure(cconf.NewConfigParamsFromTuples(
-		"connection.protocol", "http",
-		"connection.host", "somewhere.com",
-		"connection.port", "777",
-	))
+	resolver.Configure(
+		context.Background(),
+		cconf.NewConfigParamsFromTuples(
+			"connection.protocol", "http",
+			"connection.host", "somewhere.com",
+			"connection.port", "777",
+		))
 
 	connection, _, _ := resolver.Resolve("")
 	assert.Equal(t, "http://somewhere.com:777", connection.Uri())

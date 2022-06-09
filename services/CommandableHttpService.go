@@ -2,76 +2,71 @@ package services
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"github.com/gorilla/mux"
+	ccomands "github.com/pip-services3-gox/pip-services3-commons-gox/commands"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/gorilla/mux"
-	ccomands "github.com/pip-services3-go/pip-services3-commons-go/commands"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	crun "github.com/pip-services3-go/pip-services3-commons-go/run"
 )
 
-/*
-CommandableHttpService abstract service that receives remove calls via HTTP/REST protocol
-to operations automatically generated for commands defined in ICommandable components.
-Each command is exposed as POST operation that receives all parameters in body object.
-
-Commandable services require only 3 lines of code to implement a robust external
-HTTP-based remote interface.
-
-Configuration parameters:
-
-  - base_route:              base route for remote URI
-  - dependencies:
-    - endpoint:              override for HTTP Endpoint dependency
-    - controller:            override for Controller dependency
-  - connection(s):
-    - discovery_key:         (optional) a key to retrieve the connection from IDiscovery
-    - protocol:              connection protocol: http or https
-    - host:                  host name or IP address
-    - port:                  port number
-    - uri:                   resource URI or connection string with all parameters in it
-
-References:
-
-- *:logger:*:*:1.0               (optional) ILogger components to pass log messages
-- *:counters:*:*:1.0             (optional) ICounters components to pass collected measurements
-- *:discovery:*:*:1.0            (optional) IDiscovery services to resolve connection
-- *:endpoint:http:*:1.0          (optional) HttpEndpoint reference
-
-See CommandableHttpClient
-See RestService
-
-Example:
-
-	type MyCommandableHttpService struct {
-	 *CommandableHttpService
-	}
-
-	func NewMyCommandableHttpService() *MyCommandableHttpService {
-		c := MyCommandableHttpService{
-			CommandableHttpService: services.NewCommandableHttpService("dummies"),
-		}
-		c.DependencyResolver.Put("controller", cref.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
-	return &c
-
-    service := NewMyCommandableHttpService();
-    service.Configure(cconf.NewConfigParamsFromTuples(
-        "connection.protocol", "http",
-        "connection.host", "localhost",
-        "connection.port", 8080,
-    ));
-    service.SetReferences(cref.NewReferencesFromTuples(
-       cref.NewDescriptor("mygroup","controller","default","default","1.0"), controller
-    ));
-
-	opnErr:=service.Open("123")
-	if opnErr == nil {
-       fmt.Println("The REST service is running on port 8080");
-	}
-
-*/
+// CommandableHttpService abstract service that receives remove calls via HTTP/REST protocol
+// to operations automatically generated for commands defined in ICommandable components.
+// Each command is exposed as POST operation that receives all parameters in body object.
+//
+// Commandable services require only 3 lines of code to implement a robust external
+// HTTP-based remote interface.
+//
+//	Configuration parameters:
+//		- base_route:                base route for remote URI
+//		- dependencies:
+//			- endpoint:              override for HTTP Endpoint dependency
+//			- controller:            override for Controller dependency
+//		- connection(s):
+//			- discovery_key:         (optional) a key to retrieve the connection from IDiscovery
+//			- protocol:              connection protocol: http or https
+//			- host:                  host name or IP address
+//			- port:                  port number
+//			- uri:                   resource URI or connection string with all parameters in it
+//
+//	References:
+//		- *:logger:*:*:1.0            (optional) ILogger components to pass log messages
+//		- *:counters:*:*:1.0          (optional) ICounters components to pass collected measurements
+//		- *:discovery:*:*:1.0         (optional) IDiscovery services to resolve connection
+//		- *:endpoint:http:*:1.0       (optional) HttpEndpoint reference
+//
+//	see clients.CommandableHttpClient
+//	see RestService
+//
+//	Example:
+//		type MyCommandableHttpService struct {
+//			*CommandableHttpService
+//		}
+//
+//		func NewMyCommandableHttpService() *MyCommandableHttpService {
+//			c := MyCommandableHttpService{
+//				CommandableHttpService: services.NewCommandableHttpService("dummies"),
+//			}
+//			c.DependencyResolver.Put("controller", cref.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
+//			return &c
+//		}
+//
+//		service := NewMyCommandableHttpService();
+//		service.Configure(cconf.NewConfigParamsFromTuples(
+//			"connection.protocol", "http",
+//			"connection.host", "localhost",
+//			"connection.port", 8080,
+//		));
+//		service.SetReferences(cref.NewReferencesFromTuples(
+//			cref.NewDescriptor("mygroup","controller","default","default","1.0"), controller
+//		));
+//
+//		opnErr:=service.Open("123")
+//		if opnErr == nil {
+//			fmt.Println("The REST service is running on port 8080");
+//		}
 type CommandableHttpService struct {
 	*RestService
 	commandSet  *ccomands.CommandSet
@@ -79,50 +74,50 @@ type CommandableHttpService struct {
 }
 
 // NewCommandableHttpService creates a new instance of the service.
-// Parameters:
-//   - baseRoute string a service base route.
-// Returns: *CommandableHttpService
-// pointer on new instance CommandableHttpService
-// func NewCommandableHttpService(baseRoute string) *CommandableHttpService {
-// 	c := &CommandableHttpService{}
-// 	c.RestService = InheritRestService(c)
-// 	c.BaseRoute = baseRoute
-// 	c.SwaggerAuto = true
-// 	c.DependencyResolver.Put("controller", "none")
-// 	return c
-// }
+//	Parameters:
+//		- baseRoute string a service base route.
+//	Returns: *CommandableHttpService pointer on new instance CommandableHttpService
+//	func NewCommandableHttpService(baseRoute string) *CommandableHttpService {
+//		c := &CommandableHttpService{}
+//		c.RestService = InheritRestService(c)
+//		c.BaseRoute = baseRoute
+//		c.SwaggerAuto = true
+//		c.DependencyResolver.Put(context.Background(), "controller", "none")
+//		return c
+//	}
 
 // InheritCommandableHttpService creates a new instance of the service.
-// Parameters:
-//   - overrides references to child class that overrides virtual methods
-//   - baseRoute string a service base route.
-// Returns: *CommandableHttpService
-// pointer on new instance CommandableHttpService
+//	Parameters:
+//		- overrides references to child class that overrides virtual methods
+//		- baseRoute string a service base route.
+//	Returns: *CommandableHttpService pointer on new instance CommandableHttpService
 func InheritCommandableHttpService(overrides IRestServiceOverrides, baseRoute string) *CommandableHttpService {
 	c := &CommandableHttpService{}
 	c.RestService = InheritRestService(overrides)
 	c.BaseRoute = baseRoute
 	c.SwaggerAuto = true
-	c.DependencyResolver.Put("controller", "none")
+	c.DependencyResolver.Put(context.Background(), "controller", "none")
 	return c
 }
 
-//  Configure method configures component by passing configuration parameters.
-//   - config    configuration parameters to be set.
-func (c *CommandableHttpService) Configure(config *cconf.ConfigParams) {
-	c.RestService.Configure(config)
+// Configure method configures component by passing configuration parameters.
+//	Parameters:
+//		- ctx context.Context
+//		- config configuration parameters to be set.
+func (c *CommandableHttpService) Configure(ctx context.Context, config *cconf.ConfigParams) {
+	c.RestService.Configure(ctx, config)
 	c.SwaggerAuto = config.GetAsBooleanWithDefault("swagger.auto", c.SwaggerAuto)
 }
 
 // Register method are registers all service routes in HTTP endpoint.
-func (c *CommandableHttpService) Register() {
+func (c *CommandableHttpService) Register(ctx context.Context) {
 	resCtrl, depErr := c.DependencyResolver.GetOneRequired("controller")
 	if depErr != nil {
 		return
 	}
 	controller, ok := resCtrl.(ccomands.ICommandable)
 	if !ok {
-		c.Logger.Error("CommandableHttpService", nil, "Can't cast Controller to ICommandable")
+		c.Logger.Error(ctx, "CommandableHttpService", nil, "Can't cast Controller to ICommandable")
 		return
 	}
 	c.commandSet = controller.GetCommandSet()
@@ -144,10 +139,11 @@ func (c *CommandableHttpService) Register() {
 				HttpResponseSender.SendError(res, req, bodyErr)
 				return
 			}
-			req.Body.Close()
+			_ = req.Body.Close()
 			req.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBuf))
 			//-------------------------
-			var params map[string]interface{} = make(map[string]interface{}, 0)
+			// TODO:: think about marshaling and error
+			var params map[string]any = make(map[string]any, 0)
 			json.Unmarshal(bodyBuf, &params)
 
 			urlParams := req.URL.Query()
@@ -160,12 +156,11 @@ func (c *CommandableHttpService) Register() {
 
 			correlationId := c.GetCorrelationId(req)
 			args := crun.NewParametersFromValue(params)
-			timing := c.Instrument(correlationId, c.BaseRoute+"."+command.Name())
+			timing := c.Instrument(ctx, correlationId, c.BaseRoute+"."+command.Name())
 
-			execRes, execErr := command.Execute(correlationId, args)
-			timing.EndTiming(execErr)
+			execRes, execErr := command.Execute(ctx, correlationId, args)
+			timing.EndTiming(ctx, execErr)
 			c.SendResult(res, req, execRes, execErr)
-
 		})
 	}
 

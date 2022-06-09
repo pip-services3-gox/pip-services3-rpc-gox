@@ -1,20 +1,21 @@
 package test_services
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
-	"github.com/pip-services3-go/pip-services3-rpc-go/services"
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
-	tlogic "github.com/pip-services3-go/pip-services3-rpc-go/test/logic"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cvalid "github.com/pip-services3-gox/pip-services3-commons-gox/validate"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/services"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
+	tlogic "github.com/pip-services3-gox/pip-services3-rpc-gox/test/logic"
 )
 
 type DummyRestService struct {
@@ -29,18 +30,22 @@ func NewDummyRestService() *DummyRestService {
 	c := &DummyRestService{}
 	c.RestService = services.InheritRestService(c)
 	c.numberOfCalls = 0
-	c.DependencyResolver.Put("controller", crefer.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
+	c.DependencyResolver.Put(context.Background(), "controller", crefer.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
 	return c
 }
 
-func (c *DummyRestService) Configure(config *cconf.ConfigParams) {
-	c.openApiContent = *config.GetAsNullableString("openapi_content")
-	c.openApiFile = *config.GetAsNullableString("openapi_file")
-	c.RestService.Configure(config)
+func (c *DummyRestService) Configure(ctx context.Context, config *cconf.ConfigParams) {
+	if _val, ok := config.GetAsNullableString("openapi_content"); ok {
+		c.openApiContent = _val
+	}
+	if _val, ok := config.GetAsNullableString("openapi_file"); ok {
+		c.openApiFile = _val
+	}
+	c.RestService.Configure(ctx, config)
 }
 
-func (c *DummyRestService) SetReferences(references crefer.IReferences) {
-	c.RestService.SetReferences(references)
+func (c *DummyRestService) SetReferences(ctx context.Context, references crefer.IReferences) {
+	c.RestService.SetReferences(ctx, references)
 	depRes, depErr := c.DependencyResolver.GetOneRequired("controller")
 	if depErr == nil && depRes != nil {
 		c.controller = depRes.(tlogic.IDummyController)
@@ -69,6 +74,7 @@ func (c *DummyRestService) getPageByFilter(res http.ResponseWriter, req *http.Re
 	delete(params, "total")
 
 	result, err := c.controller.GetPageByFilter(
+		context.Background(),
 		c.GetCorrelationId(req),
 		cdata.NewFilterParamsFromValue(params), // W! need test
 		cdata.NewPagingParamsFromTuples(paginParams),
@@ -85,6 +91,7 @@ func (c *DummyRestService) getOneById(res http.ResponseWriter, req *http.Request
 		dummyId = vars["dummy_id"]
 	}
 	result, err := c.controller.GetOneById(
+		context.Background(),
 		c.GetCorrelationId(req),
 		dummyId)
 	c.SendResult(res, req, result, err)
@@ -110,6 +117,7 @@ func (c *DummyRestService) create(res http.ResponseWriter, req *http.Request) {
 	}
 
 	result, err := c.controller.Create(
+		context.Background(),
 		correlationId,
 		dummy,
 	)
@@ -136,6 +144,7 @@ func (c *DummyRestService) update(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	result, err := c.controller.Update(
+		context.Background(),
 		correlationId,
 		dummy,
 	)
@@ -152,6 +161,7 @@ func (c *DummyRestService) deleteById(res http.ResponseWriter, req *http.Request
 	}
 
 	result, err := c.controller.DeleteById(
+		context.Background(),
 		c.GetCorrelationId(req),
 		dummyId,
 	)
@@ -159,12 +169,12 @@ func (c *DummyRestService) deleteById(res http.ResponseWriter, req *http.Request
 }
 
 func (c *DummyRestService) checkCorrelationId(res http.ResponseWriter, req *http.Request) {
-	result, err := c.controller.CheckCorrelationId(c.GetCorrelationId(req))
+	result, err := c.controller.CheckCorrelationId(context.Background(), c.GetCorrelationId(req))
 	c.SendResult(res, req, result, err)
 }
 
 func (c *DummyRestService) checkErrorPropagation(res http.ResponseWriter, req *http.Request) {
-	err := c.controller.CheckErrorPropagation(c.GetCorrelationId(req))
+	err := c.controller.CheckErrorPropagation(context.Background(), c.GetCorrelationId(req))
 	c.SendError(res, req, err)
 }
 

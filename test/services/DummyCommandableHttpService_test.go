@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
 
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,7 +24,7 @@ func TestDummyCommandableHttpService(t *testing.T) {
 
 	// Create one dummy
 
-	bodyMap := make(map[string]interface{})
+	bodyMap := make(map[string]any)
 	bodyMap["dummy"] = _dummy1
 
 	jsonBody, _ := json.Marshal(bodyMap)
@@ -46,7 +47,7 @@ func TestDummyCommandableHttpService(t *testing.T) {
 	dummy1 := dummy
 
 	// Create another dummy
-	bodyMap = make(map[string]interface{})
+	bodyMap = make(map[string]any)
 	bodyMap["dummy"] = _dummy2
 
 	jsonBody, _ = json.Marshal(bodyMap)
@@ -72,7 +73,7 @@ func TestDummyCommandableHttpService(t *testing.T) {
 	resBody, bodyErr = ioutil.ReadAll(postResponse.Body)
 	assert.Nil(t, bodyErr)
 	postResponse.Body.Close()
-	var dummies tdata.DummyDataPage
+	var dummies cdata.DataPage[tdata.Dummy]
 	jsonErr = json.Unmarshal(resBody, &dummies)
 	assert.Nil(t, jsonErr)
 	assert.NotNil(t, dummies)
@@ -80,7 +81,7 @@ func TestDummyCommandableHttpService(t *testing.T) {
 
 	// Update the dummy
 	dummy1.Content = "Updated Content 1"
-	bodyMap = make(map[string]interface{})
+	bodyMap = make(map[string]any)
 	bodyMap["dummy"] = dummy1
 
 	jsonBody, _ = json.Marshal(bodyMap)
@@ -98,7 +99,7 @@ func TestDummyCommandableHttpService(t *testing.T) {
 	assert.Equal(t, dummy.Key, _dummy1.Key)
 
 	// Delete dummy
-	bodyMap = make(map[string]interface{})
+	bodyMap = make(map[string]any)
 	bodyMap["dummy_id"] = dummy1.Id
 	jsonBody, _ = json.Marshal(bodyMap)
 	bodyReader = bytes.NewReader(jsonBody)
@@ -109,7 +110,7 @@ func TestDummyCommandableHttpService(t *testing.T) {
 	assert.Nil(t, bodyErr)
 
 	// Try to get delete dummy
-	bodyMap = make(map[string]interface{})
+	bodyMap = make(map[string]any)
 	bodyMap["dummy_id"] = dummy1.Id
 	jsonBody, _ = json.Marshal(bodyMap)
 	bodyReader = bytes.NewReader(jsonBody)
@@ -124,7 +125,7 @@ func TestDummyCommandableHttpService(t *testing.T) {
 	assert.Empty(t, dummy)
 
 	// Testing transmit correlationId
-	bodyMap = make(map[string]interface{})
+	bodyMap = make(map[string]any)
 	bodyMap["dummy_id"] = dummy1.Id
 	jsonBody, _ = json.Marshal(bodyMap)
 	bodyReader = bytes.NewReader(jsonBody)

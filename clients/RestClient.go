@@ -2,6 +2,7 @@ package clients
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -10,73 +11,67 @@ import (
 	"strings"
 	"time"
 
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
-	clog "github.com/pip-services3-go/pip-services3-components-go/log"
-	ctrace "github.com/pip-services3-go/pip-services3-components-go/trace"
-	rpccon "github.com/pip-services3-go/pip-services3-rpc-go/connect"
-	service "github.com/pip-services3-go/pip-services3-rpc-go/services"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
+	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
+	ctrace "github.com/pip-services3-gox/pip-services3-components-gox/trace"
+	rpccon "github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
+	service "github.com/pip-services3-gox/pip-services3-rpc-gox/services"
 )
 
-/*
-RestClient is abstract client that calls remove endpoints using HTTP/REST protocol.
-
-Configuration parameters:
-  - base_route:              base route for remote URI
-  - connection(s):
-    - discovery_key:         (optional) a key to retrieve the connection from IDiscovery
-    - protocol:              connection protocol: http or https
-    - host:                  host name or IP address
-    - port:                  port number
-    - uri:                   resource URI or connection string with all parameters in it
-  - options:
-    - retries:               number of retries (default: 3)
-    - connectTimeout:        connection timeout in milliseconds (default: 10 sec)
-	- timeout:               invocation timeout in milliseconds (default: 10 sec)
-	- correlation_id_place 	 place for adding correalationId, query - in query string, headers - in headers, both - in query and headers (default: query)
-
-References:
-- *:logger:*:*:1.0         (optional) ILogger components to pass log messages
-- *:counters:*:*:1.0         (optional) ICounters components to pass collected measurements
-- *:discovery:*:*:1.0        (optional)  IDiscovery services to resolve connection
-
-See RestService
-See CommandableHttpService
-
- Example:
-    type MyRestClient struct {
-		*RestClient
-	}
-    ...
-    func (c *MyRestClient) GetData(correlationId string, id string) (result *tdata.MyDataPage, err error) {
-
-		params := cdata.NewEmptyStringValueMap()
-		params.Set("id", id)
-
-		calValue, calErr := c.Call(MyDataPageType, "get", "/data", correlationId, params, nil)
-		if calErr != nil {
-			return nil, calErr
-		}
-
-		result, _ = calValue.(*tdata.MyDataPage)
-		c.Instrument(correlationId, "myData.get_page_by_filter")
-		return result, nil
-	}
-
-    client := NewMyRestClient();
-    client.Configure(cconf.NewConfigParamsFromTuples(
-        "connection.protocol", "http",
-        "connection.host", "localhost",
-        "connection.port", 8080,
-    ));
-
-	result, err := client.GetData("123", "1")
-	 ...
-
-*/
+// RestClient is abstract client that calls remove endpoints using HTTP/REST protocol.
+//
+//	Configuration parameters:
+//		- base_route:              base route for remote URI
+//		- connection(s):
+//			- discovery_key:         (optional) a key to retrieve the connection from IDiscovery
+//			- protocol:              connection protocol: http or https
+//			- host:                  host name or IP address
+//			- port:                  port number
+//			- uri:                   resource URI or connection string with all parameters in it
+//		- options:
+//			- retries:               number of retries (default: 3)
+//			- connectTimeout:        connection timeout in milliseconds (default: 10 sec)
+//			- timeout:               invocation timeout in milliseconds (default: 10 sec)
+//			- correlation_id_place 	 place for adding correalationId, query - in query string, headers - in headers, both - in query and headers (default: query)
+//
+//	References:
+//		- *:logger:*:*:1.0         (optional) ILogger components to pass log messages
+//		- *:counters:*:*:1.0         (optional) ICounters components to pass collected measurements
+//		- *:discovery:*:*:1.0        (optional)  IDiscovery services to resolve connection
+//
+//	see services.RestService
+//	see services.CommandableHttpService
+//
+//	Example:
+//		type MyRestClient struct {
+//			*RestClient
+//		}
+//		...
+//		func (c *MyRestClient) GetData(correlationId string, id string) (result *tdata.MyDataPage, err error) {
+//			params := cdata.NewEmptyStringValueMap()
+//			params.Set("id", id)
+//			calValue, calErr := c.Call(MyDataPageType, "get", "/data", correlationId, params, nil)
+//			if calErr != nil {
+//				return nil, calErr
+//			}
+//			result, _ = calValue.(*tdata.MyDataPage)
+//			c.Instrument(correlationId, "myData.get_page_by_filter")
+//			return result, nil
+//		}
+//
+//		client := NewMyRestClient();
+//		client.Configure(context.Background(), cconf.NewConfigParamsFromTuples(
+//			"connection.protocol", "http",
+//			"connection.host", "localhost",
+//			"connection.port", 8080,
+//		));
+//
+//		result, err := client.GetData("123", "1")
+//		...
 type RestClient struct {
 	defaultConfig cconf.ConfigParams
 	//The HTTP client.
@@ -107,8 +102,15 @@ type RestClient struct {
 	passCorrelationId string
 }
 
+const (
+	DefaultRequestMaxSize = 1024 * 1024
+	DefaultConnectTimeout = 10000
+	DefaultTimeout        = 10000
+	DefaultRetriesCount   = 3
+)
+
 // NewRestClient creates new instance of RestClient
-// Retruns pointer on NewRestClient
+//	Returns: pointer on NewRestClient
 func NewRestClient() *RestClient {
 	rc := RestClient{}
 	rc.defaultConfig = *cconf.NewConfigParamsFromTuples(
@@ -116,17 +118,17 @@ func NewRestClient() *RestClient {
 		"connection.host", "0.0.0.0",
 		"connection.port", 3000,
 
-		"options.request_max_size", 1024*1024,
-		"options.connectTimeout", 10000,
-		"options.timeout", 10000,
-		"options.retries", 3,
+		"options.request_max_size", DefaultRequestMaxSize,
+		"options.connectTimeout", DefaultConnectTimeout,
+		"options.timeout", DefaultTimeout,
+		"options.retries", DefaultRetriesCount,
 		"options.debug", true,
 		"options.correlation_id", "query",
 	)
 	rc.ConnectionResolver = *rpccon.NewHttpConnectionResolver()
 	rc.Logger = clog.NewCompositeLogger()
 	rc.Counters = ccount.NewCompositeCounters()
-	rc.Tracer = ctrace.NewCompositeTracer(nil)
+	rc.Tracer = ctrace.NewCompositeTracer(context.Background(), nil)
 	rc.Options = *cconf.NewEmptyConfigParams()
 	rc.Retries = 1
 	rc.Headers = *cdata.NewEmptyStringValueMap()
@@ -135,12 +137,13 @@ func NewRestClient() *RestClient {
 	return &rc
 }
 
-// Configures component by passing configuration parameters.
-// Parameters:
-// - config *cconf.ConfigParams   configuration parameters to be set.
-func (c *RestClient) Configure(config *cconf.ConfigParams) {
+// Configure component by passing configuration parameters.
+//	Parameters:
+//		- ctx context.Context
+//		- config *cconf.ConfigParams   configuration parameters to be set.
+func (c *RestClient) Configure(ctx context.Context, config *cconf.ConfigParams) {
 	config = config.SetDefaults(&c.defaultConfig)
-	c.ConnectionResolver.Configure(config)
+	c.ConnectionResolver.Configure(ctx, config)
 	c.Options = *c.Options.Override(config.GetSection("options"))
 	c.Retries = config.GetAsIntegerWithDefault("options.retries", c.Retries)
 	c.ConnectTimeout = config.GetAsIntegerWithDefault("options.connectTimeout", c.ConnectTimeout)
@@ -149,58 +152,62 @@ func (c *RestClient) Configure(config *cconf.ConfigParams) {
 	c.passCorrelationId = config.GetAsStringWithDefault("options.correlation_id", c.passCorrelationId)
 }
 
-// Sets references to dependent components.
-// Parameters:
-// - references  crefer.IReferences	references to locate the component dependencies.
-func (c *RestClient) SetReferences(references crefer.IReferences) {
-	c.Logger.SetReferences(references)
-	c.Counters.SetReferences(references)
-	c.Tracer.SetReferences(references)
-	c.ConnectionResolver.SetReferences(references)
+// SetReferences to dependent components.
+//	Parameters:
+//		- ctx context.Context
+//		- references  crefer.IReferences	references to locate the component dependencies.
+func (c *RestClient) SetReferences(ctx context.Context, references crefer.IReferences) {
+	c.Logger.SetReferences(ctx, references)
+	c.Counters.SetReferences(ctx, references)
+	c.Tracer.SetReferences(ctx, references)
+	c.ConnectionResolver.SetReferences(ctx, references)
 }
 
 // Instrument method are adds instrumentation to log calls and measure call time.
 // It returns a Timing object that is used to end the time measurement.
-// Parameters:
-// - correlationId  string   (optional) transaction id to trace execution through call chain.
-// - name    string          a method name.
-// Return Timing object to end the time measurement.
-func (c *RestClient) Instrument(correlationId string, name string) *service.InstrumentTiming {
-	c.Logger.Trace(correlationId, "Calling %s method", name)
-	c.Counters.IncrementOne(name + ".call_count")
-	counterTiming := c.Counters.BeginTiming(name + ".call_time")
-	traceTiming := c.Tracer.BeginTrace(correlationId, name, "")
+//	Parameters:
+//		- ctx context.Context
+//		- correlationId string (optional) transaction id to trace execution through call chain.
+//		- name string a method name.
+//	Returns: Timing object to end the time measurement.
+func (c *RestClient) Instrument(ctx context.Context, correlationId string, name string) *service.InstrumentTiming {
+	c.Logger.Trace(ctx, correlationId, "Calling %s method", name)
+	c.Counters.IncrementOne(ctx, name+".call_count")
+	counterTiming := c.Counters.BeginTiming(ctx, name+".call_time")
+	traceTiming := c.Tracer.BeginTrace(ctx, correlationId, name, "")
 	return service.NewInstrumentTiming(correlationId, name, "call",
 		c.Logger, c.Counters, counterTiming, traceTiming)
 }
 
 // InstrumentError method are dds instrumentation to error handling.
-//    - correlationId   string  (optional) transaction id to trace execution through call chain.
-//    - name   string           a method name.
-//    - err    error           an occured error
-//    - result  interface{}           (optional) an execution result
-// Returns: result interface{}, err error
-// an execution result and error
-func (c *RestClient) InstrumentError(correlationId string, name string, inErr error, inRes interface{}) (result interface{}, err error) {
+//	Parameters:
+//		- ctx context.Context
+//		- correlationId string  (optional) transaction id to trace execution through call chain.
+//		- name   string         a method name.
+//		- err    error          an occured error
+//		- result  any           (optional) an execution result
+//	Returns: result any, err error an execution result and error
+func (c *RestClient) InstrumentError(ctx context.Context, correlationId string, name string, inErr error, inRes any) (result any, err error) {
 	if inErr != nil {
-		c.Logger.Error(correlationId, inErr, "Failed to call %s method", name)
-		c.Counters.IncrementOne(name + ".call_errors")
+		c.Logger.Error(ctx, correlationId, inErr, "Failed to call %s method", name)
+		c.Counters.IncrementOne(ctx, name+".call_errors")
 	}
 
 	return inRes, inErr
 }
 
 // IsOpen are checks if the component is opened.
-// Return true if the component has been opened and false otherwise.
+//	Returns: true if the component has been opened and false otherwise.
 func (c *RestClient) IsOpen() bool {
 	return c.Client != nil
 }
 
 // Open method are opens the component.
-// 	- correlationId string	(optional) transaction id to trace execution through call chain.
-// Returns: error
-// error or nil no errors occured.
-func (c *RestClient) Open(correlationId string) error {
+//	Parameters:
+//		- ctx context.Context
+//		- correlationId string	(optional) transaction id to trace execution through call chain.
+//	Returns: error or nil no errors occurred.
+func (c *RestClient) Open(ctx context.Context, correlationId string) error {
 	if c.IsOpen() {
 		return nil
 	}
@@ -223,13 +230,13 @@ func (c *RestClient) Open(correlationId string) error {
 }
 
 // Close method are closes component and frees used resources.
-// Parameters:
-// 	- correlationId  string	(optional) transaction id to trace execution through call chain.
-// Retruns: error
-// error or nil no errors occured.
-func (c *RestClient) Close(correlationId string) error {
+//	Parameters:
+//		- ctx context.Context
+//		- correlationId  string	(optional) transaction id to trace execution through call chain.
+// Returns: error or nil no errors occured.
+func (c *RestClient) Close(ctx context.Context, correlationId string) error {
 	if c.Client != nil {
-		c.Logger.Debug(correlationId, "Closed REST service at %s", c.Uri)
+		c.Logger.Debug(ctx, correlationId, "Closed REST service at %s", c.Uri)
 		c.Client = nil
 		c.Uri = ""
 	}
@@ -237,10 +244,10 @@ func (c *RestClient) Close(correlationId string) error {
 }
 
 // AddCorrelationId method are adds a correlation id (correlation_id) to invocation parameter map.
-// Parameters:
-//    - params    *cdata.StringValueMap        invocation parameters.
-//    - correlationId  string  (optional) a correlation id to be added.
-//  Return invocation parameters with added correlation id.
+//	Parameters:
+//		- params    *cdata.StringValueMap        invocation parameters.
+//		- correlationId  string  (optional) a correlation id to be added.
+//	Returns: invocation parameters with added correlation id.
 func (c *RestClient) AddCorrelationId(params *cdata.StringValueMap, correlationId string) *cdata.StringValueMap {
 	// Automatically generate short ids for now
 	if correlationId == "" {
@@ -257,10 +264,10 @@ func (c *RestClient) AddCorrelationId(params *cdata.StringValueMap, correlationI
 
 // AddFilterParams method are adds filter parameters (with the same name as they defined)
 // to invocation parameter map.
-// Parameters:
-//    - params  *cdata.StringValueMap      invocation parameters.
-//    - filter  *cdata.FilterParams     (optional) filter parameters
-// Return invocation parameters with added filter parameters.
+//	Parameters:
+//		- params  *cdata.StringValueMap      invocation parameters.
+//		- filter  *cdata.FilterParams     (optional) filter parameters
+//	Returns: invocation parameters with added filter parameters.
 func (c *RestClient) AddFilterParams(params *cdata.StringValueMap, filter *cdata.FilterParams) *cdata.StringValueMap {
 
 	if params == nil {
@@ -286,11 +293,11 @@ func (c *RestClient) AddPagingParams(params *cdata.StringValueMap, paging *cdata
 
 	if paging != nil {
 		params.Put("total", paging.Total)
-		if paging.Skip != nil {
-			params.Put("skip", *paging.Skip)
+		if paging.Skip >= 0 {
+			params.Put("skip", paging.Skip)
 		}
-		if paging.Take != nil {
-			params.Put("take", *paging.Take)
+		if paging.Take >= 0 {
+			params.Put("take", paging.Take)
 		}
 	}
 
@@ -316,17 +323,19 @@ func (c *RestClient) createRequestRoute(route string) string {
 }
 
 // Call method are calls a remote method via HTTP/REST protocol.
-// Parameters:
-// 	- prototype reflect.Type type for convert JSON result. Set nil for return raw JSON string
-//  - method 	string           HTTP method: "get", "head", "post", "put", "delete"
-//  - route   string          a command route. Base route will be added to this route
-//  - correlationId  string    (optional) transaction id to trace execution through call chain.
-//  - params  cdata.StringValueMap          (optional) query parameters.
-//  - data   interface{}           (optional) body object.
-// Returns:  result interface{}, err error
-// result object or error.
-func (c *RestClient) Call(prototype reflect.Type, method string, route string, correlationId string, params *cdata.StringValueMap,
-	data interface{}) (result interface{}, err error) {
+//	Parameters:
+//		- ctx context.Context
+//		- prototype reflect.Type type for convert JSON result. Set nil for return raw JSON string
+//		- method 	string           HTTP method: "get", "head", "post", "put", "delete"
+//		- route   string          a command route. Base route will be added to this route
+//		- correlationId  string    (optional) transaction id to trace execution through call chain.
+//		- params  cdata.StringValueMap          (optional) query parameters.
+//		- data   any           (optional) body object.
+//	Returns: result any, err error result object or error.
+func (c *RestClient) Call(ctx context.Context, prototype reflect.Type, method string, route string, correlationId string, params *cdata.StringValueMap,
+	data any) (result any, err error) {
+
+	//TODO:: refactor method
 
 	method = strings.ToUpper(method)
 	if params == nil {
@@ -417,7 +426,7 @@ func (c *RestClient) Call(prototype reflect.Type, method string, route string, c
 		appErr := cerr.ApplicationError{}
 		json.Unmarshal(r, &appErr)
 		if appErr.Status == 0 && len(r) > 0 { // not standart Pip.Services error
-			values := make(map[string]interface{})
+			values := make(map[string]any)
 			decodeErr := json.Unmarshal(r, &values)
 			if decodeErr != nil { // not json response
 				appErr.Message = (string)(r)

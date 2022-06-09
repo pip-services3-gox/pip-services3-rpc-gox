@@ -1,6 +1,6 @@
 {
     "name": "pip-services3-rpc-gox",
     "registry": "github.com/pip-services3-gox",
-    "version": "3.1.0",
+    "version": "1.0.0",
     "build": 0
 }

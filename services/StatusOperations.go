@@ -1,17 +1,16 @@
 package services
 
 import (
+	"context"
 	"net/http"
 	"time"
 
-	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cinfo "github.com/pip-services3-go/pip-services3-components-go/info"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cinfo "github.com/pip-services3-gox/pip-services3-components-gox/info"
 )
 
-/*
-StatusOperations helper class for status service
-*/
+// StatusOperations helper class for status service
 type StatusOperations struct {
 	RestOperations
 	startTime   time.Time
@@ -23,19 +22,27 @@ type StatusOperations struct {
 func NewStatusOperations() *StatusOperations {
 	c := StatusOperations{}
 	c.startTime = time.Now()
-	c.DependencyResolver.Put("context-info", crefer.NewDescriptor("pip-services", "context-info", "default", "*", "1.0"))
+	c.DependencyResolver.Put(
+		context.Background(),
+		"context-info",
+		crefer.NewDescriptor("pip-services", "context-info", "default", "*", "1.0"),
+	)
 	return &c
 }
 
 // SetReferences  sets references to dependent components.
-//  - references  crefer.IReferences	references to locate the component dependencies.
-func (c *StatusOperations) SetReferences(references crefer.IReferences) {
+//	Parameters:
+//		- ctx context.Context
+//		- references crefer.IReferences references to locate the component dependencies.
+func (c *StatusOperations) SetReferences(ctx context.Context, references crefer.IReferences) {
 	c.references2 = references
-	c.RestOperations.SetReferences(references)
+	c.RestOperations.SetReferences(ctx, references)
 
 	depRes := c.DependencyResolver.GetOneOptional("context-info")
 	if depRes != nil {
-		c.contextInfo = depRes.(*cinfo.ContextInfo)
+		if ctxInfo, ok := depRes.(*cinfo.ContextInfo); ok {
+			c.contextInfo = ctxInfo
+		}
 	}
 }
 
@@ -47,8 +54,9 @@ func (c *StatusOperations) GetStatusOperation() func(res http.ResponseWriter, re
 }
 
 // Status method handles status requests
-//   - req *http.Request  an HTTP request
-//   - res  http.ResponseWriter  an HTTP response
+//	Parameters:
+//		- req *http.Request  an HTTP request
+//		- res  http.ResponseWriter  an HTTP response
 func (c *StatusOperations) Status(res http.ResponseWriter, req *http.Request) {
 
 	id := ""
@@ -80,7 +88,7 @@ func (c *StatusOperations) Status(res http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	status := make(map[string]interface{})
+	status := make(map[string]any)
 
 	status["id"] = id
 	status["name"] = name

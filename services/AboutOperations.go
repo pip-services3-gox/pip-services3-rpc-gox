@@ -1,14 +1,15 @@
 package services
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net"
 	"net/http"
 	"time"
 
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cinfo "github.com/pip-services3-go/pip-services3-components-go/info"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cinfo "github.com/pip-services3-gox/pip-services3-components-gox/info"
 )
 
 type AboutOperations struct {
@@ -16,12 +17,14 @@ type AboutOperations struct {
 	contextInfo *cinfo.ContextInfo
 }
 
-func (c *AboutOperations) SetReferences(references crefer.IReferences) {
-	c.RestOperations.SetReferences(references)
+func (c *AboutOperations) SetReferences(ctx context.Context, references crefer.IReferences) {
+	c.RestOperations.SetReferences(ctx, references)
 
 	depResult := references.GetOneOptional(crefer.NewDescriptor("pip-services", "context-info", "*", "*", "*"))
 	if depResult != nil {
-		c.contextInfo = depResult.(*cinfo.ContextInfo)
+		if ctxInfo, ok := depResult.(*cinfo.ContextInfo); ok {
+			c.contextInfo = ctxInfo
+		}
 	}
 
 }
@@ -49,8 +52,8 @@ func (c *AboutOperations) GetNetworkAddresses() []string {
 }
 
 func (c *AboutOperations) About(res http.ResponseWriter, req *http.Request) {
-	about := make(map[string]interface{}, 0)
-	server := make(map[string]interface{})
+	about := make(map[string]any, 0)
+	server := make(map[string]any)
 
 	server["name"] = "unknown"
 	server["description"] = ""
@@ -74,7 +77,7 @@ func (c *AboutOperations) About(res http.ResponseWriter, req *http.Request) {
 
 	about["server"] = server
 
-	client := make(map[string]interface{})
+	client := make(map[string]any)
 	client["address"] = HttpRequestDetector.DetectAddress(req)
 	client["client"] = HttpRequestDetector.DetectBrowser(req)
 	client["platform"] = HttpRequestDetector.DetectPlatform(req)
@@ -84,7 +87,7 @@ func (c *AboutOperations) About(res http.ResponseWriter, req *http.Request) {
 
 	jsonObj, jsonErr := json.Marshal(about)
 	if jsonErr == nil {
-		io.WriteString(res, (string)(jsonObj))
+		_, _ = io.WriteString(res, (string)(jsonObj))
 	}
 	//res.json(about)
 }

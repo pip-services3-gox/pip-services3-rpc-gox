@@ -3,9 +3,9 @@ package test_clients
 import (
 	"reflect"
 
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	"github.com/pip-services3-go/pip-services3-rpc-go/clients"
-	tdata "github.com/pip-services3-go/pip-services3-rpc-go/test/data"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
 )
 
 var (

@@ -1,22 +1,21 @@
 package services
 
 import (
-	"encoding/json"
+	"context"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	ccount "github.com/pip-services3-go/pip-services3-components-go/count"
-	clog "github.com/pip-services3-go/pip-services3-components-go/log"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
+	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
 )
 
-/*
-RestOperations helper class for REST operations
-*/
+// RestOperations helper class for REST operations
 type RestOperations struct {
 	Logger             *clog.CompositeLogger
 	Counters           *ccount.CompositeCounters
@@ -33,27 +32,28 @@ func NewRestOperations() *RestOperations {
 }
 
 // Configure method are configures this RestOperations using the given configuration parameters.
-// Parameters:
-//   - config *cconf.ConfigParams confif parameters
-func (c *RestOperations) Configure(config *cconf.ConfigParams) {
-	c.DependencyResolver.Configure(config)
+//	Parameters:
+//		- ctx context.Context
+//		- config *cconf.ConfigParams confif parameters
+func (c *RestOperations) Configure(ctx context.Context, config *cconf.ConfigParams) {
+	c.DependencyResolver.Configure(ctx, config)
 }
 
 // SetReferences method are sets references to this RestOperations logger, counters, and connection resolver.
-// Parameters:
-//   - references    an IReferences object, containing references to a logger, counters,
-//   and a dependency resolver.
-func (c *RestOperations) SetReferences(references crefer.IReferences) {
-	c.Logger.SetReferences(references)
-	c.Counters.SetReferences(references)
-	c.DependencyResolver.SetReferences(references)
+//	Parameters:
+//		- ctx context.Context
+//		- references    an IReferences object, containing references to a logger, counters,
+//			and a dependency resolver.
+func (c *RestOperations) SetReferences(ctx context.Context, references crefer.IReferences) {
+	c.Logger.SetReferences(ctx, references)
+	c.Counters.SetReferences(ctx, references)
+	c.DependencyResolver.SetReferences(ctx, references)
 }
 
 // GetCorrelationId method returns CorrelationId from request
-// Parameters:
-//   req *http.Request  request
-// Returns: string
-// retrun correlation_id or empty string
+//	Parameters:
+//		- req *http.Request  request
+//	Returns: string correlation_id or empty string
 func (c *RestOperations) GetCorrelationId(req *http.Request) string {
 	correlationId := req.URL.Query().Get("correlation_id")
 	if correlationId == "" {
@@ -62,11 +62,10 @@ func (c *RestOperations) GetCorrelationId(req *http.Request) string {
 	return correlationId
 }
 
-// GetFilterParams method retruns filter params object from request
-// Parameters:
-//   req *http.Request  request
-// Returns: *cdata.FilterParams
-// filter params object
+// GetFilterParams method reruns filter params object from request
+//	Parameters:
+//		- req *http.Request  request
+//	Returns: *cdata.FilterParams filter params object
 func (c *RestOperations) GetFilterParams(req *http.Request) *cdata.FilterParams {
 
 	params := req.URL.Query()
@@ -79,11 +78,10 @@ func (c *RestOperations) GetFilterParams(req *http.Request) *cdata.FilterParams 
 	return filter
 }
 
-// GetPagingParams method retruns paging params object from request
-// Parameters:
-//   req *http.Request  request
-// Returns: *cdata.PagingParams
-// pagings params object
+// GetPagingParams method reruns paging params object from request
+//	Parameters:
+//		- req *http.Request  request
+//	Returns: *cdata.PagingParams pagings params object
 func (c *RestOperations) GetPagingParams(req *http.Request) *cdata.PagingParams {
 
 	params := req.URL.Query()
@@ -100,9 +98,10 @@ func (c *RestOperations) GetPagingParams(req *http.Request) *cdata.PagingParams 
 }
 
 // GetParam methods helps get all params from query
-//   - req   - incoming request
-//   - name  - parameter name
-// Returns value or empty string if param not exists
+//	Parameters:
+//   - req  incoming request
+//   - name parameter name
+// Returns: value or empty string if param not exists
 func (c *RestOperations) GetParam(req *http.Request, name string) string {
 	param := req.URL.Query().Get(name)
 	if param == "" {
@@ -112,24 +111,25 @@ func (c *RestOperations) GetParam(req *http.Request, name string) string {
 }
 
 // DecodeBody methods helps decode body
-//   - req   	- incoming request
-//   - target  	- pointer on target variable for decode
-// Returns error
-func (c *RestOperations) DecodeBody(req *http.Request, target interface{}) error {
+//	Parameters:
+//		- req incoming request
+//		- target pointer on target variable for decode
+// Returns: error
+func (c *RestOperations) DecodeBody(req *http.Request, target any) error {
 
 	bytes, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		return err
 	}
 	defer req.Body.Close()
-	err = json.Unmarshal(bytes, target)
+	target, err = cconv.JsonConverter.FromJson(string(bytes))
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *RestOperations) SendResult(res http.ResponseWriter, req *http.Request, result interface{}, err error) {
+func (c *RestOperations) SendResult(res http.ResponseWriter, req *http.Request, result any, err error) {
 	HttpResponseSender.SendResult(res, req, result, err)
 }
 
@@ -137,11 +137,11 @@ func (c *RestOperations) SendEmptyResult(res http.ResponseWriter, req *http.Requ
 	HttpResponseSender.SendEmptyResult(res, req, err)
 }
 
-func (c *RestOperations) SendCreatedResult(res http.ResponseWriter, req *http.Request, result interface{}, err error) {
+func (c *RestOperations) SendCreatedResult(res http.ResponseWriter, req *http.Request, result any, err error) {
 	HttpResponseSender.SendCreatedResult(res, req, result, err)
 }
 
-func (c *RestOperations) SendDeletedResult(res http.ResponseWriter, req *http.Request, result interface{}, err error) {
+func (c *RestOperations) SendDeletedResult(res http.ResponseWriter, req *http.Request, result any, err error) {
 	HttpResponseSender.SendDeletedResult(res, req, result, err)
 }
 
@@ -151,26 +151,26 @@ func (c *RestOperations) SendError(res http.ResponseWriter, req *http.Request, e
 
 func (c *RestOperations) SendBadRequest(res http.ResponseWriter, req *http.Request, message string) {
 	correlationId := c.GetCorrelationId(req)
-	error := cerr.NewBadRequestError(correlationId, "BAD_REQUEST", message)
-	c.SendError(res, req, error)
+	err := cerr.NewBadRequestError(correlationId, "BAD_REQUEST", message)
+	c.SendError(res, req, err)
 }
 
 func (c *RestOperations) SendUnauthorized(res http.ResponseWriter, req *http.Request, message string) {
 	correlationId := c.GetCorrelationId(req)
-	error := cerr.NewUnauthorizedError(correlationId, "UNAUTHORIZED", message)
-	c.SendError(res, req, error)
+	err := cerr.NewUnauthorizedError(correlationId, "UNAUTHORIZED", message)
+	c.SendError(res, req, err)
 }
 
 func (c *RestOperations) SendNotFound(res http.ResponseWriter, req *http.Request, message string) {
 	correlationId := c.GetCorrelationId(req)
-	error := cerr.NewNotFoundError(correlationId, "NOT_FOUND", message)
-	c.SendError(res, req, error)
+	err := cerr.NewNotFoundError(correlationId, "NOT_FOUND", message)
+	c.SendError(res, req, err)
 }
 
 func (c *RestOperations) SendConflict(res http.ResponseWriter, req *http.Request, message string) {
 	correlationId := c.GetCorrelationId(req)
-	error := cerr.NewConflictError(correlationId, "CONFLICT", message)
-	c.SendError(res, req, error)
+	err := cerr.NewConflictError(correlationId, "CONFLICT", message)
+	c.SendError(res, req, err)
 }
 
 func (c *RestOperations) SendSessionExpired(res http.ResponseWriter, req *http.Request, message string) {
@@ -182,8 +182,8 @@ func (c *RestOperations) SendSessionExpired(res http.ResponseWriter, req *http.R
 
 func (c *RestOperations) SendInternalError(res http.ResponseWriter, req *http.Request, message string) {
 	correlationId := c.GetCorrelationId(req)
-	error := cerr.NewUnknownError(correlationId, "INTERNAL", message)
-	c.SendError(res, req, error)
+	err := cerr.NewUnknownError(correlationId, "INTERNAL", message)
+	c.SendError(res, req, err)
 }
 
 func (c *RestOperations) SendServerUnavailable(res http.ResponseWriter, req *http.Request, message string) {

@@ -3,10 +3,10 @@ package services
 import (
 	"strings"
 
-	ccomands "github.com/pip-services3-go/pip-services3-commons-go/commands"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
-	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
+	ccomands "github.com/pip-services3-gox/pip-services3-commons-gox/commands"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	cvalid "github.com/pip-services3-gox/pip-services3-commons-gox/validate"
 )
 
 type CommandableSwaggerDocument struct {
@@ -53,19 +53,19 @@ func NewCommandableSwaggerDocument(baseRoute string, config *cconf.ConfigParams,
 }
 
 func (c *CommandableSwaggerDocument) ToString() string {
-	var data = map[string]interface{}{
+	var data = map[string]any{
 		"openapi": c.Version,
-		"info": map[string]interface{}{
+		"info": map[string]any{
 			"title":          c.InfoTitle,
 			"description":    c.InfoDescription,
 			"version":        c.InfoVersion,
 			"termsOfService": c.InfoTermsOfService,
-			"contact": map[string]interface{}{
+			"contact": map[string]any{
 				"name":  c.InfoContactName,
 				"url":   c.InfoContactUrl,
 				"email": c.InfoContactEmail,
 			},
-			"license": map[string]interface{}{
+			"license": map[string]any{
 				"name": c.InfoLicenseName,
 				"url":  c.InfoLicenseUrl,
 			},
@@ -79,8 +79,8 @@ func (c *CommandableSwaggerDocument) ToString() string {
 	return c.content
 }
 
-func (c *CommandableSwaggerDocument) createPathsData() map[string]interface{} {
-	var data = make(map[string]interface{}, 0)
+func (c *CommandableSwaggerDocument) createPathsData() map[string]any {
+	var data = make(map[string]any, 0)
 
 	for index := 0; index < len(c.Commands); index++ {
 		command := c.Commands[index]
@@ -90,10 +90,10 @@ func (c *CommandableSwaggerDocument) createPathsData() map[string]interface{} {
 			path = "/" + path
 		}
 
-		data[path] = map[string]interface{}{
+		data[path] = map[string]any{
 
-			"post": map[string]interface{}{
-				"tags":        []interface{}{c.BaseRoute},
+			"post": map[string]any{
+				"tags":        []any{c.BaseRoute},
 				"operationId": command.Name(),
 				"requestBody": c.createRequestBodyData(command),
 				"responses":   c.createResponsesData(),
@@ -104,35 +104,35 @@ func (c *CommandableSwaggerDocument) createPathsData() map[string]interface{} {
 	return data
 }
 
-func (c *CommandableSwaggerDocument) createRequestBodyData(command ccomands.ICommand) map[string]interface{} {
+func (c *CommandableSwaggerDocument) createRequestBodyData(command ccomands.ICommand) map[string]any {
 	var schemaData = c.createSchemaData(command)
 	if schemaData == nil {
 		return nil
 	}
 
-	return map[string]interface{}{
-		"content": map[string]interface{}{
-			"application/json": map[string]interface{}{
+	return map[string]any{
+		"content": map[string]any{
+			"application/json": map[string]any{
 				"schema": schemaData,
 			},
 		},
 	}
 }
 
-func (c *CommandableSwaggerDocument) createSchemaData(command ccomands.ICommand) map[string]interface{} {
+func (c *CommandableSwaggerDocument) createSchemaData(command ccomands.ICommand) map[string]any {
 	var schema = command.(*ccomands.Command).GetSchema().(*cvalid.ObjectSchema)
 
 	if schema == nil || schema.Properties() == nil {
 		return nil
 	}
 
-	var properties = make(map[string]interface{}, 0)
-	var required = make([]interface{}, 0)
+	var properties = make(map[string]any, 0)
+	var required = make([]any, 0)
 
 	for _, property := range schema.Properties() {
 		tp, _ := property.Type().(cconv.TypeCode)
 
-		properties[property.Name()] = map[string]interface{}{
+		properties[property.Name()] = map[string]any{
 
 			"type": c.typeToString(tp),
 		}
@@ -141,7 +141,7 @@ func (c *CommandableSwaggerDocument) createSchemaData(command ccomands.ICommand)
 		}
 	}
 
-	var data = map[string]interface{}{
+	var data = map[string]any{
 		"properties": properties,
 	}
 
@@ -152,14 +152,14 @@ func (c *CommandableSwaggerDocument) createSchemaData(command ccomands.ICommand)
 	return data
 }
 
-func (c *CommandableSwaggerDocument) createResponsesData() map[string]interface{} {
-	return map[string]interface{}{
+func (c *CommandableSwaggerDocument) createResponsesData() map[string]any {
+	return map[string]any{
 
-		"200": map[string]interface{}{
+		"200": map[string]any{
 			"description": "Successful response",
-			"content": map[string]interface{}{
-				"application/json": map[string]interface{}{
-					"schema": map[string]interface{}{
+			"content": map[string]any{
+				"application/json": map[string]any{
+					"schema": map[string]any{
 						"type": "object",
 					},
 				},
@@ -168,13 +168,13 @@ func (c *CommandableSwaggerDocument) createResponsesData() map[string]interface{
 	}
 }
 
-func (c *CommandableSwaggerDocument) WriteData(indent int, data map[string]interface{}) {
+func (c *CommandableSwaggerDocument) WriteData(indent int, data map[string]any) {
 
 	for key, value := range data {
 		if val, ok := value.(string); ok {
 			c.writeAsString(indent, key, val)
 		} else {
-			if arr, ok := value.([]interface{}); ok {
+			if arr, ok := value.([]any); ok {
 				if len(arr) > 0 {
 					c.WriteName(indent, key)
 					for index := 0; index < len(arr); index++ {
@@ -183,7 +183,7 @@ func (c *CommandableSwaggerDocument) WriteData(indent int, data map[string]inter
 					}
 				}
 			} else {
-				if m, ok := value.(map[string]interface{}); ok {
+				if m, ok := value.(map[string]any); ok {
 					notEmpty := false
 					for _, v := range m {
 						if v != nil {
@@ -219,7 +219,7 @@ func (c *CommandableSwaggerDocument) writeArrayItem(indent int, name string, isO
 	}
 }
 
-func (c *CommandableSwaggerDocument) writeAsObject(indent int, name string, value interface{}) {
+func (c *CommandableSwaggerDocument) writeAsObject(indent int, name string, value any) {
 	if value == nil {
 		return
 	}

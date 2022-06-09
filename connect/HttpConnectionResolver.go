@@ -1,55 +1,51 @@
 package connect
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
-	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cauth "github.com/pip-services3-go/pip-services3-components-go/auth"
-	ccon "github.com/pip-services3-go/pip-services3-components-go/connect"
+	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
+	cauth "github.com/pip-services3-gox/pip-services3-components-gox/auth"
+	ccon "github.com/pip-services3-gox/pip-services3-components-gox/connect"
 )
 
-/*
-HttpConnectionResolver helper class to retrieve connections for HTTP-based services abd clients.
-
-In addition to regular functions of ConnectionResolver is able to parse http:// URIs
-and validate connection parameters before returning them.
-
-Configuration parameters:
-
-  - connection:
-    - discovery_key:               (optional) a key to retrieve the connection from IDiscovery
-    - ...                          other connection parameters
-  
-  - connections:                   alternative to connection
-    - [connection params 1]:       first connection parameters
-    -  ...
-    - [connection params N]:       Nth connection parameters
-    -  ...
-
- References:
-
-- *:discovery:*:*:1.0            (optional) IDiscovery services
-
-See: ConnectionParams
-See: ConnectionResolver
-
-Example:
-
-    config := cconf.NewConfigParamsFromTuples(
-         "connection.host", "10.1.1.100",
-         "connection.port", 8080,
-    );
-
-    connectionResolver = NewHttpConnectionResolver();
-    connectionResolver.Configure(config);
-    connectionResolver.SetReferences(references);
-
-    connection, err := connectionResolver.Resolve("123")
-	// Now use connection...
-*/
+// HttpConnectionResolver helper class to retrieve connections for HTTP-based services abd clients.
+//
+// In addition to regular functions of ConnectionResolver is able to parse http:// URIs
+// and validate connection parameters before returning them.
+//
+//	Configuration parameters:
+//		- connection:
+//		- discovery_key:               (optional) a key to retrieve the connection from IDiscovery
+//		- ...                          other connection parameters
+//
+//		- connections:                   alternative to connection
+//		- [connection params 1]:       first connection parameters
+//		-  ...
+//		- [connection params N]:       Nth connection parameters
+//		-  ...
+//
+//	References:
+//		- *:discovery:*:*:1.0            (optional) IDiscovery services
+//
+//	see: ConnectionParams
+//	see: ConnectionResolver
+//
+//	Example:
+//		config := cconf.NewConfigParamsFromTuples(
+//			"connection.host", "10.1.1.100",
+//			"connection.port", 8080,
+//		);
+//
+//		connectionResolver = NewHttpConnectionResolver();
+//		connectionResolver.Configure(config);
+//		connectionResolver.SetReferences(references);
+//
+//		connection, err := connectionResolver.Resolve("123")
+//		// Now use connection...
 type HttpConnectionResolver struct {
 	//The base connection resolver.
 	ConnectionResolver ccon.ConnectionResolver
@@ -58,25 +54,27 @@ type HttpConnectionResolver struct {
 }
 
 // NewHttpConnectionResolver creates new instance NewHttpConnectionResolver
-// Returns pointer on NewHttpConnectionResolver
+// 	Returns: pointer on NewHttpConnectionResolver
 func NewHttpConnectionResolver() *HttpConnectionResolver {
 	return &HttpConnectionResolver{*ccon.NewEmptyConnectionResolver(), *cauth.NewEmptyCredentialResolver()}
 }
 
 // Configure method are configures component by passing configuration parameters.
-// Parameters:
-//    - config  *cconf.ConfigParams  configuration parameters to be set.
-func (c *HttpConnectionResolver) Configure(config *cconf.ConfigParams) {
-	c.ConnectionResolver.Configure(config)
-	c.CredentialResolver.Configure(config)
+//	Parameters:
+//		- ctx context.Context
+//		- config  *cconf.ConfigParams  configuration parameters to be set.
+func (c *HttpConnectionResolver) Configure(ctx context.Context, config *cconf.ConfigParams) {
+	c.ConnectionResolver.Configure(ctx, config)
+	c.CredentialResolver.Configure(ctx, config)
 }
 
 // SetReferences method are sets references to dependent components.
-// Parameters:
-// 	 - references crefer.IReferences	references to locate the component dependencies.
-func (c *HttpConnectionResolver) SetReferences(references crefer.IReferences) {
-	c.ConnectionResolver.SetReferences(references)
-	c.CredentialResolver.SetReferences(references)
+//	Parameters:
+//		- ctx context.Context
+//		- references crefer.IReferences	references to locate the component dependencies.
+func (c *HttpConnectionResolver) SetReferences(ctx context.Context, references crefer.IReferences) {
+	c.ConnectionResolver.SetReferences(ctx, references)
+	c.CredentialResolver.SetReferences(ctx, references)
 }
 
 func (c *HttpConnectionResolver) validateConnection(correlationId string, connection *ccon.ConnectionParams, credential *cauth.CredentialParams) error {
@@ -106,10 +104,10 @@ func (c *HttpConnectionResolver) validateConnection(correlationId string, connec
 		if credential == nil {
 			return cerr.NewConfigError(correlationId, "NO_CREDENTIAL", "SSL certificates are not configured for HTTPS protocol")
 		} else {
-			if credential.GetAsNullableString("ssl_key_file") == nil {
+			if _, ok := credential.GetAsNullableString("ssl_key_file"); !ok {
 				return cerr.NewConfigError(
 					correlationId, "NO_SSL_KEY_FILE", "SSL key file is not configured in credentials")
-			} else if credential.GetAsNullableString("ssl_crt_file") == nil {
+			} else if _, ok := credential.GetAsNullableString("ssl_crt_file"); !ok {
 				return cerr.NewConfigError(
 					correlationId, "NO_SSL_CRT_FILE", "SSL crt file is not configured in credentials")
 			}
@@ -150,10 +148,10 @@ func (c *HttpConnectionResolver) updateConnection(connection *ccon.ConnectionPar
 
 // Resolve method are resolves a single component connection. If connections are configured to be retrieved
 // from Discovery service it finds a IDiscovery and resolves the connection there.
-// Parameters:
-// - correlationId  string     (optional) transaction id to trace execution through call chain.
-// Returns: connection *ccon.ConnectionParams, credential *cauth.CredentialParams, err error
-// resolved connection and credential or error.
+//	Parameters:
+//		- correlationId  string     (optional) transaction id to trace execution through call chain.
+//	Returns: connection *ccon.ConnectionParams, credential *cauth.CredentialParams, err error
+//		resolved connection and credential or error.
 func (c *HttpConnectionResolver) Resolve(correlationId string) (connection *ccon.ConnectionParams, credential *cauth.CredentialParams, err error) {
 
 	connection, err = c.ConnectionResolver.Resolve(correlationId)
@@ -161,10 +159,8 @@ func (c *HttpConnectionResolver) Resolve(correlationId string) (connection *ccon
 		return nil, nil, err
 	}
 
-	credential, err = c.CredentialResolver.Lookup(correlationId)
-	if err == nil {
-		err = c.validateConnection(correlationId, connection, credential)
-	}
+	credential, err = c.CredentialResolver.Lookup(context.TODO(), correlationId)
+	err = c.validateConnection(correlationId, connection, credential)
 	if err == nil && connection != nil {
 		c.updateConnection(connection)
 	}
@@ -174,10 +170,10 @@ func (c *HttpConnectionResolver) Resolve(correlationId string) (connection *ccon
 
 // ResolveAll method are resolves all component connection. If connections are configured to be retrieved
 // from Discovery service it finds a IDiscovery and resolves the connection there.
-// Parameters:
-// - correlationId  string   (optional) transaction id to trace execution through call chain.
-// Returns:  connections []*ccon.ConnectionParams, credential *cauth.CredentialParams, err error
-// resolved connections and credential or error.
+//	Parameters:
+//		- correlationId  string   (optional) transaction id to trace execution through call chain.
+//	Returns:  connections []*ccon.ConnectionParams, credential *cauth.CredentialParams, err error
+//		resolved connections and credential or error.
 func (c *HttpConnectionResolver) ResolveAll(correlationId string) (connections []*ccon.ConnectionParams, credential *cauth.CredentialParams, err error) {
 
 	connections, err = c.ConnectionResolver.ResolveAll(correlationId)
@@ -185,7 +181,7 @@ func (c *HttpConnectionResolver) ResolveAll(correlationId string) (connections [
 		return nil, nil, err
 	}
 
-	credential, err = c.CredentialResolver.Lookup(correlationId)
+	credential, err = c.CredentialResolver.Lookup(context.TODO(), correlationId)
 	if connections == nil {
 		connections = make([]*ccon.ConnectionParams, 0)
 	}
@@ -203,11 +199,9 @@ func (c *HttpConnectionResolver) ResolveAll(correlationId string) (connections [
 
 // Register method are registers the given connection in all referenced discovery services.
 // c method can be used for dynamic service discovery.
-// Parameters:
-// - correlationId  string   (optional) transaction id to trace execution through call chain.
-// Returns: error
-// nil if registered connection or error.
-
+//	Parameters:
+//		- correlationId  string   (optional) transaction id to trace execution through call chain.
+//	Returns: error nil if registered connection or error.
 func (c *HttpConnectionResolver) Register(correlationId string) error {
 
 	connection, err := c.ConnectionResolver.Resolve(correlationId)
@@ -215,7 +209,7 @@ func (c *HttpConnectionResolver) Register(correlationId string) error {
 		return err
 	}
 
-	credential, err := c.CredentialResolver.Lookup(correlationId)
+	credential, err := c.CredentialResolver.Lookup(context.TODO(), correlationId)
 	// Validate connection
 	if err == nil {
 		err = c.validateConnection(correlationId, connection, credential)
