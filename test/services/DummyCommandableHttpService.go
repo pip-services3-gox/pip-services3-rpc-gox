@@ -21,5 +21,5 @@ func (c *DummyCommandableHttpService) Register() {
 	if !c.SwaggerAuto && c.SwaggerEnabled {
 		c.RegisterOpenApiSpec("swagger yaml content")
 	}
-	c.CommandableHttpService.Register(context.Background())
+	c.CommandableHttpService.Register()
 }

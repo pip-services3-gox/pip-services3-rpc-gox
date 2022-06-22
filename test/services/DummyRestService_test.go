@@ -98,7 +98,8 @@ func TestDummyRestService(t *testing.T) {
 	// Delete dummy
 	delReq, delErr := http.NewRequest(http.MethodDelete, url+"/dummies/"+dummy1.Id, nil)
 	assert.Nil(t, delErr)
-	_, delErr = client.Do(delReq)
+	resp, delErr := client.Do(delReq)
+	assert.NotNil(t, resp)
 	assert.Nil(t, delErr)
 
 	// Try to get delete dummy

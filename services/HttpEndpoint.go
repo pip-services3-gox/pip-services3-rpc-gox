@@ -4,8 +4,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
+	"github.com/pip-services3-go/pip-services3-commons-go/convert"
 	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -187,12 +191,13 @@ func (c *HttpEndpoint) Open(ctx context.Context, correlationId string) error {
 	c.uri = connection.Uri()
 	url := connection.Host() + ":" + strconv.Itoa(connection.Port())
 	c.server = &http.Server{Addr: url}
+	// Provide container context to http handler
+	if ctx != nil {
+		c.server.BaseContext = func(listener net.Listener) context.Context {
+			return ctx
+		}
+	}
 	c.router = mux.NewRouter()
-
-	// Add default origins
-	// if len(c.allowedOrigins) == 0 {
-	// 	c.allowedOrigins = []string{"*"}
-	// }
 
 	allowedOrigins := handlers.AllowedOrigins(c.allowedOrigins)
 	allowedMethods := handlers.AllowedMethods([]string{
@@ -206,6 +211,12 @@ func (c *HttpEndpoint) Open(ctx context.Context, correlationId string) error {
 	allowedHeaders := handlers.AllowedHeaders(c.allowedHeaders)
 	c.server.Handler = handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(c.router)
 
+	//c.router.Use(func(next http.Handler) http.Handler {
+	//	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	//		ctx, _ = context.WithCancel(r.Context())
+	//		next.ServeHTTP(w, r.Clone(ctx))
+	//	})
+	//})
 	c.router.Use(c.noCache)
 	c.router.Use(c.doMaintenance)
 
@@ -215,20 +226,41 @@ func (c *HttpEndpoint) Open(ctx context.Context, correlationId string) error {
 		sslKeyFile := credential.GetAsString("ssl_key_file")
 		sslCrtFile := credential.GetAsString("ssl_crt_file")
 
-		// TODO:: fix to use context
 		go func() {
+			defer func() {
+				if r := recover(); r != nil {
+					err, ok := r.(error)
+					if !ok {
+						msg := convert.StringConverter.ToString(r)
+						err = errors.New(msg)
+					}
+					crun.SendShutdownSignalWithErr(ctx, err)
+				}
+			}()
+
 			servErr := c.server.ListenAndServeTLS(sslKeyFile, sslCrtFile)
-			if servErr != nil {
-				//fmt.Println("Server stoped:", servErr.Error())
+			if servErr != nil && !errors.Is(servErr, http.ErrServerClosed) {
+				crun.SendShutdownSignalWithErr(ctx, servErr)
 			}
 		}()
 
 	} else {
-		// TODO:: fix to use context
+
 		go func() {
+			defer func() {
+				if r := recover(); r != nil {
+					err, ok := r.(error)
+					if !ok {
+						msg := convert.StringConverter.ToString(r)
+						err = errors.New(msg)
+					}
+					crun.SendShutdownSignalWithErr(ctx, err)
+				}
+			}()
+
 			servErr := c.server.ListenAndServe()
-			if servErr != nil {
-				//fmt.Println("Server stoped:", servErr.Error())
+			if servErr != nil && !errors.Is(servErr, http.ErrServerClosed) {
+				crun.SendShutdownSignalWithErr(ctx, servErr)
 			}
 		}()
 	}

@@ -110,14 +110,14 @@ func (c *CommandableHttpService) Configure(ctx context.Context, config *cconf.Co
 }
 
 // Register method are registers all service routes in HTTP endpoint.
-func (c *CommandableHttpService) Register(ctx context.Context) {
+func (c *CommandableHttpService) Register() {
 	resCtrl, depErr := c.DependencyResolver.GetOneRequired("controller")
 	if depErr != nil {
 		return
 	}
 	controller, ok := resCtrl.(ccomands.ICommandable)
 	if !ok {
-		c.Logger.Error(ctx, "CommandableHttpService", nil, "Can't cast Controller to ICommandable")
+		c.Logger.Error(context.Background(), "CommandableHttpService", nil, "Can't cast Controller to ICommandable")
 		return
 	}
 	c.commandSet = controller.GetCommandSet()
@@ -156,10 +156,10 @@ func (c *CommandableHttpService) Register(ctx context.Context) {
 
 			correlationId := c.GetCorrelationId(req)
 			args := crun.NewParametersFromValue(params)
-			timing := c.Instrument(ctx, correlationId, c.BaseRoute+"."+command.Name())
+			timing := c.Instrument(req.Context(), correlationId, c.BaseRoute+"."+command.Name())
 
-			execRes, execErr := command.Execute(ctx, correlationId, args)
-			timing.EndTiming(ctx, execErr)
+			execRes, execErr := command.Execute(req.Context(), correlationId, args)
+			timing.EndTiming(req.Context(), execErr)
 			c.SendResult(res, req, execRes, execErr)
 		})
 	}

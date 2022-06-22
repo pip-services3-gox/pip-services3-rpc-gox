@@ -74,7 +74,7 @@ func (c *DummyRestService) getPageByFilter(res http.ResponseWriter, req *http.Re
 	delete(params, "total")
 
 	result, err := c.controller.GetPageByFilter(
-		context.Background(),
+		req.Context(),
 		c.GetCorrelationId(req),
 		cdata.NewFilterParamsFromValue(params), // W! need test
 		cdata.NewPagingParamsFromTuples(paginParams),
@@ -91,7 +91,7 @@ func (c *DummyRestService) getOneById(res http.ResponseWriter, req *http.Request
 		dummyId = vars["dummy_id"]
 	}
 	result, err := c.controller.GetOneById(
-		context.Background(),
+		req.Context(),
 		c.GetCorrelationId(req),
 		dummyId)
 	c.SendResult(res, req, result, err)
@@ -117,7 +117,7 @@ func (c *DummyRestService) create(res http.ResponseWriter, req *http.Request) {
 	}
 
 	result, err := c.controller.Create(
-		context.Background(),
+		req.Context(),
 		correlationId,
 		dummy,
 	)
@@ -144,7 +144,7 @@ func (c *DummyRestService) update(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	result, err := c.controller.Update(
-		context.Background(),
+		req.Context(),
 		correlationId,
 		dummy,
 	)
@@ -161,7 +161,7 @@ func (c *DummyRestService) deleteById(res http.ResponseWriter, req *http.Request
 	}
 
 	result, err := c.controller.DeleteById(
-		context.Background(),
+		req.Context(),
 		c.GetCorrelationId(req),
 		dummyId,
 	)
@@ -169,12 +169,12 @@ func (c *DummyRestService) deleteById(res http.ResponseWriter, req *http.Request
 }
 
 func (c *DummyRestService) checkCorrelationId(res http.ResponseWriter, req *http.Request) {
-	result, err := c.controller.CheckCorrelationId(context.Background(), c.GetCorrelationId(req))
+	result, err := c.controller.CheckCorrelationId(req.Context(), c.GetCorrelationId(req))
 	c.SendResult(res, req, result, err)
 }
 
 func (c *DummyRestService) checkErrorPropagation(res http.ResponseWriter, req *http.Request) {
-	err := c.controller.CheckErrorPropagation(context.Background(), c.GetCorrelationId(req))
+	err := c.controller.CheckErrorPropagation(req.Context(), c.GetCorrelationId(req))
 	c.SendError(res, req, err)
 }
 
