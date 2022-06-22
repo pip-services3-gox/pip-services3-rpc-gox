@@ -67,10 +67,11 @@ func TestDummyRestService(t *testing.T) {
 	assert.Nil(t, bodyErr)
 	getResponse.Body.Close()
 
-	var dummies cdata.DataPage[tdata.Dummy]
+	var dummies *cdata.DataPage[tdata.Dummy]
 	jsonErr = json.Unmarshal(resBody, &dummies)
 	assert.Nil(t, jsonErr)
 	assert.NotNil(t, dummies)
+	assert.True(t, dummies.HasData())
 	assert.Len(t, dummies.Data, 2)
 
 	// Update the dummy
@@ -79,8 +80,8 @@ func TestDummyRestService(t *testing.T) {
 	jsonBody, _ = json.Marshal(dummy1)
 
 	client := &http.Client{}
-	data := bytes.NewReader(jsonBody)
-	putReq, putErr := http.NewRequest(http.MethodPut, url+"/dummies", data)
+	bodyData := bytes.NewReader(jsonBody)
+	putReq, putErr := http.NewRequest(http.MethodPut, url+"/dummies", bodyData)
 	assert.Nil(t, putErr)
 	putRes, putErr := client.Do(putReq)
 	assert.Nil(t, putErr)
@@ -106,10 +107,11 @@ func TestDummyRestService(t *testing.T) {
 	resBody, bodyErr = ioutil.ReadAll(getResponse.Body)
 	assert.Nil(t, bodyErr)
 	getResponse.Body.Close()
-	jsonErr = json.Unmarshal(resBody, &dummies)
+
+	jsonErr = json.Unmarshal(resBody, &dummy)
 	assert.Nil(t, jsonErr)
-	assert.NotNil(t, dummies)
-	assert.False(t, dummies.HasTotal())
+	assert.NotNil(t, dummy)
+	assert.Equal(t, tdata.Dummy{}, dummy)
 
 	// Testing transmit correlationId
 	getResponse, getErr = http.Get(url + "/dummies/check/correlation_id?correlation_id=test_cor_id")

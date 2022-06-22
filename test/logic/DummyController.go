@@ -27,7 +27,7 @@ func (c *DummyController) GetCommandSet() *ccomand.CommandSet {
 }
 
 func (c *DummyController) GetPageByFilter(ctx context.Context, correlationId string, filter *cdata.FilterParams,
-	paging *cdata.PagingParams) (items cdata.DataPage[tdata.Dummy], err error) {
+	paging *cdata.PagingParams) (items *cdata.DataPage[tdata.Dummy], err error) {
 
 	if filter == nil {
 		filter = cdata.NewEmptyFilterParams()
@@ -60,7 +60,7 @@ func (c *DummyController) GetPageByFilter(ctx context.Context, correlationId str
 		result = append(result, entity)
 	}
 	var total int64 = (int64)(len(result))
-	return *cdata.NewDataPage[tdata.Dummy](result, int(total)), nil
+	return cdata.NewDataPage[tdata.Dummy](result, int(total)), nil
 }
 
 func (c *DummyController) GetOneById(ctx context.Context, correlationId string, id string) (result tdata.Dummy, err error) {

@@ -7,7 +7,7 @@ import (
 )
 
 type IDummyController interface {
-	GetPageByFilter(ctx context.Context, correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (result cdata.DataPage[tdata.Dummy], err error)
+	GetPageByFilter(ctx context.Context, correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (result *cdata.DataPage[tdata.Dummy], err error)
 	GetOneById(ctx context.Context, correlationId string, id string) (result tdata.Dummy, err error)
 	Create(ctx context.Context, correlationId string, entity tdata.Dummy) (result tdata.Dummy, err error)
 	Update(ctx context.Context, correlationId string, entity tdata.Dummy) (result tdata.Dummy, err error)

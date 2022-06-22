@@ -13,13 +13,13 @@ type InstrumentTiming struct {
 	verb          string
 	logger        clog.ILogger
 	counters      ccount.ICounters
-	counterTiming *ccount.Timing
+	counterTiming *ccount.CounterTiming
 	traceTiming   *ctrace.TraceTiming
 }
 
 func NewInstrumentTiming(correlationId string, name string,
 	verb string, logger clog.ILogger, counters ccount.ICounters,
-	counterTiming *ccount.Timing, traceTiming *ctrace.TraceTiming) *InstrumentTiming {
+	counterTiming *ccount.CounterTiming, traceTiming *ctrace.TraceTiming) *InstrumentTiming {
 
 	if len(verb) == 0 {
 		verb = "call"

@@ -73,7 +73,7 @@ func TestDummyCommandableHttpService(t *testing.T) {
 	resBody, bodyErr = ioutil.ReadAll(postResponse.Body)
 	assert.Nil(t, bodyErr)
 	postResponse.Body.Close()
-	var dummies cdata.DataPage[tdata.Dummy]
+	var dummies *cdata.DataPage[tdata.Dummy]
 	jsonErr = json.Unmarshal(resBody, &dummies)
 	assert.Nil(t, jsonErr)
 	assert.NotNil(t, dummies)
