@@ -1,39 +1,17 @@
 package clients
 
 import (
-	"encoding/json"
 	"github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
 	"io/ioutil"
 	"net/http"
-	"reflect"
 )
 
-// ConvertCommandResult method helps get correct result from JSON by prototype
+// HandleHttpResponse method helps handle http response body
 //	Parameters:
-//		- comRes any  input JSON string
-//		- prototype reflect.Type output object prototype
-//	Returns: convRes any, err error
-func ConvertCommandResult(comRes any, prototype reflect.Type) (convRes any, err error) {
-
-	str, ok := comRes.([]byte)
-	if !ok || string(str) == "null" {
-		return nil, nil
-	}
-
-	if prototype.Kind() == reflect.Ptr {
-		prototype = prototype.Elem()
-	}
-	convRes = reflect.New(prototype).Interface()
-
-	convErr := json.Unmarshal(comRes.([]byte), &convRes)
-	if convErr != nil {
-		return nil, convErr
-	}
-
-	return convRes, nil
-}
-
+//		- ctx context.Context
+//		- correlationId string (optional) transaction id to trace execution through call chain.
+//	Returns: T any result, err error
 func HandleHttpResponse[T any](r *http.Response, correlationId string) (T, error) {
 	defer r.Body.Close()
 
