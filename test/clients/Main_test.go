@@ -1,6 +1,7 @@
 package test_clients
 
 import (
+	"context"
 	"fmt"
 	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
 	cref "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
@@ -21,18 +22,18 @@ func TestMain(m *testing.M) {
 	fmt.Println("Preparing test services for clients...")
 
 	dummyRestService := BuildTestDummyRestService()
-	err := dummyRestService.Open("")
+	err := dummyRestService.Open(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
-	defer dummyRestService.Close("")
+	defer dummyRestService.Close(context.Background(), "")
 
 	dummyCommandableHttpService := BuildTestDummyCommandableHttpService()
-	err = dummyCommandableHttpService.Open("")
+	err = dummyCommandableHttpService.Open(context.Background(), "")
 	if err != nil {
 		panic(err)
 	}
-	defer dummyCommandableHttpService.Close("")
+	defer dummyCommandableHttpService.Close(context.Background(), "")
 	time.Sleep(time.Second)
 	fmt.Println("All test services started!")
 
@@ -53,13 +54,14 @@ func BuildTestDummyRestService() *test_services.DummyRestService {
 	ctrl := tlogic.NewDummyController()
 
 	service = test_services.NewDummyRestService()
-	service.Configure(restConfig)
+	service.Configure(context.Background(), restConfig)
 
 	var references *cref.References = cref.NewReferencesFromTuples(
+		context.Background(),
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
 		cref.NewDescriptor("pip-services-dummies", "service", "rest", "default", "1.0"), service,
 	)
-	service.SetReferences(references)
+	service.SetReferences(context.Background(), references)
 	return service
 }
 
@@ -76,12 +78,13 @@ func BuildTestDummyCommandableHttpService() *test_services.DummyCommandableHttpS
 
 	service := test_services.NewDummyCommandableHttpService()
 
-	service.Configure(restConfig)
+	service.Configure(context.Background(), restConfig)
 
 	references := cref.NewReferencesFromTuples(
+		context.Background(),
 		cref.NewDescriptor("pip-services-dummies", "controller", "default", "default", "1.0"), ctrl,
 		cref.NewDescriptor("pip-services-dummies", "service", "http", "default", "1.0"), service,
 	)
-	service.SetReferences(references)
+	service.SetReferences(context.Background(), references)
 	return service
 }

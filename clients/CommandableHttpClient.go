@@ -2,9 +2,8 @@ package clients
 
 import (
 	"context"
-	"reflect"
-
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
+	"net/http"
 )
 
 // CommandableHttpClient is abstract client that calls commandable HTTP service.
@@ -82,14 +81,15 @@ func NewCommandableHttpClient(baseRoute string) *CommandableHttpClient {
 // The complete route to remote method is defined as baseRoute + "/" + name.
 //	Parameters:
 //		- ctx context.Context
-//		- prototype reflect.Type type of returned data
 //		- name        string      a name of the command to call.
 //		- correlationId  string   (optional) transaction id to trace execution through call chain.
 //		- params     cdata.StringValueMap       command parameters.
-//	Returns: result any, err error result or error.
-func (c *CommandableHttpClient) CallCommand(ctx context.Context, prototype reflect.Type, name string, correlationId string, params *cdata.AnyValueMap) (result any, err error) {
+//	Returns: *http.Response, err error result or error.
+func (c *CommandableHttpClient) CallCommand(ctx context.Context, name string, correlationId string,
+	params *cdata.AnyValueMap) (*http.Response, error) {
+
 	timing := c.Instrument(ctx, correlationId, c.BaseRoute+"."+name)
-	cRes, cErr := c.Call(ctx, prototype, "post", name, correlationId, nil, params.Value())
-	timing.EndTiming(ctx, cErr)
-	return cRes, cErr
+	r, err := c.Call(ctx, "post", name, correlationId, nil, params.Value())
+	timing.EndTiming(ctx, err)
+	return r, err
 }

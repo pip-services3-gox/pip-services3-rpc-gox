@@ -1,6 +1,7 @@
 package test_clients
 
 import (
+	"context"
 	"testing"
 
 	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
@@ -18,8 +19,8 @@ func TestDummyCommandableHttpClient(t *testing.T) {
 	client := NewDummyCommandableHttpClient()
 	fixture := NewDummyClientFixture(client)
 
-	client.Configure(restConfig)
-	client.SetReferences(cref.NewEmptyReferences())
-	client.Open("")
+	client.Configure(context.Background(), restConfig)
+	client.SetReferences(context.Background(), cref.NewEmptyReferences())
+	_ = client.Open(context.Background(), "")
 	t.Run("CRUD Operations", fixture.TestCrudOperations)
 }

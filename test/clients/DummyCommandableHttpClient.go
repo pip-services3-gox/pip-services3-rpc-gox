@@ -1,8 +1,7 @@
 package test_clients
 
 import (
-	"reflect"
-
+	"context"
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	"github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
 	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
@@ -18,86 +17,81 @@ func NewDummyCommandableHttpClient() *DummyCommandableHttpClient {
 	return &dchc
 }
 
-func (c *DummyCommandableHttpClient) GetDummies(correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (result *tdata.DummyDataPage, err error) {
-
+func (c *DummyCommandableHttpClient) GetDummies(ctx context.Context, correlationId string, filter cdata.FilterParams, paging cdata.PagingParams) (result cdata.DataPage[tdata.Dummy], err error) {
 	params := cdata.NewEmptyStringValueMap()
-	c.AddFilterParams(params, filter)
-	c.AddPagingParams(params, paging)
+	c.AddFilterParams(params, &filter)
+	c.AddPagingParams(params, &paging)
 
-	calValue, calErr := c.CallCommand(dummyDataPageType, "get_dummies", correlationId, cdata.NewAnyValueMapFromValue(params.Value()))
-	if calErr != nil {
-		return nil, calErr
+	response, err := c.CallCommand(ctx, "get_dummies", correlationId, cdata.NewAnyValueMapFromValue(params.Value()))
+	if err != nil {
+		return *cdata.NewEmptyDataPage[tdata.Dummy](), err
 	}
-	result, _ = calValue.(*tdata.DummyDataPage)
-	return result, err
+
+	return clients.HandleHttpResponse[cdata.DataPage[tdata.Dummy]](response, correlationId)
 }
 
-func (c *DummyCommandableHttpClient) GetDummyById(correlationId string, dummyId string) (result *tdata.Dummy, err error) {
-
+func (c *DummyCommandableHttpClient) GetDummyById(ctx context.Context, correlationId string, dummyId string) (tdata.Dummy, error) {
 	params := cdata.NewEmptyAnyValueMap()
 	params.Put("dummy_id", dummyId)
 
-	calValue, calErr := c.CallCommand(dummyType, "get_dummy_by_id", correlationId, params)
-	if calErr != nil {
-		return nil, calErr
+	response, err := c.CallCommand(ctx, "get_dummy_by_id", correlationId, params)
+	if err != nil {
+		return tdata.Dummy{}, err
 	}
-	result, _ = calValue.(*tdata.Dummy)
-	return result, err
+
+	return clients.HandleHttpResponse[tdata.Dummy](response, correlationId)
 }
 
-func (c *DummyCommandableHttpClient) CreateDummy(correlationId string, dummy tdata.Dummy) (result *tdata.Dummy, err error) {
-
+func (c *DummyCommandableHttpClient) CreateDummy(ctx context.Context, correlationId string, dummy tdata.Dummy) (result tdata.Dummy, err error) {
 	params := cdata.NewEmptyAnyValueMap()
 	params.Put("dummy", dummy)
 
-	calValue, calErr := c.CallCommand(dummyType, "create_dummy", correlationId, params)
-	if calErr != nil {
-		return nil, calErr
+	response, err := c.CallCommand(ctx, "create_dummy", correlationId, params)
+	if err != nil {
+		return tdata.Dummy{}, err
 	}
-	result, _ = calValue.(*tdata.Dummy)
-	return result, err
+
+	return clients.HandleHttpResponse[tdata.Dummy](response, correlationId)
 }
 
-func (c *DummyCommandableHttpClient) UpdateDummy(correlationId string, dummy tdata.Dummy) (result *tdata.Dummy, err error) {
-
+func (c *DummyCommandableHttpClient) UpdateDummy(ctx context.Context, correlationId string, dummy tdata.Dummy) (result tdata.Dummy, err error) {
 	params := cdata.NewEmptyAnyValueMap()
 	params.Put("dummy", dummy)
 
-	calValue, calErr := c.CallCommand(dummyType, "update_dummy", correlationId, params)
-	if calErr != nil {
-		return nil, calErr
+	response, err := c.CallCommand(ctx, "update_dummy", correlationId, params)
+	if err != nil {
+		return tdata.Dummy{}, err
 	}
-	result, _ = calValue.(*tdata.Dummy)
-	return result, err
+
+	return clients.HandleHttpResponse[tdata.Dummy](response, correlationId)
 }
 
-func (c *DummyCommandableHttpClient) DeleteDummy(correlationId string, dummyId string) (result *tdata.Dummy, err error) {
-
+func (c *DummyCommandableHttpClient) DeleteDummy(ctx context.Context, correlationId string, dummyId string) (result tdata.Dummy, err error) {
 	params := cdata.NewEmptyAnyValueMap()
 	params.Put("dummy_id", dummyId)
 
-	calValue, calErr := c.CallCommand(dummyType, "delete_dummy", correlationId, params)
-	if calErr != nil {
-		return nil, calErr
+	response, err := c.CallCommand(ctx, "delete_dummy", correlationId, params)
+	if err != nil {
+		return tdata.Dummy{}, err
 	}
-	result, _ = calValue.(*tdata.Dummy)
-	return result, err
+
+	return clients.HandleHttpResponse[tdata.Dummy](response, correlationId)
 }
 
-func (c *DummyCommandableHttpClient) CheckCorrelationId(correlationId string) (result map[string]string, err error) {
+func (c *DummyCommandableHttpClient) CheckCorrelationId(ctx context.Context, correlationId string) (result map[string]string, err error) {
 
 	params := cdata.NewEmptyAnyValueMap()
 
-	calValue, calErr := c.CallCommand(reflect.TypeOf(make(map[string]string)), "check_correlation_id", correlationId, params)
-	if calErr != nil {
-		return nil, calErr
+	response, err := c.CallCommand(ctx, "check_correlation_id", correlationId, params)
+	if err != nil {
+		return nil, err
 	}
-	val, _ := calValue.(*(map[string]string))
-	return *val, err
+
+	return clients.HandleHttpResponse[map[string]string](response, correlationId)
 }
 
-func (c *DummyCommandableHttpClient) CheckErrorPropagation(correlationId string) error {
+func (c *DummyCommandableHttpClient) CheckErrorPropagation(ctx context.Context, correlationId string) error {
 	params := cdata.NewEmptyAnyValueMap()
-	_, calErr := c.CallCommand(nil, "check_error_propagation", correlationId, params)
+	_, calErr := c.CallCommand(ctx, "check_error_propagation", correlationId, params)
 	return calErr
 }

@@ -1,6 +1,7 @@
 package test_clients
 
 import (
+	"context"
 	"testing"
 
 	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
@@ -19,9 +20,9 @@ func TestDummyRestClient(t *testing.T) {
 	client := NewDummyRestClient()
 	fixture := NewDummyClientFixture(client)
 
-	client.Configure(restConfig)
-	client.SetReferences(cref.NewEmptyReferences())
-	client.Open("")
+	client.Configure(context.TODO(), restConfig)
+	client.SetReferences(context.TODO(), cref.NewEmptyReferences())
+	client.Open(context.TODO(), "")
 
 	t.Run("DummyRestClient.CrudOperations", fixture.TestCrudOperations)
 }

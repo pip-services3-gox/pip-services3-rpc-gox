@@ -1,16 +1,10 @@
 package test_clients
 
 import (
-	"reflect"
-
+	"context"
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	"github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
 	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
-)
-
-var (
-	dummyDataPageType = reflect.TypeOf(&tdata.DummyDataPage{})
-	dummyType         = reflect.TypeOf(&tdata.Dummy{})
 )
 
 type DummyRestClient struct {
@@ -23,83 +17,87 @@ func NewDummyRestClient() *DummyRestClient {
 	return &drc
 }
 
-func (c *DummyRestClient) GetDummies(correlationId string, filter *cdata.FilterParams,
-	paging *cdata.PagingParams) (result *tdata.DummyDataPage, err error) {
+func (c *DummyRestClient) GetDummies(ctx context.Context, correlationId string, filter cdata.FilterParams,
+	paging cdata.PagingParams) (result cdata.DataPage[tdata.Dummy], err error) {
+
+	defer c.Instrument(ctx, correlationId, "dummy.get_page_by_filter")
 
 	params := cdata.NewEmptyStringValueMap()
-	c.AddFilterParams(params, filter)
-	c.AddPagingParams(params, paging)
+	c.AddFilterParams(params, &filter)
+	c.AddPagingParams(params, &paging)
 
-	calValue, calErr := c.Call(dummyDataPageType, "get", "/dummies", correlationId, params, nil)
-	if calErr != nil {
-		return nil, calErr
+	response, err := c.Call(ctx, "get", "/dummies", correlationId, params, nil)
+	if err != nil {
+		return *cdata.NewEmptyDataPage[tdata.Dummy](), err
 	}
 
-	result, _ = calValue.(*tdata.DummyDataPage)
-	c.Instrument(correlationId, "dummy.get_page_by_filter")
-	return result, nil
+	return clients.HandleHttpResponse[cdata.DataPage[tdata.Dummy]](response, correlationId)
 }
 
-func (c *DummyRestClient) GetDummyById(correlationId string, dummyId string) (result *tdata.Dummy, err error) {
-	calValue, calErr := c.Call(dummyType, "get", "/dummies/"+dummyId, correlationId, nil, nil)
+func (c *DummyRestClient) GetDummyById(ctx context.Context, correlationId string, dummyId string) (result tdata.Dummy, err error) {
 
-	if calErr != nil {
-		return nil, calErr
+	defer c.Instrument(ctx, correlationId, "dummy.get_one_by_id")
+
+	response, err := c.Call(ctx, "get", "/dummies/"+dummyId, correlationId, nil, nil)
+	if err != nil {
+		return tdata.Dummy{}, err
 	}
 
-	result, _ = calValue.(*tdata.Dummy)
-	c.Instrument(correlationId, "dummy.get_one_by_id")
-	return result, nil
+	return clients.HandleHttpResponse[tdata.Dummy](response, correlationId)
 }
 
-func (c *DummyRestClient) CreateDummy(correlationId string, dummy tdata.Dummy) (result *tdata.Dummy, err error) {
-	calValue, calErr := c.Call(dummyType, "post", "/dummies", correlationId, nil, dummy)
-	if calErr != nil {
-		return nil, calErr
+func (c *DummyRestClient) CreateDummy(ctx context.Context, correlationId string, dummy tdata.Dummy) (result tdata.Dummy, err error) {
+
+	defer c.Instrument(ctx, correlationId, "dummy.create")
+
+	response, err := c.Call(ctx, "post", "/dummies", correlationId, nil, dummy)
+	if err != nil {
+		return tdata.Dummy{}, err
 	}
 
-	result, _ = calValue.(*tdata.Dummy)
-	c.Instrument(correlationId, "dummy.create")
-	return result, nil
+	return clients.HandleHttpResponse[tdata.Dummy](response, correlationId)
 }
 
-func (c *DummyRestClient) UpdateDummy(correlationId string, dummy tdata.Dummy) (result *tdata.Dummy, err error) {
-	calValue, calErr := c.Call(dummyType, "put", "/dummies", correlationId, nil, dummy)
-	if calErr != nil {
-		return nil, calErr
+func (c *DummyRestClient) UpdateDummy(ctx context.Context, correlationId string, dummy tdata.Dummy) (result tdata.Dummy, err error) {
+
+	defer c.Instrument(ctx, correlationId, "dummy.update")
+
+	response, err := c.Call(ctx, "put", "/dummies", correlationId, nil, dummy)
+	if err != nil {
+		return tdata.Dummy{}, err
 	}
 
-	result, _ = calValue.(*tdata.Dummy)
-	c.Instrument(correlationId, "dummy.update")
-	return result, nil
+	return clients.HandleHttpResponse[tdata.Dummy](response, correlationId)
 }
 
-func (c *DummyRestClient) DeleteDummy(correlationId string, dummyId string) (result *tdata.Dummy, err error) {
-	calValue, calErr := c.Call(dummyType, "delete", "/dummies/"+dummyId, correlationId, nil, nil)
-	if calErr != nil {
-		return nil, calErr
+func (c *DummyRestClient) DeleteDummy(ctx context.Context, correlationId string, dummyId string) (result tdata.Dummy, err error) {
+
+	defer c.Instrument(ctx, correlationId, "dummy.delete_by_id")
+
+	response, err := c.Call(ctx, "delete", "/dummies/"+dummyId, correlationId, nil, nil)
+	if err != nil {
+		return tdata.Dummy{}, err
 	}
 
-	result, _ = calValue.(*tdata.Dummy)
-	c.Instrument(correlationId, "dummy.delete_by_id")
-	return result, nil
+	return clients.HandleHttpResponse[tdata.Dummy](response, correlationId)
 }
 
-func (c *DummyRestClient) CheckCorrelationId(correlationId string) (result map[string]string, err error) {
+func (c *DummyRestClient) CheckCorrelationId(ctx context.Context, correlationId string) (result map[string]string, err error) {
 
-	calValue, calErr := c.Call(reflect.TypeOf(make(map[string]string)), "get", "/dummies/check/correlation_id", correlationId, nil, nil)
-	if calErr != nil {
-		return nil, calErr
+	defer c.Instrument(ctx, correlationId, "dummy.check_correlation_id")
+
+	response, err := c.Call(ctx, "get", "/dummies/check/correlation_id", correlationId, nil, nil)
+	if err != nil {
+		return nil, err
 	}
 
-	val, _ := calValue.(*(map[string]string))
-	c.Instrument(correlationId, "dummy.check_correlation_id")
-	return *val, nil
+	return clients.HandleHttpResponse[map[string]string](response, correlationId)
 }
 
-func (c *DummyRestClient) CheckErrorPropagation(correlationId string) error {
+func (c *DummyRestClient) CheckErrorPropagation(ctx context.Context, correlationId string) error {
 
-	_, calErr := c.Call(nil, "get", "/dummies/check/error_propagation", correlationId, nil, nil)
-	c.Instrument(correlationId, "dummy.check_error_propagation")
-	return calErr
+	c.Instrument(ctx, correlationId, "dummy.check_error_propagation")
+
+	_, err := c.Call(ctx, "get", "/dummies/check/error_propagation", correlationId, nil, nil)
+	return err
 }

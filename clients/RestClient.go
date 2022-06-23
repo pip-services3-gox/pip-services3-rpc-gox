@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	neturl "net/url"
-	"reflect"
 	"strings"
 	"time"
 
@@ -19,7 +18,7 @@ import (
 	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
 	ctrace "github.com/pip-services3-gox/pip-services3-components-gox/trace"
 	rpccon "github.com/pip-services3-gox/pip-services3-rpc-gox/connect"
-	service "github.com/pip-services3-gox/pip-services3-rpc-gox/services"
+	"github.com/pip-services3-gox/pip-services3-rpc-gox/services"
 )
 
 // RestClient is abstract client that calls remove endpoints using HTTP/REST protocol.
@@ -164,18 +163,18 @@ func (c *RestClient) SetReferences(ctx context.Context, references crefer.IRefer
 }
 
 // Instrument method are adds instrumentation to log calls and measure call time.
-// It returns a Timing object that is used to end the time measurement.
+// It returns a services.InstrumentTiming object that is used to end the time measurement.
 //	Parameters:
 //		- ctx context.Context
 //		- correlationId string (optional) transaction id to trace execution through call chain.
 //		- name string a method name.
-//	Returns: Timing object to end the time measurement.
-func (c *RestClient) Instrument(ctx context.Context, correlationId string, name string) *service.InstrumentTiming {
+//	Returns: services.InstrumentTiming object to end the time measurement.
+func (c *RestClient) Instrument(ctx context.Context, correlationId string, name string) *services.InstrumentTiming {
 	c.Logger.Trace(ctx, correlationId, "Calling %s method", name)
 	c.Counters.IncrementOne(ctx, name+".call_count")
 	counterTiming := c.Counters.BeginTiming(ctx, name+".call_time")
 	traceTiming := c.Tracer.BeginTrace(ctx, correlationId, name, "")
-	return service.NewInstrumentTiming(correlationId, name, "call",
+	return services.NewInstrumentTiming(correlationId, name, "call",
 		c.Logger, c.Counters, counterTiming, traceTiming)
 }
 
@@ -332,8 +331,8 @@ func (c *RestClient) createRequestRoute(route string) string {
 //		- params  cdata.StringValueMap          (optional) query parameters.
 //		- data   any           (optional) body object.
 //	Returns: result any, err error result object or error.
-func (c *RestClient) Call(ctx context.Context, prototype reflect.Type, method string, route string, correlationId string, params *cdata.StringValueMap,
-	data any) (result any, err error) {
+func (c *RestClient) Call(ctx context.Context, method string, route string, correlationId string,
+	params *cdata.StringValueMap, data any) (*http.Response, error) {
 
 	//TODO:: refactor method
 
@@ -375,7 +374,7 @@ func (c *RestClient) Call(ctx context.Context, prototype reflect.Type, method st
 		req, reqErr := http.NewRequest(method, url, bytes.NewBuffer(jsonStr))
 
 		if reqErr != nil {
-			err = cerr.NewUnknownError(correlationId, "UNSUPPORTED_METHOD", "Method is not supported by REST client").WithDetails("verb", method).WithCause(reqErr)
+			err := cerr.NewUnknownError(correlationId, "UNSUPPORTED_METHOD", "Method is not supported by REST client").WithDetails("verb", method).WithCause(reqErr)
 			return nil, err
 		}
 		// Set headers
@@ -393,7 +392,7 @@ func (c *RestClient) Call(ctx context.Context, prototype reflect.Type, method st
 
 			retries--
 			if retries == 0 {
-				err = cerr.NewUnknownError(correlationId, "COMMUNICATION_ERROR", "Unknown communication problem on REST client").WithCause(respErr)
+				err := cerr.NewUnknownError(correlationId, "COMMUNICATION_ERROR", "Unknown communication problem on REST client").WithCause(respErr)
 				return nil, err
 			}
 			continue
@@ -401,30 +400,30 @@ func (c *RestClient) Call(ctx context.Context, prototype reflect.Type, method st
 		break
 	}
 
-	if resp != nil {
-		defer resp.Body.Close()
-	}
-
 	if resp.StatusCode == 204 {
+		_ = resp.Body.Close()
 		return nil, nil
 	}
 
-	r, rErr := ioutil.ReadAll(resp.Body)
-	if rErr != nil {
-		eDesct := cerr.ErrorDescription{
-			Type:          "Application",
-			Category:      "Application",
-			Status:        resp.StatusCode,
-			Code:          "",
-			Message:       rErr.Error(),
-			CorrelationId: correlationId,
-		}
-		return nil, cerr.ApplicationErrorFactory.Create(&eDesct).WithCause(rErr)
-	}
-
 	if resp.StatusCode >= 400 {
+
+		defer resp.Body.Close()
+
+		r, rErr := ioutil.ReadAll(resp.Body)
+		if rErr != nil {
+			eDesct := cerr.ErrorDescription{
+				Type:          "Application",
+				Category:      "Application",
+				Status:        resp.StatusCode,
+				Code:          "",
+				Message:       rErr.Error(),
+				CorrelationId: correlationId,
+			}
+			return nil, cerr.ApplicationErrorFactory.Create(&eDesct).WithCause(rErr)
+		}
+
 		appErr := cerr.ApplicationError{}
-		json.Unmarshal(r, &appErr)
+		_ = json.Unmarshal(r, &appErr)
 		if appErr.Status == 0 && len(r) > 0 { // not standart Pip.Services error
 			values := make(map[string]any)
 			decodeErr := json.Unmarshal(r, &values)
@@ -437,10 +436,5 @@ func (c *RestClient) Call(ctx context.Context, prototype reflect.Type, method st
 		return nil, &appErr
 	}
 
-	if prototype != nil {
-		return ConvertComandResult(r, prototype)
-	}
-
-	return r, rErr
-
+	return resp, nil
 }

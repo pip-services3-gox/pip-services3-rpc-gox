@@ -1,6 +1,8 @@
 package test_clients
 
 import (
+	"context"
+	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
 	"testing"
 
 	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
@@ -23,12 +25,12 @@ func TestRetriesRestClient(t *testing.T) {
 
 	client = NewDummyRestClient()
 
-	client.Configure(restConfig)
-	client.SetReferences(cref.NewEmptyReferences())
-	client.Open("")
+	client.Configure(context.Background(), restConfig)
+	client.SetReferences(context.Background(), cref.NewEmptyReferences())
+	client.Open(context.Background(), "")
 
-	res, err := client.GetDummyById("", "1")
+	res, err := client.GetDummyById(context.Background(), "", "1")
 	assert.NotNil(t, err)
-	assert.Nil(t, res)
+	assert.Equal(t, tdata.Dummy{}, res)
 
 }
