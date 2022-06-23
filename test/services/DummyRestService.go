@@ -178,6 +178,11 @@ func (c *DummyRestService) checkErrorPropagation(res http.ResponseWriter, req *h
 	c.SendError(res, req, err)
 }
 
+func (c *DummyRestService) checkGracefulShutdownContext(res http.ResponseWriter, req *http.Request) {
+	err := c.controller.CheckGracefulShutdownContext(req.Context(), c.GetCorrelationId(req))
+	c.SendError(res, req, err)
+}
+
 func (c *DummyRestService) Register() {
 	c.RegisterInterceptor("/dummies$", c.incrementNumberOfCalls)
 
@@ -200,6 +205,12 @@ func (c *DummyRestService) Register() {
 		"get", "/dummies/check/error_propagation",
 		&cvalid.NewObjectSchema().Schema,
 		c.checkErrorPropagation,
+	)
+
+	c.RegisterRoute(
+		"get", "/dummies/check/graceful_shutdown",
+		&cvalid.NewObjectSchema().Schema,
+		c.checkGracefulShutdownContext,
 	)
 
 	c.RegisterRoute(

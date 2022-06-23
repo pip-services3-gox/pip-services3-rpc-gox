@@ -3,6 +3,8 @@ package test_services
 import (
 	"context"
 	"fmt"
+	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
+	"net/http"
 	"os"
 	"path"
 	"testing"
@@ -58,8 +60,13 @@ func TestMain(m *testing.M) {
 		}
 	}
 
+	// Prepare shutdown context and channel
+	shutdownCtx, restServiceCancel := context.WithTimeout(context.Background(), time.Minute*3)
+	shutdownChan := make(crun.ContextShutdownWithErrorChan)
+	shutdownCtx, _ = crun.AddErrShutdownChanToContext(shutdownCtx, shutdownChan)
+
 	dummyRestService := BuildTestDummyRestService()
-	err = dummyRestService.Open(context.Background(), "")
+	err = dummyRestService.Open(shutdownCtx, "")
 	if err != nil {
 		panic(err)
 	}
@@ -102,7 +109,35 @@ func TestMain(m *testing.M) {
 	if noc != 4 {
 		panic("Number of calls test failed!")
 	}
-	os.Exit(code)
+
+	go func() {
+		getResponse, getErr := http.Get(
+			fmt.Sprintf(
+				"http://localhost:%d/dummies/check/graceful_shutdown",
+				DummyRestServicePort,
+			),
+		)
+		fmt.Println(getResponse)
+		fmt.Println(getErr)
+	}()
+
+	for {
+		select {
+		case err := <-shutdownChan:
+			restServiceCancel()
+			if err == nil {
+				panic("invalid shutdown error")
+			}
+			if err.Error() != "called from DummyController.CheckGracefulShutdownContext" {
+				panic("invalid shutdown error")
+			}
+			fmt.Println("rest service shutdown successful")
+			os.Exit(code)
+		case <-shutdownCtx.Done():
+			fmt.Println("rest service shutdown by timeout")
+			os.Exit(1)
+		}
+	}
 }
 
 func BuildTestStatusRestService() *services.StatusRestService {

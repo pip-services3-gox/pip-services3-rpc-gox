@@ -14,6 +14,6 @@ type IDummyController interface {
 	DeleteById(ctx context.Context, correlationId string, id string) (result tdata.Dummy, err error)
 
 	CheckCorrelationId(ctx context.Context, correlationId string) (result map[string]string, err error)
-
 	CheckErrorPropagation(ctx context.Context, correlationId string) error
+	CheckGracefulShutdownContext(ctx context.Context, correlationId string) error
 }

@@ -188,7 +188,7 @@ func (c *RestService) SetReferences(ctx context.Context, references crefer.IRefe
 
 	// Or create a local one
 	if c.Endpoint == nil {
-		c.Endpoint = c.createEndpoint()
+		c.Endpoint = c.createEndpoint(ctx)
 		c.localEndpoint = true
 	} else {
 		c.localEndpoint = false
@@ -214,14 +214,14 @@ func (c *RestService) UnsetReferences() {
 	c.SwaggerService = nil
 }
 
-func (c *RestService) createEndpoint() *HttpEndpoint {
+func (c *RestService) createEndpoint(ctx context.Context) *HttpEndpoint {
 	endpoint := NewHttpEndpoint()
 
 	if c.config != nil {
-		endpoint.Configure(context.TODO(), c.config)
+		endpoint.Configure(ctx, c.config)
 	}
 	if c.references != nil {
-		endpoint.SetReferences(context.TODO(), c.references)
+		endpoint.SetReferences(ctx, c.references)
 	}
 
 	return endpoint
@@ -237,8 +237,10 @@ func (c *RestService) createEndpoint() *HttpEndpoint {
 func (c *RestService) Instrument(ctx context.Context, correlationId string, name string) *InstrumentTiming {
 	c.Logger.Trace(ctx, correlationId, "Executing %s method", name)
 	c.Counters.IncrementOne(ctx, name+".exec_count")
+
 	counterTiming := c.Counters.BeginTiming(ctx, name+".exec_time")
 	traceTiming := c.Tracer.BeginTrace(ctx, correlationId, name, "")
+
 	return NewInstrumentTiming(correlationId, name, "exec",
 		c.Logger, c.Counters, counterTiming, traceTiming)
 }
@@ -253,6 +255,7 @@ func (c *RestService) Instrument(ctx context.Context, correlationId string, name
 //	Returns: result any, err error (optional) an execution callback
 func (c *RestService) InstrumentError(ctx context.Context, correlationId string, name string, errIn error,
 	resIn any) (result any, err error) {
+
 	if errIn != nil {
 		c.Logger.Error(ctx, correlationId, errIn, "Failed to execute %s method", name)
 		c.Counters.IncrementOne(ctx, name+".exec_errors")
@@ -278,7 +281,7 @@ func (c *RestService) Open(ctx context.Context, correlationId string) error {
 	}
 
 	if c.Endpoint == nil {
-		c.Endpoint = c.createEndpoint()
+		c.Endpoint = c.createEndpoint(ctx)
 		c.Endpoint.Register(c)
 		c.localEndpoint = true
 	}
@@ -406,7 +409,7 @@ func (c *RestService) appendBaseRoute(route string) string {
 //		- action        an action function that is called when operation is invoked.
 func (c *RestService) RegisterRoute(method string, route string, schema *cvalid.Schema,
 	action func(res http.ResponseWriter, req *http.Request)) {
-	// TODO:: think about a ctx
+
 	if c.Endpoint == nil {
 		return
 	}
@@ -424,7 +427,7 @@ func (c *RestService) RegisterRoute(method string, route string, schema *cvalid.
 func (c *RestService) RegisterRouteWithAuth(method string, route string, schema *cvalid.Schema,
 	authorize func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc),
 	action func(res http.ResponseWriter, req *http.Request)) {
-	// TODO:: think about a ctx
+
 	if c.Endpoint == nil {
 		return
 	}
@@ -446,7 +449,7 @@ func (c *RestService) RegisterRouteWithAuth(method string, route string, schema 
 //		- action        an action function that is called when middleware is invoked.
 func (c *RestService) RegisterInterceptor(route string,
 	action func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)) {
-	// TODO:: think about a ctx
+
 	if c.Endpoint == nil {
 		return
 	}
@@ -532,7 +535,7 @@ func (c *RestService) RegisterOpenApiSpecFromFile(path string) {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
 		c.Logger.Error(
-			context.TODO(),
+			context.Background(),
 			"RestService",
 			err,
 			"Can't read swagger file by path %s",

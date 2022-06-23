@@ -211,12 +211,6 @@ func (c *HttpEndpoint) Open(ctx context.Context, correlationId string) error {
 	allowedHeaders := handlers.AllowedHeaders(c.allowedHeaders)
 	c.server.Handler = handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(c.router)
 
-	//c.router.Use(func(next http.Handler) http.Handler {
-	//	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	//		ctx, _ = context.WithCancel(r.Context())
-	//		next.ServeHTTP(w, r.Clone(ctx))
-	//	})
-	//})
 	c.router.Use(c.noCache)
 	c.router.Use(c.doMaintenance)
 
@@ -227,16 +221,7 @@ func (c *HttpEndpoint) Open(ctx context.Context, correlationId string) error {
 		sslCrtFile := credential.GetAsString("ssl_crt_file")
 
 		go func() {
-			defer func() {
-				if r := recover(); r != nil {
-					err, ok := r.(error)
-					if !ok {
-						msg := convert.StringConverter.ToString(r)
-						err = errors.New(msg)
-					}
-					crun.SendShutdownSignalWithErr(ctx, err)
-				}
-			}()
+			defer crun.DefaultErrorHandlerWithShutdown(ctx)
 
 			servErr := c.server.ListenAndServeTLS(sslKeyFile, sslCrtFile)
 			if servErr != nil && !errors.Is(servErr, http.ErrServerClosed) {
@@ -247,16 +232,7 @@ func (c *HttpEndpoint) Open(ctx context.Context, correlationId string) error {
 	} else {
 
 		go func() {
-			defer func() {
-				if r := recover(); r != nil {
-					err, ok := r.(error)
-					if !ok {
-						msg := convert.StringConverter.ToString(r)
-						err = errors.New(msg)
-					}
-					crun.SendShutdownSignalWithErr(ctx, err)
-				}
-			}()
+			defer crun.DefaultErrorHandlerWithShutdown(ctx)
 
 			servErr := c.server.ListenAndServe()
 			if servErr != nil && !errors.Is(servErr, http.ErrServerClosed) {
@@ -387,8 +363,17 @@ func (c *HttpEndpoint) RegisterRoute(method string, route string, schema *cvalid
 		method = "delete"
 	}
 	route = c.fixRoute(route)
-	// TODO:: fix generation actionCurl
 	actionCurl := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if rec := recover(); rec != nil {
+				err, ok := rec.(error)
+				if !ok {
+					msg := convert.StringConverter.ToString(r)
+					err = errors.New(msg)
+				}
+				c.logger.Error(r.Context(), c.GetCorrelationId(r), err, "http handler panics with error")
+			}
+		}()
 		//  Perform validation
 		if schema != nil {
 			var params = make(map[string]any, 0)
@@ -406,11 +391,11 @@ func (c *HttpEndpoint) RegisterRoute(method string, route string, schema *cvalid
 				HttpResponseSender.SendError(w, r, bodyErr)
 				return
 			}
-			r.Body.Close()
+			_ = r.Body.Close()
 			r.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBuf))
 			//-------------------------
 			var body any
-			json.Unmarshal(bodyBuf, &body)
+			_ = json.Unmarshal(bodyBuf, &body)
 			params["body"] = body
 
 			correlationId := c.GetCorrelationId(r)
@@ -439,9 +424,9 @@ func (c *HttpEndpoint) RegisterRouteWithAuth(method string, route string, schema
 
 	if authorize != nil {
 		nextAction := action
-		action = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		action = func(w http.ResponseWriter, r *http.Request) {
 			authorize(w, r, nextAction)
-		})
+		}
 	}
 
 	c.RegisterRoute(method, route, schema, action)

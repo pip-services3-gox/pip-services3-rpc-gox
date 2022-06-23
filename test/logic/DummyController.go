@@ -5,6 +5,7 @@ import (
 	ccomand "github.com/pip-services3-gox/pip-services3-commons-gox/commands"
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
+	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
 	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
 )
 
@@ -119,4 +120,11 @@ func (c *DummyController) CheckCorrelationId(ctx context.Context, correlationId 
 
 func (c *DummyController) CheckErrorPropagation(ctx context.Context, correlationId string) error {
 	return cerr.NewNotFoundError(correlationId, "NOT_FOUND_TEST", "Not found error")
+}
+
+func (c *DummyController) CheckGracefulShutdownContext(ctx context.Context, correlationId string) error {
+	defer crun.DefaultErrorHandlerWithShutdown(ctx)
+
+	panic("called from DummyController.CheckGracefulShutdownContext")
+	return nil
 }
