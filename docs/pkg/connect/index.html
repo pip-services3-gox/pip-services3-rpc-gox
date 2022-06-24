@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>connect - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.18.3";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="../index.html">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="../index.html">GoDoc</a></div>
+<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package connect
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "connect"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="index.html#HttpConnectionResolver">type HttpConnectionResolver</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewHttpConnectionResolver">func NewHttpConnectionResolver() *HttpConnectionResolver</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpConnectionResolver.Configure">func (c *HttpConnectionResolver) Configure(ctx context.Context, config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpConnectionResolver.Register">func (c *HttpConnectionResolver) Register(correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpConnectionResolver.Resolve">func (c *HttpConnectionResolver) Resolve(correlationId string) (connection *ccon.ConnectionParams, credential *cauth.CredentialParams, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpConnectionResolver.ResolveAll">func (c *HttpConnectionResolver) ResolveAll(correlationId string) (connections []*ccon.ConnectionParams, credential *cauth.CredentialParams, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpConnectionResolver.SetReferences">func (c *HttpConnectionResolver) SetReferences(ctx context.Context, references crefer.IReferences)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://localhost:6060/src/connect/HttpConnectionResolver.go">HttpConnectionResolver.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+		
+		
+		
+			
+			
+			<h2 id="HttpConnectionResolver">type <a href="http://localhost:6060/src/connect/HttpConnectionResolver.go?s=1609:1802#L39">HttpConnectionResolver</a>
+				<a class="permalink" href="index.html#HttpConnectionResolver">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+HttpConnectionResolver helper class to retrieve connections for HTTP-based services abd clients.
+</p>
+<p>
+In addition to regular functions of ConnectionResolver is able to parse http:// URIs
+and validate connection parameters before returning them.
+</p>
+<pre>Configuration parameters:
+	- connection:
+	- discovery_key:               (optional) a key to retrieve the connection from IDiscovery
+	- ...                          other connection parameters
+
+	- connections:                   alternative to connection
+	- [connection params 1]:       first connection parameters
+	-  ...
+	- [connection params N]:       Nth connection parameters
+	-  ...
+
+References:
+	- *:discovery:*:*:1.0            (optional) IDiscovery services
+
+see: ConnectionParams
+see: ConnectionResolver
+
+Example:
+	config := cconf.NewConfigParamsFromTuples(
+		&#34;connection.host&#34;, &#34;10.1.1.100&#34;,
+		&#34;connection.port&#34;, 8080,
+	);
+
+	connectionResolver = NewHttpConnectionResolver();
+	connectionResolver.Configure(config);
+	connectionResolver.SetReferences(references);
+
+	connection, err := connectionResolver.Resolve(&#34;123&#34;)
+	// Now use connection...
+</pre>
+
+			<pre>type HttpConnectionResolver struct {
+    <span class="comment">//The base connection resolver.</span>
+<span id="HttpConnectionResolver.ConnectionResolver"></span>    ConnectionResolver <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/connect/">ccon</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/connect/#ConnectionResolver">ConnectionResolver</a>
+    <span class="comment">//The base credential resolver.</span>
+<span id="HttpConnectionResolver.CredentialResolver"></span>    CredentialResolver <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/auth/">cauth</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/auth/#CredentialResolver">CredentialResolver</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewHttpConnectionResolver">func <a href="http://localhost:6060/src/connect/HttpConnectionResolver.go?s=1930:1986#L48">NewHttpConnectionResolver</a>
+					<a class="permalink" href="index.html#NewHttpConnectionResolver">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewHttpConnectionResolver() *<a href="index.html#HttpConnectionResolver">HttpConnectionResolver</a></pre>
+				<p>
+NewHttpConnectionResolver creates new instance NewHttpConnectionResolver
+</p>
+<pre>Returns: pointer on NewHttpConnectionResolver
+</pre>
+
+				
+				
+			
+
+			
+				
+				<h3 id="HttpConnectionResolver.Configure">func (*HttpConnectionResolver) <a href="http://localhost:6060/src/connect/HttpConnectionResolver.go?s=2291:2382#L56">Configure</a>
+					<a class="permalink" href="index.html#HttpConnectionResolver.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpConnectionResolver">HttpConnectionResolver</a>) Configure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configure method are configures component by passing configuration parameters.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- config  *cconf.ConfigParams  configuration parameters to be set.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpConnectionResolver.Register">func (*HttpConnectionResolver) <a href="http://localhost:6060/src/connect/HttpConnectionResolver.go?s=7421:7490#L195">Register</a>
+					<a class="permalink" href="index.html#HttpConnectionResolver.Register">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpConnectionResolver">HttpConnectionResolver</a>) Register(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Register method are registers the given connection in all referenced discovery services.
+c method can be used for dynamic service discovery.
+</p>
+<pre>Parameters:
+	- correlationId  string   (optional) transaction id to trace execution through call chain.
+Returns: error nil if registered connection or error.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpConnectionResolver.Resolve">func (*HttpConnectionResolver) <a href="http://localhost:6060/src/connect/HttpConnectionResolver.go?s=5470:5615#L145">Resolve</a>
+					<a class="permalink" href="index.html#HttpConnectionResolver.Resolve">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpConnectionResolver">HttpConnectionResolver</a>) Resolve(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (connection *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/connect/">ccon</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/connect/#ConnectionParams">ConnectionParams</a>, credential *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/auth/">cauth</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/auth/#CredentialParams">CredentialParams</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Resolve method are resolves a single component connection. If connections are configured to be retrieved
+from Discovery service it finds a IDiscovery and resolves the connection there.
+</p>
+<pre>Parameters:
+	- correlationId  string     (optional) transaction id to trace execution through call chain.
+Returns: connection *ccon.ConnectionParams, credential *cauth.CredentialParams, err error
+	resolved connection and credential or error.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpConnectionResolver.ResolveAll">func (*HttpConnectionResolver) <a href="http://localhost:6060/src/connect/HttpConnectionResolver.go?s=6431:6582#L167">ResolveAll</a>
+					<a class="permalink" href="index.html#HttpConnectionResolver.ResolveAll">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpConnectionResolver">HttpConnectionResolver</a>) ResolveAll(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (connections []*<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/connect/">ccon</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/connect/#ConnectionParams">ConnectionParams</a>, credential *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/auth/">cauth</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/auth/#CredentialParams">CredentialParams</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ResolveAll method are resolves all component connection. If connections are configured to be retrieved
+from Discovery service it finds a IDiscovery and resolves the connection there.
+</p>
+<pre>Parameters:
+	- correlationId  string   (optional) transaction id to trace execution through call chain.
+Returns:  connections []*ccon.ConnectionParams, credential *cauth.CredentialParams, err error
+	resolved connections and credential or error.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpConnectionResolver.SetReferences">func (*HttpConnectionResolver) <a href="http://localhost:6060/src/connect/HttpConnectionResolver.go?s=2673:2771#L65">SetReferences</a>
+					<a class="permalink" href="index.html#HttpConnectionResolver.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpConnectionResolver">HttpConnectionResolver</a>) SetReferences(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, references <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+SetReferences method are sets references to dependent components.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- references crefer.IReferences	references to locate the component dependencies.
+</pre>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.18.3.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="https://golang.org/doc/tos.html">Terms of Service</a> |
+<a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>

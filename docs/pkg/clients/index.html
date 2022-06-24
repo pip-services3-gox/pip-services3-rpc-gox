@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>clients - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.18.3";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="../index.html">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="../index.html">GoDoc</a></div>
+<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package clients
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "clients"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="index.html#pkg-constants">Constants</a></dd>
+			
+			
+			
+				
+				<dd><a href="index.html#HandleHttpResponse">func HandleHttpResponse[T any](r *http.Response, correlationId string) (T, error)</a></dd>
+			
+			
+				
+				<dd><a href="index.html#CommandableHttpClient">type CommandableHttpClient</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewCommandableHttpClient">func NewCommandableHttpClient(baseRoute string) *CommandableHttpClient</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableHttpClient.CallCommand">func (c *CommandableHttpClient) CallCommand(ctx context.Context, name string, correlationId string, params *cdata.AnyValueMap) (*http.Response, error)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#DirectClient">type DirectClient</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewDirectClient">func NewDirectClient() *DirectClient</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DirectClient.Close">func (c *DirectClient) Close(ctx context.Context, correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DirectClient.Configure">func (c *DirectClient) Configure(ctx context.Context, config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DirectClient.Instrument">func (c *DirectClient) Instrument(ctx context.Context, correlationId string, name string) *service.InstrumentTiming</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DirectClient.IsOpen">func (c *DirectClient) IsOpen() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DirectClient.Open">func (c *DirectClient) Open(ctx context.Context, correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#DirectClient.SetReferences">func (c *DirectClient) SetReferences(ctx context.Context, references crefer.IReferences)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#RestClient">type RestClient</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewRestClient">func NewRestClient() *RestClient</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.AddCorrelationId">func (c *RestClient) AddCorrelationId(params *cdata.StringValueMap, correlationId string) *cdata.StringValueMap</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.AddFilterParams">func (c *RestClient) AddFilterParams(params *cdata.StringValueMap, filter *cdata.FilterParams) *cdata.StringValueMap</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.AddPagingParams">func (c *RestClient) AddPagingParams(params *cdata.StringValueMap, paging *cdata.PagingParams) *cdata.StringValueMap</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.Call">func (c *RestClient) Call(ctx context.Context, method string, route string, correlationId string, params *cdata.StringValueMap, data any) (*http.Response, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.Close">func (c *RestClient) Close(ctx context.Context, correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.Configure">func (c *RestClient) Configure(ctx context.Context, config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.Instrument">func (c *RestClient) Instrument(ctx context.Context, correlationId string, name string) *services.InstrumentTiming</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.InstrumentError">func (c *RestClient) InstrumentError(ctx context.Context, correlationId string, name string, inErr error, inRes any) (result any, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.IsOpen">func (c *RestClient) IsOpen() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.Open">func (c *RestClient) Open(ctx context.Context, correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestClient.SetReferences">func (c *RestClient) SetReferences(ctx context.Context, references crefer.IReferences)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://localhost:6060/src/clients/CommandableHttpClient.go">CommandableHttpClient.go</a>
+			
+				<a href="http://localhost:6060/src/clients/DirectClient.go">DirectClient.go</a>
+			
+				<a href="http://localhost:6060/src/clients/Helpers.go">Helpers.go</a>
+			
+				<a href="http://localhost:6060/src/clients/RestClient.go">RestClient.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				
+				<pre>const (
+    <span id="DefaultRequestMaxSize">DefaultRequestMaxSize</span> = 1024 * 1024
+    <span id="DefaultConnectTimeout">DefaultConnectTimeout</span> = 10000
+    <span id="DefaultTimeout">DefaultTimeout</span>        = 10000
+    <span id="DefaultRetriesCount">DefaultRetriesCount</span>   = 3
+)</pre>
+			
+		
+		
+		
+			
+			
+			<h2 id="HandleHttpResponse">func <a href="http://localhost:6060/src/clients/Helpers.go?s=420:501#L5">HandleHttpResponse</a>
+				<a class="permalink" href="index.html#HandleHttpResponse">&#xb6;</a>
+				
+				
+			</h2>
+			<pre>func HandleHttpResponse[T <a href="http://localhost:6060/pkg/builtin/#any">any</a>](r *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Response">Response</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) (T, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+			<p>
+HandleHttpResponse method helps handle http response body
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId string (optional) transaction id to trace execution through call chain.
+Returns: T any result, err error
+</pre>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="CommandableHttpClient">type <a href="http://localhost:6060/src/clients/CommandableHttpClient.go?s=2164:2214#L54">CommandableHttpClient</a>
+				<a class="permalink" href="index.html#CommandableHttpClient">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+CommandableHttpClient is abstract client that calls commandable HTTP service.
+</p>
+<p>
+Commandable services are generated automatically for ICommandable objects.
+Each command is exposed as POST operation that receives all parameters
+in body object.
+</p>
+<pre>Configuration parameters:
+	- base_route:              base route for remote URI
+	- connection(s):
+		- discovery_key:         (optional) a key to retrieve the connection from connect.idiscovery.html IDiscovery]]
+		- protocol:              connection protocol: http or https
+		- host:                  host name or IP address
+		- port:                  port number
+		- uri:                   resource URI or connection string with all parameters in it
+	- options:
+		- retries:               number of retries (default: 3)
+		- connect_timeout:       connection timeout in milliseconds (default: 10 sec)
+		- timeout:               invocation timeout in milliseconds (default: 10 sec)
+
+References:
+	- *:logger:*:*:1.0         (optional) ILogger components to pass log messages
+	- *:counters:*:*:1.0       (optional) ICounters components to pass collected measurements
+	- *:discovery:*:*:1.0      (optional) IDiscovery services to resolve connection
+
+Example:
+	type MyCommandableHttpClient struct{
+		*CommandableHttpClient
+		prototype reflect.Type // type of operation data
+		...
+	}
+	func (c * MyCommandableHttpClient) GetData(correlationId string, id string)(result MyData, err error){
+		params:= cdata.NewEmptyStringValueMap()
+		params.Set(&#34;id&#34;,id)
+		res, err := c.CallCommand(
+			prototype
+			&#34;get_data&#34;,
+			correlationId,
+			params,
+		)
+		...
+		// convert response to MyData
+		...
+		return result, err
+	}
+
+	client = NewMyCommandableHttpClient();
+	client.Configure(cconf.NewConfigParamsFromTuples(
+		&#34;connection.protocol&#34;, &#34;http&#34;,
+		&#34;connection.host&#34;, &#34;localhost&#34;,
+		&#34;connection.port&#34;, 8080
+	));
+
+	result, err := client.GetData(&#34;123&#34;, &#34;1&#34;)
+	...
+</pre>
+
+			<pre>type CommandableHttpClient struct {
+    *<a href="index.html#RestClient">RestClient</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewCommandableHttpClient">func <a href="http://localhost:6060/src/clients/CommandableHttpClient.go?s=2415:2485#L62">NewCommandableHttpClient</a>
+					<a class="permalink" href="index.html#NewCommandableHttpClient">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewCommandableHttpClient(baseRoute <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#CommandableHttpClient">CommandableHttpClient</a></pre>
+				<p>
+NewCommandableHttpClient is creates a new instance of the client.
+</p>
+<pre>Parameters:
+	- baseRoute string a base route for remote service.
+Returns: *CommandableHttpClient pointer on new instance
+</pre>
+
+				
+				
+			
+
+			
+				
+				<h3 id="CommandableHttpClient.CallCommand">func (*CommandableHttpClient) <a href="http://localhost:6060/src/clients/CommandableHttpClient.go?s=3135:3286#L78">CallCommand</a>
+					<a class="permalink" href="index.html#CommandableHttpClient.CallCommand">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableHttpClient">CommandableHttpClient</a>) CallCommand(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>,
+    params *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#AnyValueMap">AnyValueMap</a>) (*<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Response">Response</a>, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+CallCommand is calls a remote method via HTTP commadable protocol.
+The call is made via POST operation and all parameters are sent in body object.
+The complete route to remote method is defined as baseRoute + &#34;/&#34; + name.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- name        string      a name of the command to call.
+	- correlationId  string   (optional) transaction id to trace execution through call chain.
+	- params     cdata.StringValueMap       command parameters.
+Returns: *http.Response, err error result or error.
+</pre>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="DirectClient">type <a href="http://localhost:6060/src/clients/DirectClient.go?s=2494:2857#L52">DirectClient</a>
+				<a class="permalink" href="index.html#DirectClient">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+DirectClient is abstract client that calls controller directly in the same memory space.
+</p>
+<p>
+It is used when multiple microservices are deployed in a single container (monolyth)
+and communication between them can be done by direct calls rather then through
+the network.
+</p>
+<pre>	Configuration parameters:
+		- dependencies:
+			- controller: override controller descriptor
+
+	References:
+		- *:logger:*:*:1.0         (optional) ILogger components to pass log messages
+		- *:counters:*:*:1.0       (optional) ICounters components to pass collected measurements
+		- *:controller:*:*:1.0     controller to call business methods
+
+	Example:
+		type MyDirectClient struct {
+			*DirectClient
+		}
+		func MyDirectClient()* MyDirectClient {
+			c:= MyDirectClient{}
+			c.DirectClient = NewDirectClient()
+			c.DependencyResolver.Put(context.Background(), &#34;controller&#34;, cref.NewDescriptor(
+             &#34;mygroup&#34;, &#34;controller&#34;, &#34;*&#34;, &#34;*&#34;, &#34;*&#34;));
+		}
+
+		func (c *MyDirectClient) SetReferences(ctx context.Context, references cref.IReferences) {
+			c.DirectClient.SetReferences(ctx, references)
+			specificController, ok := c.Controller.(tdata.IMyDataController)
+			if !ok {
+				panic(&#34;MyDirectClient: Cant&#39;t resolv dependency &#39;controller&#39; to IMyDataController&#34;)
+			}
+			c.specificController = specificController
+		}
+		...
+		func (c * MyDirectClient) GetData(correlationId string, id string)(result MyData, err error) {
+			timing := c.Instrument(correlationId, &#34;myclient.get_data&#34;)
+			cmRes, cmdErr := c.specificController.GetData(correlationId, id)
+			timing.EndTiming();
+			return  c.InstrumentError(correlationId, &#34;myclient.get_data&#34;, cmdRes, cmdErr)
+		}
+		...
+
+		client = NewMyDirectClient();
+		client.SetReferences(cref.NewReferencesFromTuples(
+			cref.NewDescriptor(&#34;mygroup&#34;,&#34;controller&#34;,&#34;default&#34;,&#34;default&#34;,&#34;1.0&#34;), controller,
+		));
+		res, err := client.GetData(&#34;123&#34;, &#34;1&#34;)
+</pre>
+
+			<pre>type DirectClient struct {
+    <span class="comment">//The controller reference.</span>
+<span id="DirectClient.Controller"></span>    Controller <a href="http://localhost:6060/pkg/builtin/#any">any</a>
+    <span class="comment">//The open flag.</span>
+<span id="DirectClient.Opened"></span>    Opened <a href="http://localhost:6060/pkg/builtin/#bool">bool</a>
+    <span class="comment">//The logger.</span>
+<span id="DirectClient.Logger"></span>    Logger *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/">clog</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/#CompositeLogger">CompositeLogger</a>
+    <span class="comment">//The performance counters</span>
+<span id="DirectClient.Counters"></span>    Counters *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/#CompositeCounters">CompositeCounters</a>
+    <span class="comment">//The dependency resolver to get controller reference.</span>
+<span id="DirectClient.DependencyResolver"></span>    DependencyResolver <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#DependencyResolver">DependencyResolver</a>
+    <span class="comment">// The tracer.</span>
+<span id="DirectClient.Tracer"></span>    Tracer *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/trace/">ctrace</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/trace/#CompositeTracer">CompositeTracer</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewDirectClient">func <a href="http://localhost:6060/src/clients/DirectClient.go?s=2919:2955#L68">NewDirectClient</a>
+					<a class="permalink" href="index.html#NewDirectClient">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewDirectClient() *<a href="index.html#DirectClient">DirectClient</a></pre>
+				<p>
+NewDirectClient is creates a new instance of the client.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="DirectClient.Close">func (*DirectClient) <a href="http://localhost:6060/src/clients/DirectClient.go?s=6845:6922#L169">Close</a>
+					<a class="permalink" href="index.html#DirectClient.Close">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DirectClient">DirectClient</a>) Close(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Close method are closes component and frees used resources.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId string	(optional) transaction id to trace execution through call chain.
+Returns: error or nil no errors occured.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="DirectClient.Configure">func (*DirectClient) <a href="http://localhost:6060/src/clients/DirectClient.go?s=3523:3604#L84">Configure</a>
+					<a class="permalink" href="index.html#DirectClient.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DirectClient">DirectClient</a>) Configure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configure method are configures component by passing configuration parameters.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- config  *cconf.ConfigParams  configuration parameters to be set.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="DirectClient.Instrument">func (*DirectClient) <a href="http://localhost:6060/src/clients/DirectClient.go?s=4666:4781#L111">Instrument</a>
+					<a class="permalink" href="index.html#DirectClient.Instrument">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DirectClient">DirectClient</a>) Instrument(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-rpc-gox/services/">service</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-rpc-gox/services/#InstrumentTiming">InstrumentTiming</a></pre>
+				<p>
+Instrument method are adds instrumentation to log calls and measure call time.
+It returns a Timing object that is used to end the time measurement.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId  string (optional) transaction id to trace execution through call chain.
+	- name string a method name.
+Returns: Timing object to end the time measurement.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="DirectClient.IsOpen">func (*DirectClient) <a href="http://localhost:6060/src/clients/DirectClient.go?s=5982:6018#L139">IsOpen</a>
+					<a class="permalink" href="index.html#DirectClient.IsOpen">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DirectClient">DirectClient</a>) IsOpen() <a href="http://localhost:6060/pkg/builtin/#bool">bool</a></pre>
+				<p>
+IsOpen method are checks if the component is opened.
+</p>
+<pre>Returns: true if the component has been opened and false otherwise.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="DirectClient.Open">func (*DirectClient) <a href="http://localhost:6060/src/clients/DirectClient.go?s=6259:6335#L148">Open</a>
+					<a class="permalink" href="index.html#DirectClient.Open">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DirectClient">DirectClient</a>) Open(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Open method are opens the component.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId string	(optional) transaction id to trace execution through call chain.
+Returns: error or nil no errors occurred.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="DirectClient.SetReferences">func (*DirectClient) <a href="http://localhost:6060/src/clients/DirectClient.go?s=3850:3938#L92">SetReferences</a>
+					<a class="permalink" href="index.html#DirectClient.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#DirectClient">DirectClient</a>) SetReferences(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, references <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+SetReferences method are sets references to dependent components.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- references crefer.IReferences references to locate the component dependencies.
+</pre>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="RestClient">type <a href="http://localhost:6060/src/clients/RestClient.go?s=2945:3745#L66">RestClient</a>
+				<a class="permalink" href="index.html#RestClient">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+RestClient is abstract client that calls remove endpoints using HTTP/REST protocol.
+</p>
+<pre>Configuration parameters:
+	- base_route:              base route for remote URI
+	- connection(s):
+		- discovery_key:         (optional) a key to retrieve the connection from IDiscovery
+		- protocol:              connection protocol: http or https
+		- host:                  host name or IP address
+		- port:                  port number
+		- uri:                   resource URI or connection string with all parameters in it
+	- options:
+		- retries:               number of retries (default: 3)
+		- connectTimeout:        connection timeout in milliseconds (default: 10 sec)
+		- timeout:               invocation timeout in milliseconds (default: 10 sec)
+		- correlation_id_place 	 place for adding correalationId, query - in query string, headers - in headers, both - in query and headers (default: query)
+
+References:
+	- *:logger:*:*:1.0         (optional) ILogger components to pass log messages
+	- *:counters:*:*:1.0         (optional) ICounters components to pass collected measurements
+	- *:discovery:*:*:1.0        (optional)  IDiscovery services to resolve connection
+
+see services.RestService
+see services.CommandableHttpService
+
+Example:
+	type MyRestClient struct {
+		*RestClient
+	}
+	...
+	func (c *MyRestClient) GetData(correlationId string, id string) (result *tdata.MyDataPage, err error) {
+		params := cdata.NewEmptyStringValueMap()
+		params.Set(&#34;id&#34;, id)
+		calValue, calErr := c.Call(MyDataPageType, &#34;get&#34;, &#34;/data&#34;, correlationId, params, nil)
+		if calErr != nil {
+			return nil, calErr
+		}
+		result, _ = calValue.(*tdata.MyDataPage)
+		c.Instrument(correlationId, &#34;myData.get_page_by_filter&#34;)
+		return result, nil
+	}
+
+	client := NewMyRestClient();
+	client.Configure(context.Background(), cconf.NewConfigParamsFromTuples(
+		&#34;connection.protocol&#34;, &#34;http&#34;,
+		&#34;connection.host&#34;, &#34;localhost&#34;,
+		&#34;connection.port&#34;, 8080,
+	));
+
+	result, err := client.GetData(&#34;123&#34;, &#34;1&#34;)
+	...
+</pre>
+
+			<pre>type RestClient struct {
+
+    <span class="comment">//The HTTP client.</span>
+<span id="RestClient.Client"></span>    Client *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Client">Client</a>
+    <span class="comment">//The connection resolver.</span>
+<span id="RestClient.ConnectionResolver"></span>    ConnectionResolver <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-rpc-gox/connect/">rpccon</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-rpc-gox/connect/#HttpConnectionResolver">HttpConnectionResolver</a>
+    <span class="comment">//The logger.</span>
+<span id="RestClient.Logger"></span>    Logger *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/">clog</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/#CompositeLogger">CompositeLogger</a>
+    <span class="comment">//The performance counters.</span>
+<span id="RestClient.Counters"></span>    Counters *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/#CompositeCounters">CompositeCounters</a>
+    <span class="comment">// The tracer.</span>
+<span id="RestClient.Tracer"></span>    Tracer *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/trace/">ctrace</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/trace/#CompositeTracer">CompositeTracer</a>
+    <span class="comment">//The configuration options.</span>
+<span id="RestClient.Options"></span>    Options <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>
+    <span class="comment">//The base route.</span>
+<span id="RestClient.BaseRoute"></span>    BaseRoute <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+    <span class="comment">//The number of retries.</span>
+<span id="RestClient.Retries"></span>    Retries <a href="http://localhost:6060/pkg/builtin/#int">int</a>
+    <span class="comment">//The default headers to be added to every request.</span>
+<span id="RestClient.Headers"></span>    Headers <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#StringValueMap">StringValueMap</a>
+    <span class="comment">//The connection timeout in milliseconds.</span>
+<span id="RestClient.ConnectTimeout"></span>    ConnectTimeout <a href="http://localhost:6060/pkg/builtin/#int">int</a>
+    <span class="comment">//The invocation timeout in milliseconds.</span>
+<span id="RestClient.Timeout"></span>    Timeout <a href="http://localhost:6060/pkg/builtin/#int">int</a>
+    <span class="comment">//The remote service uri which is calculated on open.</span>
+<span id="RestClient.Uri"></span>    Uri <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewRestClient">func <a href="http://localhost:6060/src/clients/RestClient.go?s=3973:4005#L105">NewRestClient</a>
+					<a class="permalink" href="index.html#NewRestClient">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewRestClient() *<a href="index.html#RestClient">RestClient</a></pre>
+				<p>
+NewRestClient creates new instance of RestClient
+</p>
+<pre>Returns: pointer on NewRestClient
+</pre>
+
+				
+				
+			
+
+			
+				
+				<h3 id="RestClient.AddCorrelationId">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=9393:9504#L245">AddCorrelationId</a>
+					<a class="permalink" href="index.html#RestClient.AddCorrelationId">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) AddCorrelationId(params *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#StringValueMap">StringValueMap</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#StringValueMap">StringValueMap</a></pre>
+				<p>
+AddCorrelationId method are adds a correlation id (correlation_id) to invocation parameter map.
+</p>
+<pre>Parameters:
+	- params    *cdata.StringValueMap        invocation parameters.
+	- correlationId  string  (optional) a correlation id to be added.
+Returns: invocation parameters with added correlation id.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.AddFilterParams">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=10102:10218#L265">AddFilterParams</a>
+					<a class="permalink" href="index.html#RestClient.AddFilterParams">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) AddFilterParams(params *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#StringValueMap">StringValueMap</a>, filter *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#FilterParams">FilterParams</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#StringValueMap">StringValueMap</a></pre>
+				<p>
+AddFilterParams method are adds filter parameters (with the same name as they defined)
+to invocation parameter map.
+</p>
+<pre>Parameters:
+	- params  *cdata.StringValueMap      invocation parameters.
+	- filter  *cdata.FilterParams     (optional) filter parameters
+Returns: invocation parameters with added filter parameters.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.AddPagingParams">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=10664:10780#L283">AddPagingParams</a>
+					<a class="permalink" href="index.html#RestClient.AddPagingParams">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) AddPagingParams(params *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#StringValueMap">StringValueMap</a>, paging *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#PagingParams">PagingParams</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#StringValueMap">StringValueMap</a></pre>
+				<p>
+AddPagingParams method are adds paging parameters (skip, take, total) to invocation parameter map.
+Parameters:
+</p>
+<pre>- params        invocation parameters.
+- paging        (optional) paging parameters
+</pre>
+<p>
+Return invocation parameters with added paging parameters.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.Call">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=11700:11862#L311">Call</a>
+					<a class="permalink" href="index.html#RestClient.Call">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) Call(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, method <a href="http://localhost:6060/pkg/builtin/#string">string</a>, route <a href="http://localhost:6060/pkg/builtin/#string">string</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>,
+    params *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#StringValueMap">StringValueMap</a>, data <a href="http://localhost:6060/pkg/builtin/#any">any</a>) (*<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Response">Response</a>, <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Call method are calls a remote method via HTTP/REST protocol.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- prototype reflect.Type type for convert JSON result. Set nil for return raw JSON string
+	- method 	string           HTTP method: &#34;get&#34;, &#34;head&#34;, &#34;post&#34;, &#34;put&#34;, &#34;delete&#34;
+	- route   string          a command route. Base route will be added to this route
+	- correlationId  string    (optional) transaction id to trace execution through call chain.
+	- params  cdata.StringValueMap          (optional) query parameters.
+	- data   any           (optional) body object.
+Returns: result any, err error result object or error.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.Close">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=8859:8934#L231">Close</a>
+					<a class="permalink" href="index.html#RestClient.Close">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) Close(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Close method are closes component and frees used resources.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId  string	(optional) transaction id to trace execution through call chain.
+</pre>
+<p>
+Returns: error or nil no errors occured.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.Configure">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=4986:5065#L135">Configure</a>
+					<a class="permalink" href="index.html#RestClient.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) Configure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configure component by passing configuration parameters.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- config *cconf.ConfigParams   configuration parameters to be set.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.Instrument">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=6493:6607#L164">Instrument</a>
+					<a class="permalink" href="index.html#RestClient.Instrument">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) Instrument(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-rpc-gox/services/">services</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-rpc-gox/services/#InstrumentTiming">InstrumentTiming</a></pre>
+				<p>
+Instrument method are adds instrumentation to log calls and measure call time.
+It returns a services.InstrumentTiming object that is used to end the time measurement.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId string (optional) transaction id to trace execution through call chain.
+	- name string a method name.
+Returns: services.InstrumentTiming object to end the time measurement.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.InstrumentError">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=7389:7529#L181">InstrumentError</a>
+					<a class="permalink" href="index.html#RestClient.InstrumentError">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) InstrumentError(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>, inErr <a href="http://localhost:6060/pkg/builtin/#error">error</a>, inRes <a href="http://localhost:6060/pkg/builtin/#any">any</a>) (result <a href="http://localhost:6060/pkg/builtin/#any">any</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+InstrumentError method are dds instrumentation to error handling.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId string  (optional) transaction id to trace execution through call chain.
+	- name   string         a method name.
+	- err    error          an occured error
+	- result  any           (optional) an execution result
+Returns: result any, err error an execution result and error
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.IsOpen">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=7829:7863#L192">IsOpen</a>
+					<a class="permalink" href="index.html#RestClient.IsOpen">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) IsOpen() <a href="http://localhost:6060/pkg/builtin/#bool">bool</a></pre>
+				<p>
+IsOpen are checks if the component is opened.
+</p>
+<pre>Returns: true if the component has been opened and false otherwise.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.Open">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=8111:8185#L201">Open</a>
+					<a class="permalink" href="index.html#RestClient.Open">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) Open(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Open method are opens the component.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId string	(optional) transaction id to trace execution through call chain.
+Returns: error or nil no errors occurred.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestClient.SetReferences">func (*RestClient) <a href="http://localhost:6060/src/clients/RestClient.go?s=5810:5896#L150">SetReferences</a>
+					<a class="permalink" href="index.html#RestClient.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestClient">RestClient</a>) SetReferences(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, references <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+SetReferences to dependent components.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- references  crefer.IReferences	references to locate the component dependencies.
+</pre>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.18.3.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="https://golang.org/doc/tos.html">Terms of Service</a> |
+<a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>

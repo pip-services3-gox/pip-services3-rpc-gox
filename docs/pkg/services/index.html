@@ -1,0 +1,2697 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#375EAB">
+
+  <title>services - Go Documentation Server</title>
+
+<link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+
+<script>window.initFuncs = [];</script>
+<script src="../../lib/godoc/jquery.js" defer></script>
+
+
+
+<script>var goVersion = "go1.18.3";</script>
+<script src="../../lib/godoc/godocs.js" defer></script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+<div class="top-heading" id="heading-wide"><a href="../index.html">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="../index.html">GoDoc</a></div>
+<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="http://localhost:6060/search">
+<div id="menu">
+
+<span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
+</div>
+</form>
+
+</div></div>
+
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>
+    Package services
+    <span class="text-muted"></span>
+  </h1>
+
+
+
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "services"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				
+				
+			</div>
+		</div>
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="index.html#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="index.html#pkg-variables">Variables</a></dd>
+			
+			
+			
+				
+				<dd><a href="index.html#AboutOperations">type AboutOperations</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AboutOperations.About">func (c *AboutOperations) About(res http.ResponseWriter, req *http.Request)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AboutOperations.GetAboutOperation">func (c *AboutOperations) GetAboutOperation() func(res http.ResponseWriter, req *http.Request)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AboutOperations.GetNetworkAddresses">func (c *AboutOperations) GetNetworkAddresses() []string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#AboutOperations.SetReferences">func (c *AboutOperations) SetReferences(ctx context.Context, references crefer.IReferences)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#CommandableHttpService">type CommandableHttpService</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#InheritCommandableHttpService">func InheritCommandableHttpService(overrides IRestServiceOverrides, baseRoute string) *CommandableHttpService</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableHttpService.Configure">func (c *CommandableHttpService) Configure(ctx context.Context, config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableHttpService.Register">func (c *CommandableHttpService) Register()</a></dd>
+				
+			
+				
+				<dd><a href="index.html#CommandableSwaggerDocument">type CommandableSwaggerDocument</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewCommandableSwaggerDocument">func NewCommandableSwaggerDocument(baseRoute string, config *cconf.ConfigParams, commands []ccomands.ICommand) *CommandableSwaggerDocument</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableSwaggerDocument.GetSpaces">func (c *CommandableSwaggerDocument) GetSpaces(length int) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableSwaggerDocument.ToString">func (c *CommandableSwaggerDocument) ToString() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableSwaggerDocument.WriteData">func (c *CommandableSwaggerDocument) WriteData(indent int, data map[string]any)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#CommandableSwaggerDocument.WriteName">func (c *CommandableSwaggerDocument) WriteName(indent int, name string)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#HeartbeatOperations">type HeartbeatOperations</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewHeartbeatOperations">func NewHeartbeatOperations() *HeartbeatOperations</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HeartbeatOperations.GetHeartbeatOperation">func (c *HeartbeatOperations) GetHeartbeatOperation() func(res http.ResponseWriter, req *http.Request)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HeartbeatOperations.Heartbeat">func (c *HeartbeatOperations) Heartbeat(res http.ResponseWriter, req *http.Request)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#HeartbeatRestService">type HeartbeatRestService</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewHeartbeatRestService">func NewHeartbeatRestService() *HeartbeatRestService</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HeartbeatRestService.Configure">func (c *HeartbeatRestService) Configure(ctx context.Context, config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HeartbeatRestService.Register">func (c *HeartbeatRestService) Register()</a></dd>
+				
+			
+				
+				<dd><a href="index.html#HttpEndpoint">type HttpEndpoint</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewHttpEndpoint">func NewHttpEndpoint() *HttpEndpoint</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.AddCorsHeader">func (c *HttpEndpoint) AddCorsHeader(header string, origin string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.Close">func (c *HttpEndpoint) Close(ctx context.Context, correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.Configure">func (c *HttpEndpoint) Configure(ctx context.Context, config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.GetCorrelationId">func (c *HttpEndpoint) GetCorrelationId(req *http.Request) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.IsOpen">func (c *HttpEndpoint) IsOpen() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.Open">func (c *HttpEndpoint) Open(ctx context.Context, correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.Register">func (c *HttpEndpoint) Register(registration IRegisterable)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.RegisterInterceptor">func (c *HttpEndpoint) RegisterInterceptor(route string, action func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc))</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.RegisterRoute">func (c *HttpEndpoint) RegisterRoute(method string, route string, schema *cvalid.Schema, action http.HandlerFunc)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.RegisterRouteWithAuth">func (c *HttpEndpoint) RegisterRouteWithAuth(method string, route string, schema *cvalid.Schema, authorize func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc), action http.HandlerFunc)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.SetReferences">func (c *HttpEndpoint) SetReferences(ctx context.Context, references crefer.IReferences)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#HttpEndpoint.Unregister">func (c *HttpEndpoint) Unregister(registration IRegisterable)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#IRegisterable">type IRegisterable</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#IRestServiceOverrides">type IRestServiceOverrides</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#ISwaggerService">type ISwaggerService</a></dd>
+				
+				
+			
+				
+				<dd><a href="index.html#InstrumentTiming">type InstrumentTiming</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewInstrumentTiming">func NewInstrumentTiming(correlationId string, name string, verb string, logger clog.ILogger, counters ccount.ICounters, counterTiming *ccount.CounterTiming, traceTiming *ctrace.TraceTiming) *InstrumentTiming</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#InstrumentTiming.EndFailure">func (c *InstrumentTiming) EndFailure(ctx context.Context, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#InstrumentTiming.EndSuccess">func (c *InstrumentTiming) EndSuccess(ctx context.Context)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#InstrumentTiming.EndTiming">func (c *InstrumentTiming) EndTiming(ctx context.Context, err error)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#RestOperations">type RestOperations</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewRestOperations">func NewRestOperations() *RestOperations</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.Configure">func (c *RestOperations) Configure(ctx context.Context, config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.DecodeBody">func (c *RestOperations) DecodeBody(req *http.Request, target any) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.GetCorrelationId">func (c *RestOperations) GetCorrelationId(req *http.Request) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.GetFilterParams">func (c *RestOperations) GetFilterParams(req *http.Request) *cdata.FilterParams</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.GetPagingParams">func (c *RestOperations) GetPagingParams(req *http.Request) *cdata.PagingParams</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.GetParam">func (c *RestOperations) GetParam(req *http.Request, name string) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendBadRequest">func (c *RestOperations) SendBadRequest(res http.ResponseWriter, req *http.Request, message string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendConflict">func (c *RestOperations) SendConflict(res http.ResponseWriter, req *http.Request, message string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendCreatedResult">func (c *RestOperations) SendCreatedResult(res http.ResponseWriter, req *http.Request, result any, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendDeletedResult">func (c *RestOperations) SendDeletedResult(res http.ResponseWriter, req *http.Request, result any, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendEmptyResult">func (c *RestOperations) SendEmptyResult(res http.ResponseWriter, req *http.Request, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendError">func (c *RestOperations) SendError(res http.ResponseWriter, req *http.Request, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendInternalError">func (c *RestOperations) SendInternalError(res http.ResponseWriter, req *http.Request, message string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendNotFound">func (c *RestOperations) SendNotFound(res http.ResponseWriter, req *http.Request, message string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendResult">func (c *RestOperations) SendResult(res http.ResponseWriter, req *http.Request, result any, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendServerUnavailable">func (c *RestOperations) SendServerUnavailable(res http.ResponseWriter, req *http.Request, message string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendSessionExpired">func (c *RestOperations) SendSessionExpired(res http.ResponseWriter, req *http.Request, message string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SendUnauthorized">func (c *RestOperations) SendUnauthorized(res http.ResponseWriter, req *http.Request, message string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestOperations.SetReferences">func (c *RestOperations) SetReferences(ctx context.Context, references crefer.IReferences)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#RestService">type RestService</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#InheritRestService">func InheritRestService(overrides IRestServiceOverrides) *RestService</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.Close">func (c *RestService) Close(ctx context.Context, correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.Configure">func (c *RestService) Configure(ctx context.Context, config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.DecodeBody">func (c *RestService) DecodeBody(req *http.Request, target any) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.GetCorrelationId">func (c *RestService) GetCorrelationId(req *http.Request) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.GetFilterParams">func (c *RestService) GetFilterParams(req *http.Request) *cdata.FilterParams</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.GetPagingParams">func (c *RestService) GetPagingParams(req *http.Request) *cdata.PagingParams</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.GetParam">func (c *RestService) GetParam(req *http.Request, name string) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.Instrument">func (c *RestService) Instrument(ctx context.Context, correlationId string, name string) *InstrumentTiming</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.InstrumentError">func (c *RestService) InstrumentError(ctx context.Context, correlationId string, name string, errIn error, resIn any) (result any, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.IsOpen">func (c *RestService) IsOpen() bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.Open">func (c *RestService) Open(ctx context.Context, correlationId string) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.Register">func (c *RestService) Register()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.RegisterInterceptor">func (c *RestService) RegisterInterceptor(route string, action func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc))</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.RegisterOpenApiSpec">func (c *RestService) RegisterOpenApiSpec(content string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.RegisterOpenApiSpecFromFile">func (c *RestService) RegisterOpenApiSpecFromFile(path string)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.RegisterRoute">func (c *RestService) RegisterRoute(method string, route string, schema *cvalid.Schema, action func(res http.ResponseWriter, req *http.Request))</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.RegisterRouteWithAuth">func (c *RestService) RegisterRouteWithAuth(method string, route string, schema *cvalid.Schema, authorize func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc), action func(res http.ResponseWriter, req *http.Request))</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.SendCreatedResult">func (c *RestService) SendCreatedResult(res http.ResponseWriter, req *http.Request, result any, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.SendDeletedResult">func (c *RestService) SendDeletedResult(res http.ResponseWriter, req *http.Request, result any, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.SendError">func (c *RestService) SendError(res http.ResponseWriter, req *http.Request, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.SendResult">func (c *RestService) SendResult(res http.ResponseWriter, req *http.Request, result any, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.SetReferences">func (c *RestService) SetReferences(ctx context.Context, references crefer.IReferences)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#RestService.UnsetReferences">func (c *RestService) UnsetReferences()</a></dd>
+				
+			
+				
+				<dd><a href="index.html#StatusOperations">type StatusOperations</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewStatusOperations">func NewStatusOperations() *StatusOperations</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#StatusOperations.GetStatusOperation">func (c *StatusOperations) GetStatusOperation() func(res http.ResponseWriter, req *http.Request)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#StatusOperations.SetReferences">func (c *StatusOperations) SetReferences(ctx context.Context, references crefer.IReferences)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#StatusOperations.Status">func (c *StatusOperations) Status(res http.ResponseWriter, req *http.Request)</a></dd>
+				
+			
+				
+				<dd><a href="index.html#StatusRestService">type StatusRestService</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#NewStatusRestService">func NewStatusRestService() *StatusRestService</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#StatusRestService.Configure">func (c *StatusRestService) Configure(ctx context.Context, config *cconf.ConfigParams)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#StatusRestService.Register">func (c *StatusRestService) Register()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="index.html#StatusRestService.SetReferences">func (c *StatusRestService) SetReferences(ctx context.Context, references crefer.IReferences)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h3>Package files</h3>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="http://localhost:6060/src/services/AboutOperations.go">AboutOperations.go</a>
+			
+				<a href="http://localhost:6060/src/services/CommandableHttpService.go">CommandableHttpService.go</a>
+			
+				<a href="http://localhost:6060/src/services/CommandableSwaggerDocument.go">CommandableSwaggerDocument.go</a>
+			
+				<a href="http://localhost:6060/src/services/HeartbeatOperations.go">HeartbeatOperations.go</a>
+			
+				<a href="http://localhost:6060/src/services/HeartbeatRestService.go">HeartbeatRestService.go</a>
+			
+				<a href="http://localhost:6060/src/services/HttpEndpoint.go">HttpEndpoint.go</a>
+			
+				<a href="http://localhost:6060/src/services/HttpRequestDetector.go">HttpRequestDetector.go</a>
+			
+				<a href="http://localhost:6060/src/services/HttpResponseSender.go">HttpResponseSender.go</a>
+			
+				<a href="http://localhost:6060/src/services/IRegisterable.go">IRegisterable.go</a>
+			
+				<a href="http://localhost:6060/src/services/ISwaggerService.go">ISwaggerService.go</a>
+			
+				<a href="http://localhost:6060/src/services/InstrumentTiming.go">InstrumentTiming.go</a>
+			
+				<a href="http://localhost:6060/src/services/RestOperations.go">RestOperations.go</a>
+			
+				<a href="http://localhost:6060/src/services/RestService.go">RestService.go</a>
+			
+				<a href="http://localhost:6060/src/services/StatusOperations.go">StatusOperations.go</a>
+			
+				<a href="http://localhost:6060/src/services/StatusRestService.go">StatusRestService.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				
+				<pre>const (
+    <span id="DefaultConnectionTimeout">DefaultConnectionTimeout</span> = &#34;60000&#34;
+    <span id="DefaultFileMaxSize">DefaultFileMaxSize</span>       = 200 * 1024 * 1024
+    <span id="DefaultRequestMaxSize">DefaultRequestMaxSize</span>    = 1024 * 1024
+)</pre>
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<p>
+HttpRequestDetector helper class that retrieves parameters from HTTP requests.
+</p>
+
+				<pre>var <span id="HttpRequestDetector">HttpRequestDetector</span> = _THttpRequestDetector{}</pre>
+			
+				<p>
+HttpResponseSender helper class that handles HTTP-based responses.
+</p>
+
+				<pre>var <span id="HttpResponseSender">HttpResponseSender</span> = _THttpResponseSender{}</pre>
+			
+		
+		
+		
+			
+			
+			<h2 id="AboutOperations">type <a href="http://localhost:6060/src/services/AboutOperations.go?s=235:314#L5">AboutOperations</a>
+				<a class="permalink" href="index.html#AboutOperations">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type AboutOperations struct {
+    <a href="index.html#RestOperations">RestOperations</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="AboutOperations.About">func (*AboutOperations) <a href="http://localhost:6060/src/services/AboutOperations.go?s=1252:1327#L44">About</a>
+					<a class="permalink" href="index.html#AboutOperations.About">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AboutOperations">AboutOperations</a>) About(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="AboutOperations.GetAboutOperation">func (*AboutOperations) <a href="http://localhost:6060/src/services/AboutOperations.go?s=687:781#L22">GetAboutOperation</a>
+					<a class="permalink" href="index.html#AboutOperations.GetAboutOperation">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AboutOperations">AboutOperations</a>) GetAboutOperation() func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="AboutOperations.GetNetworkAddresses">func (*AboutOperations) <a href="http://localhost:6060/src/services/AboutOperations.go?s=869:925#L28">GetNetworkAddresses</a>
+					<a class="permalink" href="index.html#AboutOperations.GetNetworkAddresses">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AboutOperations">AboutOperations</a>) GetNetworkAddresses() []<a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="AboutOperations.SetReferences">func (*AboutOperations) <a href="http://localhost:6060/src/services/AboutOperations.go?s=316:407#L10">SetReferences</a>
+					<a class="permalink" href="index.html#AboutOperations.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#AboutOperations">AboutOperations</a>) SetReferences(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, references <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#IReferences">IReferences</a>)</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="CommandableHttpService">type <a href="http://localhost:6060/src/services/CommandableHttpService.go?s=2662:2766#L60">CommandableHttpService</a>
+				<a class="permalink" href="index.html#CommandableHttpService">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+CommandableHttpService abstract service that receives remove calls via HTTP/REST protocol
+to operations automatically generated for commands defined in ICommandable components.
+Each command is exposed as POST operation that receives all parameters in body object.
+</p>
+<p>
+Commandable services require only 3 lines of code to implement a robust external
+HTTP-based remote interface.
+</p>
+<pre>Configuration parameters:
+	- base_route:                base route for remote URI
+	- dependencies:
+		- endpoint:              override for HTTP Endpoint dependency
+		- controller:            override for Controller dependency
+	- connection(s):
+		- discovery_key:         (optional) a key to retrieve the connection from IDiscovery
+		- protocol:              connection protocol: http or https
+		- host:                  host name or IP address
+		- port:                  port number
+		- uri:                   resource URI or connection string with all parameters in it
+
+References:
+	- *:logger:*:*:1.0            (optional) ILogger components to pass log messages
+	- *:counters:*:*:1.0          (optional) ICounters components to pass collected measurements
+	- *:discovery:*:*:1.0         (optional) IDiscovery services to resolve connection
+	- *:endpoint:http:*:1.0       (optional) HttpEndpoint reference
+
+see clients.CommandableHttpClient
+see RestService
+
+Example:
+	type MyCommandableHttpService struct {
+		*CommandableHttpService
+	}
+
+	func NewMyCommandableHttpService() *MyCommandableHttpService {
+		c := MyCommandableHttpService{
+			CommandableHttpService: services.NewCommandableHttpService(&#34;dummies&#34;),
+		}
+		c.DependencyResolver.Put(&#34;controller&#34;, cref.NewDescriptor(&#34;pip-services-dummies&#34;, &#34;controller&#34;, &#34;default&#34;, &#34;*&#34;, &#34;*&#34;))
+		return &amp;c
+	}
+
+	service := NewMyCommandableHttpService();
+	service.Configure(cconf.NewConfigParamsFromTuples(
+		&#34;connection.protocol&#34;, &#34;http&#34;,
+		&#34;connection.host&#34;, &#34;localhost&#34;,
+		&#34;connection.port&#34;, 8080,
+	));
+	service.SetReferences(cref.NewReferencesFromTuples(
+		cref.NewDescriptor(&#34;mygroup&#34;,&#34;controller&#34;,&#34;default&#34;,&#34;default&#34;,&#34;1.0&#34;), controller
+	));
+
+	opnErr:=service.Open(&#34;123&#34;)
+	if opnErr == nil {
+		fmt.Println(&#34;The REST service is running on port 8080&#34;);
+	}
+</pre>
+
+			<pre>type CommandableHttpService struct {
+    *<a href="index.html#RestService">RestService</a>
+
+<span id="CommandableHttpService.SwaggerAuto"></span>    SwaggerAuto <a href="http://localhost:6060/pkg/builtin/#bool">bool</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="InheritCommandableHttpService">func <a href="http://localhost:6060/src/services/CommandableHttpService.go?s=3567:3676#L84">InheritCommandableHttpService</a>
+					<a class="permalink" href="index.html#InheritCommandableHttpService">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func InheritCommandableHttpService(overrides <a href="index.html#IRestServiceOverrides">IRestServiceOverrides</a>, baseRoute <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#CommandableHttpService">CommandableHttpService</a></pre>
+				<p>
+InheritCommandableHttpService creates a new instance of the service.
+</p>
+<pre>Parameters:
+	- overrides references to child class that overrides virtual methods
+	- baseRoute string a service base route.
+Returns: *CommandableHttpService pointer on new instance CommandableHttpService
+</pre>
+
+				
+				
+			
+
+			
+				
+				<h3 id="CommandableHttpService.Configure">func (*CommandableHttpService) <a href="http://localhost:6060/src/services/CommandableHttpService.go?s=4056:4147#L97">Configure</a>
+					<a class="permalink" href="index.html#CommandableHttpService.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableHttpService">CommandableHttpService</a>) Configure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configure method configures component by passing configuration parameters.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- config configuration parameters to be set.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="CommandableHttpService.Register">func (*CommandableHttpService) <a href="http://localhost:6060/src/services/CommandableHttpService.go?s=4340:4383#L103">Register</a>
+					<a class="permalink" href="index.html#CommandableHttpService.Register">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableHttpService">CommandableHttpService</a>) Register()</pre>
+				<p>
+Register method are registers all service routes in HTTP endpoint.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="CommandableSwaggerDocument">type <a href="http://localhost:6060/src/services/CommandableSwaggerDocument.go?s=335:695#L2">CommandableSwaggerDocument</a>
+				<a class="permalink" href="index.html#CommandableSwaggerDocument">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type CommandableSwaggerDocument struct {
+<span id="CommandableSwaggerDocument.Commands"></span>    Commands []<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/commands/">ccomands</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/commands/#ICommand">ICommand</a>
+
+<span id="CommandableSwaggerDocument.Version"></span>    Version   <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+<span id="CommandableSwaggerDocument.BaseRoute"></span>    BaseRoute <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+
+<span id="CommandableSwaggerDocument.InfoTitle"></span>    InfoTitle          <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+<span id="CommandableSwaggerDocument.InfoDescription"></span>    InfoDescription    <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+<span id="CommandableSwaggerDocument.InfoVersion"></span>    InfoVersion        <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+<span id="CommandableSwaggerDocument.InfoTermsOfService"></span>    InfoTermsOfService <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+
+<span id="CommandableSwaggerDocument.InfoContactName"></span>    InfoContactName  <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+<span id="CommandableSwaggerDocument.InfoContactUrl"></span>    InfoContactUrl   <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+<span id="CommandableSwaggerDocument.InfoContactEmail"></span>    InfoContactEmail <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+
+<span id="CommandableSwaggerDocument.InfoLicenseName"></span>    InfoLicenseName <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+<span id="CommandableSwaggerDocument.InfoLicenseUrl"></span>    InfoLicenseUrl  <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewCommandableSwaggerDocument">func <a href="http://localhost:6060/src/services/CommandableSwaggerDocument.go?s=697:835#L23">NewCommandableSwaggerDocument</a>
+					<a class="permalink" href="index.html#NewCommandableSwaggerDocument">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewCommandableSwaggerDocument(baseRoute <a href="http://localhost:6060/pkg/builtin/#string">string</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>, commands []<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/commands/">ccomands</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/commands/#ICommand">ICommand</a>) *<a href="index.html#CommandableSwaggerDocument">CommandableSwaggerDocument</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="CommandableSwaggerDocument.GetSpaces">func (*CommandableSwaggerDocument) <a href="http://localhost:6060/src/services/CommandableSwaggerDocument.go?s=5486:5551#L230">GetSpaces</a>
+					<a class="permalink" href="index.html#CommandableSwaggerDocument.GetSpaces">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableSwaggerDocument">CommandableSwaggerDocument</a>) GetSpaces(length <a href="http://localhost:6060/pkg/builtin/#int">int</a>) <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="CommandableSwaggerDocument.ToString">func (*CommandableSwaggerDocument) <a href="http://localhost:6060/src/services/CommandableSwaggerDocument.go?s=1311:1365#L45">ToString</a>
+					<a class="permalink" href="index.html#CommandableSwaggerDocument.ToString">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableSwaggerDocument">CommandableSwaggerDocument</a>) ToString() <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="CommandableSwaggerDocument.WriteData">func (*CommandableSwaggerDocument) <a href="http://localhost:6060/src/services/CommandableSwaggerDocument.go?s=3864:3943#L161">WriteData</a>
+					<a class="permalink" href="index.html#CommandableSwaggerDocument.WriteData">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableSwaggerDocument">CommandableSwaggerDocument</a>) WriteData(indent <a href="http://localhost:6060/pkg/builtin/#int">int</a>, data map[<a href="http://localhost:6060/pkg/builtin/#string">string</a>]<a href="http://localhost:6060/pkg/builtin/#any">any</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="CommandableSwaggerDocument.WriteName">func (*CommandableSwaggerDocument) <a href="http://localhost:6060/src/services/CommandableSwaggerDocument.go?s=4636:4707#L196">WriteName</a>
+					<a class="permalink" href="index.html#CommandableSwaggerDocument.WriteName">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#CommandableSwaggerDocument">CommandableSwaggerDocument</a>) WriteName(indent <a href="http://localhost:6060/pkg/builtin/#int">int</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="HeartbeatOperations">type <a href="http://localhost:6060/src/services/HeartbeatOperations.go?s=50:101#L1">HeartbeatOperations</a>
+				<a class="permalink" href="index.html#HeartbeatOperations">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type HeartbeatOperations struct {
+    <a href="index.html#RestOperations">RestOperations</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewHeartbeatOperations">func <a href="http://localhost:6060/src/services/HeartbeatOperations.go?s=203:253#L4">NewHeartbeatOperations</a>
+					<a class="permalink" href="index.html#NewHeartbeatOperations">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewHeartbeatOperations() *<a href="index.html#HeartbeatOperations">HeartbeatOperations</a></pre>
+				<p>
+NewHeartbeatOperations creates new instance HeartbeatOperations
+</p>
+<pre>Returns: *HeartbeatOperations
+</pre>
+
+				
+				
+			
+
+			
+				
+				<h3 id="HeartbeatOperations.GetHeartbeatOperation">func (*HeartbeatOperations) <a href="http://localhost:6060/src/services/HeartbeatOperations.go?s=387:489#L10">GetHeartbeatOperation</a>
+					<a class="permalink" href="index.html#HeartbeatOperations.GetHeartbeatOperation">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HeartbeatOperations">HeartbeatOperations</a>) GetHeartbeatOperation() func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>)</pre>
+				<p>
+GetHeartbeatOperation is a heartbeat method are insert timestamp into HTTP result
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="HeartbeatOperations.Heartbeat">func (*HeartbeatOperations) <a href="http://localhost:6060/src/services/HeartbeatOperations.go?s=639:722#L17">Heartbeat</a>
+					<a class="permalink" href="index.html#HeartbeatOperations.Heartbeat">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HeartbeatOperations">HeartbeatOperations</a>) Heartbeat(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>)</pre>
+				<p>
+Heartbeat method are insert timestamp into HTTP result
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="HeartbeatRestService">type <a href="http://localhost:6060/src/services/HeartbeatRestService.go?s=1802:1866#L41">HeartbeatRestService</a>
+				<a class="permalink" href="index.html#HeartbeatRestService">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+HeartbeatRestService service returns heartbeat via HTTP/REST protocol.
+The service responds on /heartbeat route (can be changed)
+with a string with the current time in UTC.
+This service route can be used to health checks by load-balancers and
+container orchestrators.
+</p>
+<pre>Configuration parameters:
+	- baseroute:           base route for remote URI (default: &#34;&#34;)
+	- route:               route to heartbeat operation (default: &#34;heartbeat&#34;)
+	- dependencies:
+		- endpoint:        override for HTTP Endpoint dependency
+	- connection(s):
+		- discovery_key:   (optional) a key to retrieve the connection from IDiscovery
+		- protocol:        connection protocol: http or https
+		- host:            host name or IP address
+		- port:            port number
+		- uri:             resource URI or connection string with all parameters in it
+
+References:
+	- *:logger:*:*:1.0       (optional)  ILogger components to pass log messages
+	- *:counters:*:*:1.0     (optional)  ICounters components to pass collected measurements
+	- *:discovery:*:*:1.0    (optional)  IDiscovery services to resolve connection
+	- *:endpoint:http:*:1.0  (optional) HttpEndpoint reference
+
+see RestService
+see clients.RestClient
+
+Example:
+	service := NewHeartbeatService();
+	service.Configure(context.Background(), cconf.NewConfigParamsFromTuples(
+		&#34;route&#34;, &#34;ping&#34;,
+		&#34;connection.protocol&#34;, &#34;http&#34;,
+		&#34;connection.host&#34;, &#34;localhost&#34;,
+		&#34;connection.port&#34;, 8080,
+	));
+
+	opnErr := service.Open(&#34;123&#34;)
+	if opnErr == nil {
+		fmt.Println(&#34;The Heartbeat service is accessible at http://+:8080/ping&#34;);
+	}
+</pre>
+
+			<pre>type HeartbeatRestService struct {
+    *<a href="index.html#RestService">RestService</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewHeartbeatRestService">func <a href="http://localhost:6060/src/services/HeartbeatRestService.go?s=1932:1984#L47">NewHeartbeatRestService</a>
+					<a class="permalink" href="index.html#NewHeartbeatRestService">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewHeartbeatRestService() *<a href="index.html#HeartbeatRestService">HeartbeatRestService</a></pre>
+				<p>
+NewHeartbeatRestService creates a new instance of c service.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="HeartbeatRestService.Configure">func (*HeartbeatRestService) <a href="http://localhost:6060/src/services/HeartbeatRestService.go?s=2242:2331#L58">Configure</a>
+					<a class="permalink" href="index.html#HeartbeatRestService.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HeartbeatRestService">HeartbeatRestService</a>) Configure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configure component by passing configuration parameters.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- config configuration parameters to be set.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HeartbeatRestService.Register">func (*HeartbeatRestService) <a href="http://localhost:6060/src/services/HeartbeatRestService.go?s=2483:2524#L64">Register</a>
+					<a class="permalink" href="index.html#HeartbeatRestService.Register">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HeartbeatRestService">HeartbeatRestService</a>) Register()</pre>
+				<p>
+Register all service routes in HTTP endpoint.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="HttpEndpoint">type <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=2232:2754#L49">HttpEndpoint</a>
+				<a class="permalink" href="index.html#HttpEndpoint">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+HttpEndpoint used for creating HTTP endpoints. An endpoint is a URL,
+at which a given service can be accessed by a client.
+</p>
+<pre>Configuration parameters:
+	Parameters to pass to the configure method for component configuration:
+	- connection(s) - the connection resolver&#34;s connections:
+		- &#34;connection.discovery_key&#34; - the key to use for connection resolving in a discovery service;
+		- &#34;connection.protocol&#34; - the connection&#34;s protocol;
+		- &#34;connection.host&#34; - the target host;
+		- &#34;connection.port&#34; - the target port;
+		- &#34;connection.uri&#34; - the target URI.
+	- credential - the HTTPS credentials:
+		- &#34;credential.ssl_key_file&#34; - the SSL func (c *HttpEndpoint )key in PEM
+		- &#34;credential.ssl_crt_file&#34; - the SSL certificate in PEM
+		- &#34;credential.ssl_ca_file&#34; - the certificate authorities (root cerfiticates) in PEM
+	- cors-headers - pair CORS headers: origin. Example: MyHeader1: \*.\*
+
+References:
+	A logger, counters, and a connection resolver can be referenced by passing the
+	following references to the object&#34;s setReferences method:
+	- logger: &#34;*:logger:*:*:1.0&#34;;
+	- counters: &#34;*:counters:*:*:1.0&#34;;
+	- discovery: &#34;*:discovery:*:*:1.0&#34; (for the connection resolver).
+
+Examples:
+	endpoint := NewHttpEndpoint();
+	endpoint.Configure(config);
+	endpoint.SetReferences(references);
+	...
+	endpoint.Open(correlationId)
+</pre>
+
+			<pre>type HttpEndpoint struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewHttpEndpoint">func <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=2933:2969#L72">NewHttpEndpoint</a>
+					<a class="permalink" href="index.html#NewHttpEndpoint">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewHttpEndpoint() *<a href="index.html#HttpEndpoint">HttpEndpoint</a></pre>
+				<p>
+NewHttpEndpoint creates new HttpEndpoint
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="HttpEndpoint.AddCorsHeader">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=15474:15540#L447">AddCorsHeader</a>
+					<a class="permalink" href="index.html#HttpEndpoint.AddCorsHeader">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) AddCorsHeader(header <a href="http://localhost:6060/pkg/builtin/#string">string</a>, origin <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				<p>
+AddCorsHeader method adds allowed header, ignore if it already exists
+must be called before to opening endpoint
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.Close">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=9832:9909#L272">Close</a>
+					<a class="permalink" href="index.html#HttpEndpoint.Close">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) Close(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Close method are closes this endpoint and the REST server (service) that was opened earlier.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId string (optional) transaction id to trace execution through call chain.
+Returns: error an error if one is raised.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.Configure">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=4808:4889#L124">Configure</a>
+					<a class="permalink" href="index.html#HttpEndpoint.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) Configure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configure method are configures this HttpEndpoint using the given configuration parameters.
+</p>
+<pre>Configuration parameters:
+	- connection(s) - the connection resolver&#34;s connections;
+		- &#34;connection.discovery_key&#34; - the key to use for connection resolving in a discovery service;
+		- &#34;connection.protocol&#34; - the connection&#34;s protocol;
+		- &#34;connection.host&#34; - the target host;
+		- &#34;connection.port&#34; - the target port;
+		- &#34;connection.uri&#34; - the target URI.
+		- &#34;credential.ssl_key_file&#34; - SSL func (c *HttpEndpoint )key in PEM
+		- &#34;credential.ssl_crt_file&#34; - SSL certificate in PEM
+		- &#34;credential.ssl_ca_file&#34; - Certificate authority (root certificate) in PEM
+Parameters:
+	- ctx context.Context
+	- config    configuration parameters, containing a &#34;connection(s)&#34; section.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.GetCorrelationId">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=11611:11676#L333">GetCorrelationId</a>
+					<a class="permalink" href="index.html#HttpEndpoint.GetCorrelationId">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) GetCorrelationId(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>) <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetCorrelationId method returns CorrelationId from request
+</p>
+<pre>Parameters:
+	- req *http.Request  request
+Returns: string correlation_id or empty string
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.IsOpen">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=6447:6483#L162">IsOpen</a>
+					<a class="permalink" href="index.html#HttpEndpoint.IsOpen">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) IsOpen() <a href="http://localhost:6060/pkg/builtin/#bool">bool</a></pre>
+				<p>
+IsOpen method is  whether this endpoint is open with an actively listening REST server.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.Open">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=6860:6936#L172">Open</a>
+					<a class="permalink" href="index.html#HttpEndpoint.Open">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) Open(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Open a connection using the parameters resolved by the referenced connection
+resolver and creates a REST server (service) using the set options and parameters.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId   string  (optional) transaction id to trace execution through call chain.
+Returns: error an error if one is raised.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.Register">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=10504:10563#L293">Register</a>
+					<a class="permalink" href="index.html#HttpEndpoint.Register">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) Register(registration <a href="index.html#IRegisterable">IRegisterable</a>)</pre>
+				<p>
+Register a registrable object for dynamic endpoint discovery.
+</p>
+<pre>Parameters:
+	- registration IRegisterable implements of IRegisterable interface.
+See IRegisterable
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.RegisterInterceptor">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=14857:14989#L429">RegisterInterceptor</a>
+					<a class="permalink" href="index.html#HttpEndpoint.RegisterInterceptor">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) RegisterInterceptor(route <a href="http://localhost:6060/pkg/builtin/#string">string</a>, action func(w <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, r *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>))</pre>
+				<p>
+RegisterInterceptor method are registers a middleware action for the given route.
+Parameters:
+</p>
+<pre>- route         the route to register in this object&#34;s REST server (service).
+- action        the middleware action to perform at the given route.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.RegisterRoute">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=12275:12389#L348">RegisterRoute</a>
+					<a class="permalink" href="index.html#HttpEndpoint.RegisterRoute">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) RegisterRoute(method <a href="http://localhost:6060/pkg/builtin/#string">string</a>, route <a href="http://localhost:6060/pkg/builtin/#string">string</a>, schema *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/validate/#Schema">Schema</a>,
+    action <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
+				<p>
+RegisterRoute method are registers an action in this objects REST server (service)
+by the given method and route.
+</p>
+<pre>Parameters:
+	- method   string     the HTTP method of the route.
+	- route    string     the route to register in this object&#34;s REST server (service).
+	- schema   *cvalid.Schema     the schema to use for parameter validation.
+	- action   http.HandlerFunc     the action to perform at the given route.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.RegisterRouteWithAuth">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=14202:14404#L411">RegisterRouteWithAuth</a>
+					<a class="permalink" href="index.html#HttpEndpoint.RegisterRouteWithAuth">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) RegisterRouteWithAuth(method <a href="http://localhost:6060/pkg/builtin/#string">string</a>, route <a href="http://localhost:6060/pkg/builtin/#string">string</a>, schema *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/validate/#Schema">Schema</a>,
+    authorize func(w <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, r *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>),
+    action <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
+				<p>
+RegisterRouteWithAuth method are registers an action with authorization in this objects REST server (service)
+by the given method and route.
+Parameters:
+</p>
+<pre>- method    string    the HTTP method of the route.
+- route     string    the route to register in this object&#34;s REST server (service).
+- schema    *cvalid.Schema    the schema to use for parameter validation.
+- authorize     the authorization interceptor
+- action        the action to perform at the given route.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.SetReferences">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=6125:6213#L155">SetReferences</a>
+					<a class="permalink" href="index.html#HttpEndpoint.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) SetReferences(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, references <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+SetReferences method are sets references to this endpoint&#34;s logger, counters, and connection resolver.
+</p>
+<pre>References:
+	- logger: &#34;*:logger:*:*:1.0&#34;
+	- counters: &#34;*:counters:*:*:1.0&#34;
+	- discovery: &#34;*:discovery:*:*:1.0&#34; (for the connection resolver)
+Parameters:
+	- references an IReferences object, containing references to a logger, counters,
+		and a connection resolver.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="HttpEndpoint.Unregister">func (*HttpEndpoint) <a href="http://localhost:6060/src/services/HttpEndpoint.go?s=10825:10886#L302">Unregister</a>
+					<a class="permalink" href="index.html#HttpEndpoint.Unregister">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#HttpEndpoint">HttpEndpoint</a>) Unregister(registration <a href="index.html#IRegisterable">IRegisterable</a>)</pre>
+				<p>
+Unregister a registerable object, so that it is no longer used in dynamic
+endpoint discovery.
+</p>
+<pre>Parameters:
+	- registration  IRegisterable  the registration to remove.
+See IRegisterable
+</pre>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="IRegisterable">type <a href="http://localhost:6060/src/services/IRegisterable.go?s=84:178#L1">IRegisterable</a>
+				<a class="permalink" href="index.html#IRegisterable">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+IRegisterable is interface to perform on-demand registrations.
+</p>
+
+			<pre>type IRegisterable interface {
+    <span class="comment">// Register perform required registration steps.</span>
+    Register()
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="IRestServiceOverrides">type <a href="http://localhost:6060/src/services/RestService.go?s=744:796#L11">IRestServiceOverrides</a>
+				<a class="permalink" href="index.html#IRestServiceOverrides">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type IRestServiceOverrides interface {
+    Register()
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ISwaggerService">type <a href="http://localhost:6060/src/services/ISwaggerService.go?s=81:245#L1">ISwaggerService</a>
+				<a class="permalink" href="index.html#ISwaggerService">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+ISwaggerService Interface to perform Swagger registrations.
+</p>
+
+			<pre>type ISwaggerService interface {
+
+    <span class="comment">// RegisterOpenApiSpec Perform required Swagger registration steps.</span>
+    RegisterOpenApiSpec(baseRoute <a href="http://localhost:6060/pkg/builtin/#string">string</a>, swaggerRoute <a href="http://localhost:6060/pkg/builtin/#string">string</a>)
+}</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="InstrumentTiming">type <a href="http://localhost:6060/src/services/InstrumentTiming.go?s=259:489#L1">InstrumentTiming</a>
+				<a class="permalink" href="index.html#InstrumentTiming">&#xb6;</a>
+				
+				
+			</h2>
+			
+			<pre>type InstrumentTiming struct {
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewInstrumentTiming">func <a href="http://localhost:6060/src/services/InstrumentTiming.go?s=491:701#L10">NewInstrumentTiming</a>
+					<a class="permalink" href="index.html#NewInstrumentTiming">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewInstrumentTiming(correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>,
+    verb <a href="http://localhost:6060/pkg/builtin/#string">string</a>, logger <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/">clog</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/#ILogger">ILogger</a>, counters <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/#ICounters">ICounters</a>,
+    counterTiming *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/#CounterTiming">CounterTiming</a>, traceTiming *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/trace/">ctrace</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/trace/#TraceTiming">TraceTiming</a>) *<a href="index.html#InstrumentTiming">InstrumentTiming</a></pre>
+				
+				
+				
+			
+
+			
+				
+				<h3 id="InstrumentTiming.EndFailure">func (*InstrumentTiming) <a href="http://localhost:6060/src/services/InstrumentTiming.go?s=1486:1555#L55">EndFailure</a>
+					<a class="permalink" href="index.html#InstrumentTiming.EndFailure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#InstrumentTiming">InstrumentTiming</a>) EndFailure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="InstrumentTiming.EndSuccess">func (*InstrumentTiming) <a href="http://localhost:6060/src/services/InstrumentTiming.go?s=1285:1343#L44">EndSuccess</a>
+					<a class="permalink" href="index.html#InstrumentTiming.EndSuccess">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#InstrumentTiming">InstrumentTiming</a>) EndSuccess(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="InstrumentTiming.EndTiming">func (*InstrumentTiming) <a href="http://localhost:6060/src/services/InstrumentTiming.go?s=1136:1204#L36">EndTiming</a>
+					<a class="permalink" href="index.html#InstrumentTiming.EndTiming">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#InstrumentTiming">InstrumentTiming</a>) EndTiming(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="RestOperations">type <a href="http://localhost:6060/src/services/RestOperations.go?s=641:806#L9">RestOperations</a>
+				<a class="permalink" href="index.html#RestOperations">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+RestOperations helper class for REST operations
+</p>
+
+			<pre>type RestOperations struct {
+<span id="RestOperations.Logger"></span>    Logger             *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/">clog</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/#CompositeLogger">CompositeLogger</a>
+<span id="RestOperations.Counters"></span>    Counters           *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/#CompositeCounters">CompositeCounters</a>
+<span id="RestOperations.DependencyResolver"></span>    DependencyResolver *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#DependencyResolver">DependencyResolver</a>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewRestOperations">func <a href="http://localhost:6060/src/services/RestOperations.go?s=868:908#L16">NewRestOperations</a>
+					<a class="permalink" href="index.html#NewRestOperations">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewRestOperations() *<a href="index.html#RestOperations">RestOperations</a></pre>
+				<p>
+NewRestOperations creates new instance of RestOperations
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="RestOperations.Configure">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=1279:1362#L28">Configure</a>
+					<a class="permalink" href="index.html#RestOperations.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) Configure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configure method are configures this RestOperations using the given configuration parameters.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- config *cconf.ConfigParams confif parameters
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.DecodeBody">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=3771:3843#L108">DecodeBody</a>
+					<a class="permalink" href="index.html#RestOperations.DecodeBody">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) DecodeBody(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, target <a href="http://localhost:6060/pkg/builtin/#any">any</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+DecodeBody methods helps decode body
+</p>
+<pre>Parameters:
+	- req incoming request
+	- target pointer on target variable for decode
+</pre>
+<p>
+Returns: error
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.GetCorrelationId">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=2077:2144#L47">GetCorrelationId</a>
+					<a class="permalink" href="index.html#RestOperations.GetCorrelationId">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) GetCorrelationId(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>) <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetCorrelationId method returns CorrelationId from request
+</p>
+<pre>Parameters:
+	- req *http.Request  request
+Returns: string correlation_id or empty string
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.GetFilterParams">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=2476:2555#L59">GetFilterParams</a>
+					<a class="permalink" href="index.html#RestOperations.GetFilterParams">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) GetFilterParams(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#FilterParams">FilterParams</a></pre>
+				<p>
+GetFilterParams method reruns filter params object from request
+</p>
+<pre>Parameters:
+	- req *http.Request  request
+Returns: *cdata.FilterParams filter params object
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.GetPagingParams">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=2902:2981#L75">GetPagingParams</a>
+					<a class="permalink" href="index.html#RestOperations.GetPagingParams">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) GetPagingParams(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#PagingParams">PagingParams</a></pre>
+				<p>
+GetPagingParams method reruns paging params object from request
+</p>
+<pre>Parameters:
+	- req *http.Request  request
+Returns: *cdata.PagingParams pagings params object
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.GetParam">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=3441:3513#L95">GetParam</a>
+					<a class="permalink" href="index.html#RestOperations.GetParam">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) GetParam(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetParam methods helps get all params from query
+</p>
+<pre>	Parameters:
+  - req  incoming request
+  - name parameter name
+</pre>
+<p>
+Returns: value or empty string if param not exists
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendBadRequest">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=4857:4956#L142">SendBadRequest</a>
+					<a class="permalink" href="index.html#RestOperations.SendBadRequest">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendBadRequest(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, message <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendConflict">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=5594:5691#L160">SendConflict</a>
+					<a class="permalink" href="index.html#RestOperations.SendConflict">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendConflict(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, message <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendCreatedResult">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=4365:4474#L130">SendCreatedResult</a>
+					<a class="permalink" href="index.html#RestOperations.SendCreatedResult">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendCreatedResult(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, result <a href="http://localhost:6060/pkg/builtin/#any">any</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendDeletedResult">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=4541:4650#L134">SendDeletedResult</a>
+					<a class="permalink" href="index.html#RestOperations.SendDeletedResult">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendDeletedResult(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, result <a href="http://localhost:6060/pkg/builtin/#any">any</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendEmptyResult">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=4213:4308#L126">SendEmptyResult</a>
+					<a class="permalink" href="index.html#RestOperations.SendEmptyResult">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendEmptyResult(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendError">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=4717:4806#L138">SendError</a>
+					<a class="permalink" href="index.html#RestOperations.SendError">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendError(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendInternalError">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=6102:6204#L173">SendInternalError</a>
+					<a class="permalink" href="index.html#RestOperations.SendInternalError">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendInternalError(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, message <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendNotFound">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=5354:5451#L154">SendNotFound</a>
+					<a class="permalink" href="index.html#RestOperations.SendNotFound">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendNotFound(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, message <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendResult">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=4051:4153#L122">SendResult</a>
+					<a class="permalink" href="index.html#RestOperations.SendResult">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendResult(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, result <a href="http://localhost:6060/pkg/builtin/#any">any</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendServerUnavailable">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=6345:6451#L179">SendServerUnavailable</a>
+					<a class="permalink" href="index.html#RestOperations.SendServerUnavailable">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendServerUnavailable(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, message <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendSessionExpired">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=5833:5936#L166">SendSessionExpired</a>
+					<a class="permalink" href="index.html#RestOperations.SendSessionExpired">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendSessionExpired(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, message <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SendUnauthorized">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=5103:5204#L148">SendUnauthorized</a>
+					<a class="permalink" href="index.html#RestOperations.SendUnauthorized">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SendUnauthorized(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, message <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestOperations.SetReferences">func (*RestOperations) <a href="http://localhost:6060/src/services/RestOperations.go?s=1684:1774#L37">SetReferences</a>
+					<a class="permalink" href="index.html#RestOperations.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestOperations">RestOperations</a>) SetReferences(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, references <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+SetReferences method are sets references to this RestOperations logger, counters, and connection resolver.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- references    an IReferences object, containing references to a logger, counters,
+		and a dependency resolver.
+</pre>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="RestService">type <a href="http://localhost:6060/src/services/RestService.go?s=3951:4575#L101">RestService</a>
+				<a class="permalink" href="index.html#RestService">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+RestService Abstract service that receives remove calls via HTTP/REST protocol.
+</p>
+<pre>Configuration parameters:
+	- base_route:              base route for remote URI
+	- dependencies:
+		- endpoint:            override for HTTP Endpoint dependency
+		- controller:          override for Controller dependency
+	- connection(s):
+		- discovery_key:       (optional) a key to retrieve the connection from IDiscovery
+		- protocol:            connection protocol: http or https
+		- host:                host name or IP address
+		- port:                port number
+		- uri:                 resource URI or connection string with all parameters in it
+	- credential - the HTTPS credentials:
+		- ssl_key_file:        the SSL private key in PEM
+		- ssl_crt_file:        the SSL certificate in PEM
+		- ssl_ca_file:         the certificate authorities (root cerfiticates) in PEM
+
+References:
+	- *:logger:*:*:1.0         (optional) ILogger components to pass log messages
+	- *:counters:*:*:1.0       (optional) ICounters components to pass collected measurements
+	- *:discovery:*:*:1.0      (optional) IDiscovery services to resolve connection
+	- *:endpoint:http:*:1.0    (optional) HttpEndpoint reference
+
+See clients.RestClient
+
+Example:
+	type MyRestService struct {
+		*RestService
+		controller IMyController
+	}
+	...
+	func NewMyRestService() *MyRestService {
+		c := MyRestService{}
+		c.RestService = services.NewRestService()
+		c.RestService.IRegisterable = &amp;c
+		c.numberOfCalls = 0
+		c.DependencyResolver.Put(&#34;controller&#34;, crefer.NewDescriptor(&#34;mygroup&#34;, &#34;controller&#34;, &#34;*&#34;, &#34;*&#34;, &#34;1.0&#34;))
+		return &amp;c
+	}
+
+	func (c * MyRestService) SetReferences(ctx context.Context, references IReferences) {
+		c.RestService.SetReferences(ctx, references);
+		resolv := c.DependencyResolver.GetRequired(&#34;controller&#34;);
+		if resolv != nil {
+			c.controller, _ = resolv.(IMyController)
+		}
+	}
+
+	func (c *MyRestService) getOneById(res http.ResponseWriter, req *http.Request) {
+		params := req.URL.Query()
+		vars := mux.Vars(req)
+
+		mydataId := params.Get(&#34;mydata_id&#34;)
+		if mydataId == &#34;&#34; {
+			mydataId = vars[&#34;mydatay_id&#34;]
+		}
+		result, err := c.controller.GetOneById(params.Get(&#34;correlation_id&#34;), mydataId),
+		c.SendResult(res, req, result, err)
+	}
+
+	func (c * MyRestService) Register() {
+		c.RegisterRoute(
+			&#34;get&#34;, &#34;get_mydata/{mydata_id}&#34;,
+			&amp;cvalid.NewObjectSchema().
+				WithRequiredProperty(&#34;mydata_id&#34;, cconv.String).Schema,
+			c.getOneById,
+		)
+		...
+	}
+
+	service := NewMyRestService();
+	service.Configure(context.Background(), cconf.NewConfigParamsFromTuples(
+		&#34;connection.protocol&#34;, &#34;http&#34;,
+		&#34;connection.host&#34;, &#34;localhost&#34;,
+		&#34;connection.port&#34;, 8080,
+	));
+	service.SetReferences(context.Background(), cref.NewReferencesFromTuples(
+		cref.NewDescriptor(&#34;mygroup&#34;,&#34;controller&#34;,&#34;default&#34;,&#34;default&#34;,&#34;1.0&#34;), controller
+	));
+
+	opnRes := service.Open(&#34;123&#34;)
+	if opnErr == nil {
+		fmt.Println(&#34;The REST service is running on port 8080&#34;);
+	}
+</pre>
+
+			<pre>type RestService struct {
+<span id="RestService.Overrides"></span>    Overrides <a href="index.html#IRestServiceOverrides">IRestServiceOverrides</a>
+
+    <span class="comment">//The base route.</span>
+<span id="RestService.BaseRoute"></span>    BaseRoute <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+    <span class="comment">//The HTTP endpoint that exposes this service.</span>
+<span id="RestService.Endpoint"></span>    Endpoint *<a href="index.html#HttpEndpoint">HttpEndpoint</a>
+    <span class="comment">//The dependency resolver.</span>
+<span id="RestService.DependencyResolver"></span>    DependencyResolver *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#DependencyResolver">DependencyResolver</a>
+    <span class="comment">//The logger.</span>
+<span id="RestService.Logger"></span>    Logger *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/">clog</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/log/#CompositeLogger">CompositeLogger</a>
+    <span class="comment">//The performance counters.</span>
+<span id="RestService.Counters"></span>    Counters *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/">ccount</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/count/#CompositeCounters">CompositeCounters</a>
+    <span class="comment">// The tracer.</span>
+<span id="RestService.Tracer"></span>    Tracer *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/trace/">ctrace</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-components-gox/trace/#CompositeTracer">CompositeTracer</a>
+
+<span id="RestService.SwaggerService"></span>    SwaggerService <a href="index.html#ISwaggerService">ISwaggerService</a>
+<span id="RestService.SwaggerEnabled"></span>    SwaggerEnabled <a href="http://localhost:6060/pkg/builtin/#bool">bool</a>
+<span id="RestService.SwaggerRoute"></span>    SwaggerRoute   <a href="http://localhost:6060/pkg/builtin/#string">string</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="InheritRestService">func <a href="http://localhost:6060/src/services/RestService.go?s=4635:4704#L128">InheritRestService</a>
+					<a class="permalink" href="index.html#InheritRestService">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func InheritRestService(overrides <a href="index.html#IRestServiceOverrides">IRestServiceOverrides</a>) *<a href="index.html#RestService">RestService</a></pre>
+				<p>
+InheritRestService creates new instance of RestService
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="RestService.Close">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=10156:10232#L294">Close</a>
+					<a class="permalink" href="index.html#RestService.Close">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) Close(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Close method are closes component and frees used resources.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId (optional) transaction id to trace execution through call chain.
+Returns: error or nil no errors occurred.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.Configure">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=5469:5549#L151">Configure</a>
+					<a class="permalink" href="index.html#RestService.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) Configure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configure method are configures component by passing configuration parameters.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- config  *cconf.ConfigParams  configuration parameters to be set.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.DecodeBody">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=16187:16256#L467">DecodeBody</a>
+					<a class="permalink" href="index.html#RestService.DecodeBody">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) DecodeBody(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, target <a href="http://localhost:6060/pkg/builtin/#any">any</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+DecodeBody methods helps decode body
+</p>
+<pre>	Parameters:
+  - req   	- incoming request
+  - target  	- pointer on target variable for decode
+</pre>
+<p>
+Returns error
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.GetCorrelationId">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=17462:17526#L515">GetCorrelationId</a>
+					<a class="permalink" href="index.html#RestService.GetCorrelationId">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) GetCorrelationId(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>) <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetCorrelationId method returns CorrelationId from request
+</p>
+<pre>Parameters:
+	- req *http.Request  request
+Returns: string correlation_id or empty string
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.GetFilterParams">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=17036:17112#L499">GetFilterParams</a>
+					<a class="permalink" href="index.html#RestService.GetFilterParams">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) GetFilterParams(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#FilterParams">FilterParams</a></pre>
+				<p>
+GetFilterParams methods helps decode filter params
+</p>
+<pre>Parameters:
+	- req incoming request
+Returns: filter params
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.GetPagingParams">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=16587:16663#L485">GetPagingParams</a>
+					<a class="permalink" href="index.html#RestService.GetPagingParams">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) GetPagingParams(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>) *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/">cdata</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/data/#PagingParams">PagingParams</a></pre>
+				<p>
+GetPagingParams methods helps decode paging params
+</p>
+<pre>Parameters:
+	- req  incoming request
+Returns: paging params
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.GetParam">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=15850:15919#L454">GetParam</a>
+					<a class="permalink" href="index.html#RestService.GetParam">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) GetParam(req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#string">string</a></pre>
+				<p>
+GetParam methods helps get all params from query
+</p>
+<pre>Parameters:
+	- req  incoming request
+	- name parameter name
+Returns value or empty string if param not exists
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.Instrument">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=7932:8038#L227">Instrument</a>
+					<a class="permalink" href="index.html#RestService.Instrument">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) Instrument(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>) *<a href="index.html#InstrumentTiming">InstrumentTiming</a></pre>
+				<p>
+Instrument method are adds instrumentation to log calls and measure call time.
+It returns a Timing object that is used to end the time measurement.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId     (optional) transaction id to trace execution through call chain.
+	- name              a method name.
+Returns: Timing object to end the time measurement.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.InstrumentError">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=8812:8954#L246">InstrumentError</a>
+					<a class="permalink" href="index.html#RestService.InstrumentError">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) InstrumentError(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>, name <a href="http://localhost:6060/pkg/builtin/#string">string</a>, errIn <a href="http://localhost:6060/pkg/builtin/#error">error</a>,
+    resIn <a href="http://localhost:6060/pkg/builtin/#any">any</a>) (result <a href="http://localhost:6060/pkg/builtin/#any">any</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+InstrumentError method are adds instrumentation to error handling.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId  string (optional) transaction id to trace execution through call chain.
+	- name    string        a method name.
+	- err     error         an occurred error
+	- result  any			(optional) an execution result
+Returns: result any, err error (optional) an execution callback
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.IsOpen">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=9260:9295#L258">IsOpen</a>
+					<a class="permalink" href="index.html#RestService.IsOpen">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) IsOpen() <a href="http://localhost:6060/pkg/builtin/#bool">bool</a></pre>
+				<p>
+IsOpen method checks if the component is opened.
+</p>
+<pre>Returns: true if the component has been opened and false otherwise.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.Open">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=9536:9611#L267">Open</a>
+					<a class="permalink" href="index.html#RestService.Open">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) Open(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, correlationId <a href="http://localhost:6060/pkg/builtin/#string">string</a>) <a href="http://localhost:6060/pkg/builtin/#error">error</a></pre>
+				<p>
+Open method are opens the component.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- correlationId  string (optional) transaction id to trace execution through call chain.
+Returns: error or nil no errors occured.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.Register">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=18579:18611#L555">Register</a>
+					<a class="permalink" href="index.html#RestService.Register">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) Register()</pre>
+				<p>
+Register method are registers all service routes in HTTP endpoint.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.RegisterInterceptor">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=15416:15552#L439">RegisterInterceptor</a>
+					<a class="permalink" href="index.html#RestService.RegisterInterceptor">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) RegisterInterceptor(route <a href="http://localhost:6060/pkg/builtin/#string">string</a>,
+    action func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>))</pre>
+				<p>
+RegisterInterceptor method are registers a middleware for a given route in HTTP endpoint.
+</p>
+<pre>Parameters:
+	- route         a command route. Base route will be added to this route
+	- action        an action function that is called when middleware is invoked.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.RegisterOpenApiSpec">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=17991:18048#L538">RegisterOpenApiSpec</a>
+					<a class="permalink" href="index.html#RestService.RegisterOpenApiSpec">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) RegisterOpenApiSpec(content <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestService.RegisterOpenApiSpecFromFile">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=17690:17752#L523">RegisterOpenApiSpecFromFile</a>
+					<a class="permalink" href="index.html#RestService.RegisterOpenApiSpecFromFile">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) RegisterOpenApiSpecFromFile(path <a href="http://localhost:6060/pkg/builtin/#string">string</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="RestService.RegisterRoute">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=13850:13995#L399">RegisterRoute</a>
+					<a class="permalink" href="index.html#RestService.RegisterRoute">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) RegisterRoute(method <a href="http://localhost:6060/pkg/builtin/#string">string</a>, route <a href="http://localhost:6060/pkg/builtin/#string">string</a>, schema *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/validate/#Schema">Schema</a>,
+    action func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>))</pre>
+				<p>
+RegisterRoute method are registers a route in HTTP endpoint.
+</p>
+<pre>Parameters:
+	- method        HTTP method: &#34;get&#34;, &#34;head&#34;, &#34;post&#34;, &#34;put&#34;, &#34;delete&#34;
+	- route         a command route. Base route will be added to this route
+	- schema        a validation schema to validate received parameters.
+	- action        an action function that is called when operation is invoked.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.RegisterRouteWithAuth">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=14586:14823#L416">RegisterRouteWithAuth</a>
+					<a class="permalink" href="index.html#RestService.RegisterRouteWithAuth">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) RegisterRouteWithAuth(method <a href="http://localhost:6060/pkg/builtin/#string">string</a>, route <a href="http://localhost:6060/pkg/builtin/#string">string</a>, schema *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/validate/">cvalid</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/validate/#Schema">Schema</a>,
+    authorize func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>),
+    action func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>))</pre>
+				<p>
+RegisterRouteWithAuth method are registers a route with authorization in HTTP endpoint.
+</p>
+<pre>Parameters:
+	- method        HTTP method: &#34;get&#34;, &#34;head&#34;, &#34;post&#34;, &#34;put&#34;, &#34;delete&#34;
+	- route         a command route. Base route will be added to this route
+	- schema        a validation schema to validate received parameters.
+	- authorize     an authorization interceptor
+	- action        an action function that is called when operation is invoked.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.SendCreatedResult">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=11768:11874#L340">SendCreatedResult</a>
+					<a class="permalink" href="index.html#RestService.SendCreatedResult">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) SendCreatedResult(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, result <a href="http://localhost:6060/pkg/builtin/#any">any</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SendCreatedResult method are sends newly created object as JSON.
+That callback function call be called directly or passed
+as a parameter to business logic components.
+If object is not nil it returns 201 status code.
+For nil results it returns 204 status code.
+If error occur it sends ErrorDescription with approproate status code.
+</p>
+<pre>Parameters:
+	- req       a HTTP request object.
+	- res       a HTTP response object.
+	- result    (optional) result object to send
+	- err error (optional) error objrct to send
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.SendDeletedResult">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=12475:12581#L355">SendDeletedResult</a>
+					<a class="permalink" href="index.html#RestService.SendDeletedResult">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) SendDeletedResult(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, result <a href="http://localhost:6060/pkg/builtin/#any">any</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SendDeletedResult method are sends deleted object as JSON.
+That callback function call be called directly or passed
+as a parameter to business logic components.
+If object is not nil it returns 200 status code.
+For nil results it returns 204 status code.
+If error occur it sends ErrorDescription with appropriate status code.
+</p>
+<pre>Parameters:
+	- req       a HTTP request object.
+	- res       a HTTP response object.
+	- result    (optional) result object to send
+	- err error (optional) error objrct to send
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.SendError">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=12956:13042#L366">SendError</a>
+					<a class="permalink" href="index.html#RestService.SendError">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) SendError(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SendError method are sends error serialized as ErrorDescription object
+and appropriate HTTP status code.
+If status code is not defined, it uses 500 status code.
+</p>
+<pre>Parameters:
+	- req       a HTTP request object.
+	- res       a HTTP response object.
+	- error     an error object to be sent.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.SendResult">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=11069:11168#L325">SendResult</a>
+					<a class="permalink" href="index.html#RestService.SendResult">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) SendResult(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, result <a href="http://localhost:6060/pkg/builtin/#any">any</a>, err <a href="http://localhost:6060/pkg/builtin/#error">error</a>)</pre>
+				<p>
+SendResult method are sends result as JSON object.
+That function call be called directly or passed
+as a parameter to business logic components.
+If object is not nil it returns 200 status code.
+For nil results it returns 204 status code.
+If error occur it sends ErrorDescription with approproate status code.
+</p>
+<pre>Parameters:
+	- req       a HTTP request object.
+	- res       a HTTP response object.
+	- result    (optional) result object to send
+	- err error (optional) error objrct to send
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.SetReferences">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=6188:6275#L165">SetReferences</a>
+					<a class="permalink" href="index.html#RestService.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) SetReferences(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, references <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+SetReferences method are sets references to dependent components.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- references crefer.IReferences	references to locate the component dependencies.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="RestService.UnsetReferences">func (*RestService) <a href="http://localhost:6060/src/services/RestService.go?s=7104:7143#L198">UnsetReferences</a>
+					<a class="permalink" href="index.html#RestService.UnsetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#RestService">RestService</a>) UnsetReferences()</pre>
+				<p>
+UnsetReferences method are unsets (clears) previously set references to dependent components.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="StatusOperations">type <a href="http://localhost:6060/src/services/StatusOperations.go?s=329:464#L4">StatusOperations</a>
+				<a class="permalink" href="index.html#StatusOperations">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+StatusOperations helper class for status service
+</p>
+
+			<pre>type StatusOperations struct {
+    <a href="index.html#RestOperations">RestOperations</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewStatusOperations">func <a href="http://localhost:6060/src/services/StatusOperations.go?s=530:574#L12">NewStatusOperations</a>
+					<a class="permalink" href="index.html#NewStatusOperations">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewStatusOperations() *<a href="index.html#StatusOperations">StatusOperations</a></pre>
+				<p>
+NewStatusOperations creates new instance of StatusOperations
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="StatusOperations.GetStatusOperation">func (*StatusOperations) <a href="http://localhost:6060/src/services/StatusOperations.go?s=1378:1474#L40">GetStatusOperation</a>
+					<a class="permalink" href="index.html#StatusOperations.GetStatusOperation">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#StatusOperations">StatusOperations</a>) GetStatusOperation() func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>)</pre>
+				<p>
+GetStatusOperation return function for get status
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="StatusOperations.SetReferences">func (*StatusOperations) <a href="http://localhost:6060/src/services/StatusOperations.go?s=978:1070#L27">SetReferences</a>
+					<a class="permalink" href="index.html#StatusOperations.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#StatusOperations">StatusOperations</a>) SetReferences(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, references <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+SetReferences  sets references to dependent components.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- references crefer.IReferences references to locate the component dependencies.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="StatusOperations.Status">func (*StatusOperations) <a href="http://localhost:6060/src/services/StatusOperations.go?s=1709:1786#L50">Status</a>
+					<a class="permalink" href="index.html#StatusOperations.Status">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#StatusOperations">StatusOperations</a>) Status(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>)</pre>
+				<p>
+Status method handles status requests
+</p>
+<pre>Parameters:
+	- req *http.Request  an HTTP request
+	- res  http.ResponseWriter  an HTTP response
+</pre>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="StatusRestService">type <a href="http://localhost:6060/src/services/StatusRestService.go?s=2402:2556#L52">StatusRestService</a>
+				<a class="permalink" href="index.html#StatusRestService">&#xb6;</a>
+				
+				
+			</h2>
+			<p>
+StatusRestService is a service that returns microservice status information via HTTP/REST protocol.
+</p>
+<pre>The service responds on /status route (can be changed) with a JSON object:
+	{
+		&#34;id&#34;:            unique container id (usually hostname)
+		&#34;name&#34;:          container name (from ContextInfo)
+		&#34;description&#34;:   container description (from ContextInfo)
+		&#34;start_time&#34;:    time when container was started
+		&#34;current_time&#34;:  current time in UTC
+		&#34;uptime&#34;:        duration since container start time in milliseconds
+		&#34;properties&#34;:    additional container properties (from ContextInfo)
+		&#34;components&#34;:    descriptors of components registered in the container
+	}
+
+Configuration parameters:
+	- baseroute:          base route for remote URI
+	- route:              status route (default: &#34;status&#34;)
+	- dependencies:
+		- endpoint:       override for HTTP Endpoint dependency
+		- controller:     override for Controller dependency
+	- connection(s):
+		- discovery_key:  (optional) a key to retrieve the connection from IDiscovery
+		- protocol:       connection protocol: http or https
+		- host:           host name or IP address
+		- port:           port number
+		- uri:            resource URI or connection string with all parameters in it
+
+References:
+	- *:logger:*:*:1.0       (optional) ILogger components to pass log messages
+	- *:counters:*:*:1.0     (optional) ICounters components to pass collected measurements
+	- *:discovery:*:*:1.0    (optional) IDiscovery services to resolve connection
+	- *:endpoint:http:*:1.0  (optional) HttpEndpoint reference
+
+see: RestService
+see: clients.RestClient
+
+Example:
+	service = NewStatusService();
+	service.Configure(cref.NewConfigParamsFromTuples(
+		&#34;connection.protocol&#34;, &#34;http&#34;,
+		&#34;connection.host&#34;, &#34;localhost&#34;,
+		&#34;connection.port&#34;, 8080,
+	));
+
+	opnErr:= service.Open(&#34;123&#34;)
+	if opnErr == nil {
+		fmt.Println(&#34;The Status service is accessible at <a href="http://localhost:8080/status">http://localhost:8080/status</a>&#34;);
+	}
+</pre>
+
+			<pre>type StatusRestService struct {
+    *<a href="index.html#RestService">RestService</a>
+    <span class="comment">// contains filtered or unexported fields</span>
+}
+</pre>
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewStatusRestService">func <a href="http://localhost:6060/src/services/StatusRestService.go?s=2633:2679#L61">NewStatusRestService</a>
+					<a class="permalink" href="index.html#NewStatusRestService">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func NewStatusRestService() *<a href="index.html#StatusRestService">StatusRestService</a></pre>
+				<p>
+NewStatusRestService method are creates a new instance of this service.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="StatusRestService.Configure">func (*StatusRestService) <a href="http://localhost:6060/src/services/StatusRestService.go?s=3152:3238#L78">Configure</a>
+					<a class="permalink" href="index.html#StatusRestService.Configure">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#StatusRestService">StatusRestService</a>) Configure(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, config *<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/">cconf</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/config/#ConfigParams">ConfigParams</a>)</pre>
+				<p>
+Configure method are configures component by passing configuration parameters.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- config  *cconf.ConfigParams  configuration parameters to be set.
+</pre>
+
+				
+				
+				
+			
+				
+				<h3 id="StatusRestService.Register">func (*StatusRestService) <a href="http://localhost:6060/src/services/StatusRestService.go?s=3945:3983#L100">Register</a>
+					<a class="permalink" href="index.html#StatusRestService.Register">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#StatusRestService">StatusRestService</a>) Register()</pre>
+				<p>
+Register method are registers all service routes in HTTP endpoint.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="StatusRestService.SetReferences">func (*StatusRestService) <a href="http://localhost:6060/src/services/StatusRestService.go?s=3536:3629#L87">SetReferences</a>
+					<a class="permalink" href="index.html#StatusRestService.SetReferences">&#xb6;</a>
+					
+					
+				</h3>
+				<pre>func (c *<a href="index.html#StatusRestService">StatusRestService</a>) SetReferences(ctx <a href="http://localhost:6060/pkg/context/">context</a>.<a href="http://localhost:6060/pkg/context/#Context">Context</a>, references <a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/">crefer</a>.<a href="http://localhost:6060/pkg/github.com/pip-services3-gox/pip-services3-commons-gox/refer/#IReferences">IReferences</a>)</pre>
+				<p>
+SetReferences method are sets references to dependent components.
+</p>
+<pre>Parameters:
+	- ctx context.Context
+	- references crefer.IReferences	references to locate the component dependencies.
+</pre>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.18.3.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+<a href="https://golang.org/doc/tos.html">Terms of Service</a> |
+<a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+</body>
+</html>
