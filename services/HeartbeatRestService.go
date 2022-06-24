@@ -72,7 +72,7 @@ func (c *HeartbeatRestService) Configure(ctx context.Context, config *cconf.Conf
 
 // Register all service routes in HTTP endpoint.
 func (c *HeartbeatRestService) Register() {
-	c.RegisterRoute("get", c.route, nil, func(res http.ResponseWriter, req *http.Request) { c.heartbeat(req, res) })
+	c.RegisterRoute(http.MethodGet, c.route, nil, func(res http.ResponseWriter, req *http.Request) { c.heartbeat(req, res) })
 }
 
 // Handles heartbeat requests

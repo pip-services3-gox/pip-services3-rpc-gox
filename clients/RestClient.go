@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 	"io/ioutil"
+	"math"
 	"net/http"
 	neturl "net/url"
 	"strings"
@@ -211,18 +213,21 @@ func (c *RestClient) Open(ctx context.Context, correlationId string) error {
 		return nil
 	}
 
-	connection, _, conErr := c.ConnectionResolver.Resolve(correlationId)
-	if conErr != nil {
-		return conErr
+	connection, _, err := c.ConnectionResolver.Resolve(correlationId)
+	if err != nil {
+		return err
 	}
 
 	c.Uri = connection.Uri()
-	localClient := http.Client{}
-	localClient.Timeout = (time.Duration)(c.Timeout) * time.Millisecond
-	c.Client = &localClient
+	c.Client = &http.Client{
+		Timeout: time.Duration(c.Timeout) * time.Millisecond,
+	}
 	if c.Client == nil {
-		ex := cerr.NewConnectionError(correlationId, "CANNOT_CONNECT", "Connection to REST service failed").WithDetails("url", c.Uri)
-		return ex
+		return cerr.NewConnectionError(
+			correlationId,
+			"CANNOT_CONNECT",
+			"Connection to REST service failed",
+		).WithDetails("url", c.Uri)
 	}
 
 	return nil
@@ -303,6 +308,161 @@ func (c *RestClient) AddPagingParams(params *cdata.StringValueMap, paging *cdata
 	return params
 }
 
+// Call method are calls a remote method via HTTP/REST protocol.
+//	Parameters:
+//		- ctx context.Context
+//		- prototype reflect.Type type for convert JSON result. Set nil for return raw JSON string
+//		- method 	string           HTTP method: "get", "head", "post", "put", "delete"
+//		- route   string          a command route. Base route will be added to this route
+//		- correlationId  string    (optional) transaction id to trace execution through call chain.
+//		- params  cdata.StringValueMap          (optional) query parameters.
+//		- data   any           (optional) body object.
+//	Returns: result any, err error result object or error.
+func (c *RestClient) Call(ctx context.Context, method string, route string, correlationId string,
+	params *cdata.StringValueMap, data any) (*http.Response, error) {
+
+	method = strings.ToUpper(method)
+
+	if params == nil {
+		params = cdata.NewEmptyStringValueMap()
+	}
+
+	if c.passCorrelationId == "query" || c.passCorrelationId == "both" {
+		params = c.AddCorrelationId(params, correlationId)
+	}
+
+	url := c.buildURL(route, params)
+
+	if !c.IsOpen() {
+		return nil, nil
+	}
+
+	var jsonStr string
+	if data != nil {
+		jsonStr, _ = convert.JsonConverter.ToJson(data)
+	}
+
+	retries := c.Retries
+	var response *http.Response
+
+	for retries > 0 {
+		req, err := c.prepareRequest(ctx, correlationId, method, url, []byte(jsonStr))
+		if err != nil {
+			return nil, err
+		}
+
+		response, err = c.Client.Do(req)
+		if err != nil {
+			retries--
+			if retries == 0 {
+				return nil, cerr.NewUnknownError(
+					correlationId,
+					"COMMUNICATION_ERROR",
+					"Unknown communication problem on REST client",
+				).
+					WithCause(err)
+			}
+
+			err = c.waitForRetry(ctx, correlationId, retries)
+			if err != nil {
+				return nil, err
+			}
+			continue
+		}
+		break
+	}
+
+	if response.StatusCode == 204 {
+		_ = response.Body.Close()
+		return nil, nil
+	}
+
+	if response.StatusCode >= 400 {
+		defer response.Body.Close()
+		return nil, c.handleResponseError(response, correlationId)
+	}
+
+	return response, nil
+}
+
+func (c *RestClient) waitForRetry(ctx context.Context, correlationId string, retries int) error {
+	waitTime := c.Timeout * int(math.Pow(float64(c.Retries-retries), 2))
+
+	select {
+	case <-time.After(time.Duration(waitTime) * time.Millisecond):
+		return nil
+	case <-ctx.Done():
+		return cerr.ApplicationErrorFactory.Create(
+			&cerr.ErrorDescription{
+				Type:          "Application",
+				Category:      "Application",
+				Code:          "CONTEXT_CANCELLED",
+				Message:       "request canceled by parent context",
+				CorrelationId: correlationId,
+			},
+		)
+	}
+}
+
+func (c *RestClient) prepareRequest(ctx context.Context, correlationId string,
+	method string, url string, body []byte) (*http.Request, error) {
+
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(body))
+	if err != nil {
+		return nil, cerr.NewUnknownError(
+			correlationId,
+			"UNSUPPORTED_METHOD",
+			"Method is not supported by REST client",
+		).
+			WithDetails("verb", method).
+			WithCause(err)
+	}
+	// Set headers
+	req.Header.Set("Content-Type", "application/json")
+	if c.passCorrelationId == "headers" || c.passCorrelationId == "both" {
+		req.Header.Set("correlation_id", correlationId)
+	}
+	for k, v := range c.Headers.Value() {
+		req.Header.Set(k, v)
+	}
+
+	return req, nil
+}
+
+func (c *RestClient) handleResponseError(response *http.Response, correlationId string) error {
+	r, rErr := ioutil.ReadAll(response.Body)
+	if rErr != nil {
+		eDesct := cerr.ErrorDescription{
+			Type:          "Application",
+			Category:      "Application",
+			Status:        response.StatusCode,
+			Code:          "",
+			Message:       rErr.Error(),
+			CorrelationId: correlationId,
+		}
+		return cerr.ApplicationErrorFactory.Create(&eDesct).WithCause(rErr)
+	}
+
+	appErr := cerr.ApplicationError{}
+	_ = json.Unmarshal(r, &appErr)
+	if appErr.Status == 0 && len(r) > 0 { // not standart Pip.Services error
+		values := make(map[string]any)
+		decodeErr := json.Unmarshal(r, &values)
+		if decodeErr != nil { // not json response
+			appErr.Message = (string)(r)
+		}
+		appErr.Details = values
+	}
+	appErr.Status = response.StatusCode
+	return &appErr
+}
+
+func (c *RestClient) buildURL(route string, params *cdata.StringValueMap) string {
+	route = c.createRequestRoute(route)
+	route = c.putParamsToRequestRoute(route, params)
+	return c.Uri + route
+}
+
 func (c *RestClient) createRequestRoute(route string) string {
 	builder := ""
 
@@ -321,120 +481,23 @@ func (c *RestClient) createRequestRoute(route string) string {
 	return builder
 }
 
-// Call method are calls a remote method via HTTP/REST protocol.
-//	Parameters:
-//		- ctx context.Context
-//		- prototype reflect.Type type for convert JSON result. Set nil for return raw JSON string
-//		- method 	string           HTTP method: "get", "head", "post", "put", "delete"
-//		- route   string          a command route. Base route will be added to this route
-//		- correlationId  string    (optional) transaction id to trace execution through call chain.
-//		- params  cdata.StringValueMap          (optional) query parameters.
-//		- data   any           (optional) body object.
-//	Returns: result any, err error result object or error.
-func (c *RestClient) Call(ctx context.Context, method string, route string, correlationId string,
-	params *cdata.StringValueMap, data any) (*http.Response, error) {
-
-	//TODO:: refactor method
-
-	method = strings.ToUpper(method)
-	if params == nil {
-		params = cdata.NewEmptyStringValueMap()
-	}
-	route = c.createRequestRoute(route)
-	if c.passCorrelationId == "query" || c.passCorrelationId == "both" {
-		params = c.AddCorrelationId(params, correlationId)
-	}
+func (c *RestClient) putParamsToRequestRoute(route string, params *cdata.StringValueMap) string {
 	if params.Len() > 0 {
-		route += "?"
+		var builder strings.Builder
+		builder.Grow(1024)
+		builder.WriteString(route)
+		builder.WriteString("?")
 		for k, v := range params.Value() {
-			route += neturl.QueryEscape(k) + "=" + neturl.QueryEscape(v) + "&"
+			builder.WriteString(neturl.QueryEscape(k))
+			builder.WriteString("=")
+			builder.WriteString(neturl.QueryEscape(v))
+			builder.WriteString("&")
 		}
+		route = builder.String()
 		if strings.HasSuffix(route, "&") {
 			route = strings.TrimRight(route, "&")
 		}
 	}
 
-	url := c.Uri + route
-
-	if !c.IsOpen() {
-		return nil, nil
-	}
-	var jsonStr []byte
-	if data != nil {
-		jsonStr, _ = json.Marshal(data)
-	} else {
-		jsonStr = make([]byte, 0)
-	}
-
-	retries := c.Retries
-	var resp *http.Response
-	var respErr error
-
-	for retries > 0 {
-		req, reqErr := http.NewRequest(method, url, bytes.NewBuffer(jsonStr))
-
-		if reqErr != nil {
-			err := cerr.NewUnknownError(correlationId, "UNSUPPORTED_METHOD", "Method is not supported by REST client").WithDetails("verb", method).WithCause(reqErr)
-			return nil, err
-		}
-		// Set headers
-		req.Header.Set("Content-Type", "application/json")
-		if c.passCorrelationId == "headers" || c.passCorrelationId == "both" {
-			req.Header.Set("correlation_id", correlationId)
-		}
-		//req.Header.Set("User-Agent", c.UserAgent)
-		for k, v := range c.Headers.Value() {
-			req.Header.Set(k, v)
-		}
-		// Try send request
-		resp, respErr = c.Client.Do(req)
-		if respErr != nil {
-
-			retries--
-			if retries == 0 {
-				err := cerr.NewUnknownError(correlationId, "COMMUNICATION_ERROR", "Unknown communication problem on REST client").WithCause(respErr)
-				return nil, err
-			}
-			continue
-		}
-		break
-	}
-
-	if resp.StatusCode == 204 {
-		_ = resp.Body.Close()
-		return nil, nil
-	}
-
-	if resp.StatusCode >= 400 {
-
-		defer resp.Body.Close()
-
-		r, rErr := ioutil.ReadAll(resp.Body)
-		if rErr != nil {
-			eDesct := cerr.ErrorDescription{
-				Type:          "Application",
-				Category:      "Application",
-				Status:        resp.StatusCode,
-				Code:          "",
-				Message:       rErr.Error(),
-				CorrelationId: correlationId,
-			}
-			return nil, cerr.ApplicationErrorFactory.Create(&eDesct).WithCause(rErr)
-		}
-
-		appErr := cerr.ApplicationError{}
-		_ = json.Unmarshal(r, &appErr)
-		if appErr.Status == 0 && len(r) > 0 { // not standart Pip.Services error
-			values := make(map[string]any)
-			decodeErr := json.Unmarshal(r, &values)
-			if decodeErr != nil { // not json response
-				appErr.Message = (string)(r)
-			}
-			appErr.Details = values
-		}
-		appErr.Status = resp.StatusCode
-		return nil, &appErr
-	}
-
-	return resp, nil
+	return route
 }

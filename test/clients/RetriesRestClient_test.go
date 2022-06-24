@@ -16,7 +16,7 @@ func TestRetriesRestClient(t *testing.T) {
 		"connection.host", "localhost",
 		"connection.port", "12345",
 
-		"options.retries", "2",
+		"options.retries", "4",
 		"options.timeout", "100",
 		"options.connect_timeout", "100",
 	)

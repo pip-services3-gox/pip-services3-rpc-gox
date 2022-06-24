@@ -126,7 +126,7 @@ func TestDummyRestService(t *testing.T) {
 	assert.NotNil(t, values)
 	assert.Equal(t, values["correlationId"], "test_cor_id")
 
-	req, reqErr := http.NewRequest("GET", url+"/dummies/check/correlation_id", bytes.NewBuffer(make([]byte, 0, 0)))
+	req, reqErr := http.NewRequest(http.MethodGet, url+"/dummies/check/correlation_id", bytes.NewBuffer(make([]byte, 0, 0)))
 	assert.Nil(t, reqErr)
 	req.Header.Set("correlation_id", "test_cor_id")
 	localClient := http.Client{}

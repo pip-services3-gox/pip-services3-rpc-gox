@@ -140,7 +140,7 @@ func TestDummyCommandableHttpService(t *testing.T) {
 	assert.NotNil(t, values)
 	assert.Equal(t, values["correlationId"], "test_cor_id")
 
-	req, reqErr := http.NewRequest("POST", url+"/dummies/check_correlation_id", bytes.NewBuffer(make([]byte, 0, 0)))
+	req, reqErr := http.NewRequest(http.MethodPost, url+"/dummies/check_correlation_id", bytes.NewBuffer(make([]byte, 0, 0)))
 	assert.Nil(t, reqErr)
 	req.Header.Set("correlation_id", "test_cor_id")
 	localClient := http.Client{}

@@ -187,7 +187,7 @@ func (c *DummyRestService) Register() {
 	c.RegisterInterceptor("/dummies$", c.incrementNumberOfCalls)
 
 	c.RegisterRoute(
-		"get", "/dummies",
+		http.MethodGet, "/dummies",
 		&cvalid.NewObjectSchema().WithOptionalProperty("skip", cconv.String).
 			WithOptionalProperty("take", cconv.String).
 			WithOptionalProperty("total", cconv.String).
@@ -196,46 +196,46 @@ func (c *DummyRestService) Register() {
 	)
 
 	c.RegisterRoute(
-		"get", "/dummies/check/correlation_id",
+		http.MethodGet, "/dummies/check/correlation_id",
 		&cvalid.NewObjectSchema().Schema,
 		c.checkCorrelationId,
 	)
 
 	c.RegisterRoute(
-		"get", "/dummies/check/error_propagation",
+		http.MethodGet, "/dummies/check/error_propagation",
 		&cvalid.NewObjectSchema().Schema,
 		c.checkErrorPropagation,
 	)
 
 	c.RegisterRoute(
-		"get", "/dummies/check/graceful_shutdown",
+		http.MethodGet, "/dummies/check/graceful_shutdown",
 		&cvalid.NewObjectSchema().Schema,
 		c.checkGracefulShutdownContext,
 	)
 
 	c.RegisterRoute(
-		"get", "/dummies/{dummy_id}",
+		http.MethodGet, "/dummies/{dummy_id}",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("dummy_id", cconv.String).Schema,
 		c.getOneById,
 	)
 
 	c.RegisterRoute(
-		"post", "/dummies",
+		http.MethodPost, "/dummies",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("body", tdata.NewDummySchema()).Schema,
 		c.create,
 	)
 
 	c.RegisterRoute(
-		"put", "/dummies",
+		http.MethodPut, "/dummies",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("body", tdata.NewDummySchema()).Schema,
 		c.update,
 	)
 
 	c.RegisterRoute(
-		"delete", "/dummies/{dummy_id}",
+		http.MethodDelete, "/dummies/{dummy_id}",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("dummy_id", cconv.String).Schema,
 		c.deleteById,

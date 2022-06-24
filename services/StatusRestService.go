@@ -108,7 +108,7 @@ func (c *StatusRestService) SetReferences(ctx context.Context, references crefer
 
 // Register method are registers all service routes in HTTP endpoint.
 func (c *StatusRestService) Register() {
-	c.RegisterRoute("get", c.route, nil, c.status)
+	c.RegisterRoute(http.MethodGet, c.route, nil, c.status)
 }
 
 // Handles status requests

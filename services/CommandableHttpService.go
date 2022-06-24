@@ -131,7 +131,7 @@ func (c *CommandableHttpService) Register() {
 			route = "/" + route
 		}
 
-		c.RegisterRoute("post", route, nil, func(res http.ResponseWriter, req *http.Request) {
+		c.RegisterRoute(http.MethodPost, route, nil, func(res http.ResponseWriter, req *http.Request) {
 
 			// Make copy of request
 			bodyBuf, bodyErr := ioutil.ReadAll(req.Body)

@@ -266,7 +266,6 @@ func (c *RestService) InstrumentError(ctx context.Context, correlationId string,
 // IsOpen method checks if the component is opened.
 //	Returns: true if the component has been opened and false otherwise.
 func (c *RestService) IsOpen() bool {
-	// TODO:: think about adding mtx
 	return c.opened
 }
 
@@ -548,7 +547,7 @@ func (c *RestService) RegisterOpenApiSpecFromFile(path string) {
 
 func (c *RestService) RegisterOpenApiSpec(content string) {
 	if c.SwaggerEnabled {
-		c.RegisterRoute("get",
+		c.RegisterRoute(http.MethodGet,
 			c.SwaggerRoute, nil, func(res http.ResponseWriter, req *http.Request) {
 				res.Header().Add("Content-Length", cconv.StringConverter.ToString(len(content)))
 				res.Header().Add("Content-Type", "application/x-yaml")

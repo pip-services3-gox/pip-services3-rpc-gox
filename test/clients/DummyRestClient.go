@@ -5,6 +5,7 @@ import (
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	"github.com/pip-services3-gox/pip-services3-rpc-gox/clients"
 	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
+	"net/http"
 )
 
 type DummyRestClient struct {
@@ -26,7 +27,7 @@ func (c *DummyRestClient) GetDummies(ctx context.Context, correlationId string, 
 	c.AddFilterParams(params, &filter)
 	c.AddPagingParams(params, &paging)
 
-	response, err := c.Call(ctx, "get", "/dummies", correlationId, params, nil)
+	response, err := c.Call(ctx, http.MethodGet, "/dummies", correlationId, params, nil)
 	if err != nil {
 		return *cdata.NewEmptyDataPage[tdata.Dummy](), err
 	}
@@ -38,7 +39,7 @@ func (c *DummyRestClient) GetDummyById(ctx context.Context, correlationId string
 
 	defer c.Instrument(ctx, correlationId, "dummy.get_one_by_id")
 
-	response, err := c.Call(ctx, "get", "/dummies/"+dummyId, correlationId, nil, nil)
+	response, err := c.Call(ctx, http.MethodGet, "/dummies/"+dummyId, correlationId, nil, nil)
 	if err != nil {
 		return tdata.Dummy{}, err
 	}
@@ -50,7 +51,7 @@ func (c *DummyRestClient) CreateDummy(ctx context.Context, correlationId string,
 
 	defer c.Instrument(ctx, correlationId, "dummy.create")
 
-	response, err := c.Call(ctx, "post", "/dummies", correlationId, nil, dummy)
+	response, err := c.Call(ctx, http.MethodPost, "/dummies", correlationId, nil, dummy)
 	if err != nil {
 		return tdata.Dummy{}, err
 	}
@@ -62,7 +63,7 @@ func (c *DummyRestClient) UpdateDummy(ctx context.Context, correlationId string,
 
 	defer c.Instrument(ctx, correlationId, "dummy.update")
 
-	response, err := c.Call(ctx, "put", "/dummies", correlationId, nil, dummy)
+	response, err := c.Call(ctx, http.MethodPut, "/dummies", correlationId, nil, dummy)
 	if err != nil {
 		return tdata.Dummy{}, err
 	}
@@ -74,7 +75,7 @@ func (c *DummyRestClient) DeleteDummy(ctx context.Context, correlationId string,
 
 	defer c.Instrument(ctx, correlationId, "dummy.delete_by_id")
 
-	response, err := c.Call(ctx, "delete", "/dummies/"+dummyId, correlationId, nil, nil)
+	response, err := c.Call(ctx, http.MethodDelete, "/dummies/"+dummyId, correlationId, nil, nil)
 	if err != nil {
 		return tdata.Dummy{}, err
 	}
@@ -86,7 +87,7 @@ func (c *DummyRestClient) CheckCorrelationId(ctx context.Context, correlationId 
 
 	defer c.Instrument(ctx, correlationId, "dummy.check_correlation_id")
 
-	response, err := c.Call(ctx, "get", "/dummies/check/correlation_id", correlationId, nil, nil)
+	response, err := c.Call(ctx, http.MethodGet, "/dummies/check/correlation_id", correlationId, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -98,6 +99,6 @@ func (c *DummyRestClient) CheckErrorPropagation(ctx context.Context, correlation
 
 	c.Instrument(ctx, correlationId, "dummy.check_error_propagation")
 
-	_, err := c.Call(ctx, "get", "/dummies/check/error_propagation", correlationId, nil, nil)
+	_, err := c.Call(ctx, http.MethodGet, "/dummies/check/error_propagation", correlationId, nil, nil)
 	return err
 }
