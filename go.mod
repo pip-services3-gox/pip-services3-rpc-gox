@@ -6,7 +6,7 @@ require (
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/pip-services3-gox/pip-services3-commons-gox v1.0.5
-	github.com/pip-services3-gox/pip-services3-components-gox v1.0.5
+	github.com/pip-services3-gox/pip-services3-components-gox v1.0.6
 	github.com/stretchr/testify v1.7.0
 )
 
