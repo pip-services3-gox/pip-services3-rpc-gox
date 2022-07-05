@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/pip-services3-go/pip-services3-commons-go/convert"
 	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
 	"io/ioutil"
@@ -368,7 +367,7 @@ func (c *HttpEndpoint) RegisterRoute(method string, route string, schema *cvalid
 			if rec := recover(); rec != nil {
 				err, ok := rec.(error)
 				if !ok {
-					msg := convert.StringConverter.ToString(r)
+					msg := cconv.StringConverter.ToString(r)
 					err = errors.New(msg)
 				}
 				c.logger.Error(r.Context(), c.GetCorrelationId(r), err, "http handler panics with error")
