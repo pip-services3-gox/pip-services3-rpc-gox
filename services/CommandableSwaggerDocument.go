@@ -28,6 +28,8 @@ type CommandableSwaggerDocument struct {
 
 	InfoLicenseName string
 	InfoLicenseUrl  string
+
+	objectType map[string]any
 }
 
 func NewCommandableSwaggerDocument(baseRoute string, config *cconf.ConfigParams, commands []ccomands.ICommand) *CommandableSwaggerDocument {
@@ -37,6 +39,7 @@ func NewCommandableSwaggerDocument(baseRoute string, config *cconf.ConfigParams,
 		InfoVersion: "1",
 		BaseRoute:   baseRoute,
 		Commands:    make([]ccomands.ICommand, 0),
+		objectType:  map[string]any{"type": "object"},
 	}
 
 	if commands != nil {
@@ -126,18 +129,32 @@ func (c *CommandableSwaggerDocument) createSchemaData(command ccomands.ICommand)
 		return nil
 	}
 
-	var properties = make(map[string]any, 0)
-	var required = make([]any, 0)
+	return c.createPropertyData(schema, true)
+}
+
+func (c *CommandableSwaggerDocument) createPropertyData(schema ISchemaWithProperties, includeRequired bool) map[string]any {
+	properties := make(map[string]any, 0)
+	required := make([]string, 0)
 
 	for _, property := range schema.Properties() {
-		tp, _ := property.Type().(cconv.TypeCode)
+		if property.Type() != nil {
+			propertyName := property.Name()
+			propertyType := property.Type()
 
-		properties[property.Name()] = map[string]any{
+			if _propertyType, ok := propertyType.(ISchemaBaseWithValueType); ok {
+				properties[propertyName] = map[string]any{
+					"type":  "array",
+					"items": c.createPropertyTypeData(_propertyType.ValueType()),
+				}
+			} else {
+				properties[propertyName] = c.createPropertyTypeData(propertyType)
+			}
 
-			"type": c.typeToString(tp),
-		}
-		if property.Required() {
-			required = append(required, property.Name())
+			if includeRequired && property.Required() {
+				required = append(required, property.Name())
+			}
+		} else {
+			properties[property.Name()] = c.objectType
 		}
 	}
 
@@ -150,6 +167,76 @@ func (c *CommandableSwaggerDocument) createSchemaData(command ccomands.ICommand)
 	}
 
 	return data
+}
+
+type ISchemaBaseWithValueType interface {
+	cvalid.ISchemaBase
+	ValueType() any
+}
+
+type ISchemaWithProperties interface {
+	cvalid.ISchema
+	Properties() []*cvalid.PropertySchema
+}
+
+func (c *CommandableSwaggerDocument) createPropertyTypeData(propertyType any) map[string]any {
+	if _propertyType, ok := propertyType.(ISchemaWithProperties); ok {
+		objectMap := c.createPropertyData(_propertyType, false)
+
+		for k, v := range c.objectType {
+			objectMap[k] = v
+		}
+		return objectMap
+	}
+
+	var typeCode cconv.TypeCode
+
+	if _typeCode, ok := propertyType.(cconv.TypeCode); ok {
+		typeCode = _typeCode
+	} else {
+		typeCode = cconv.TypeConverter.ToTypeCode(propertyType)
+	}
+
+	if typeCode == cconv.Map || typeCode == cconv.Unknown {
+		typeCode = cconv.Object
+	}
+
+	switch typeCode {
+	case cconv.Integer:
+		return map[string]any{
+			"type":   "integer",
+			"format": "int32",
+		}
+	case cconv.Long:
+		return map[string]any{
+			"type":   "number",
+			"format": "int64",
+		}
+	case cconv.Float:
+		return map[string]any{
+			"type":   "number",
+			"format": "float",
+		}
+	case cconv.Double:
+		return map[string]any{
+			"type":   "number",
+			"format": "double",
+		}
+	case cconv.DateTime:
+		return map[string]any{
+			"type":   "string",
+			"format": "date-time",
+		}
+	case cconv.Boolean:
+		return map[string]any{
+			"type": "boolean",
+		}
+	default:
+		return map[string]any{
+			"type": cconv.TypeConverter.ToString(typeCode),
+		}
+	}
+
 }
 
 func (c *CommandableSwaggerDocument) createResponsesData() map[string]any {
@@ -239,25 +326,4 @@ func (c *CommandableSwaggerDocument) writeAsString(indent int, name string, valu
 
 func (c *CommandableSwaggerDocument) GetSpaces(length int) string {
 	return strings.Repeat(" ", length*2)
-}
-
-func (c *CommandableSwaggerDocument) typeToString(tp cconv.TypeCode) string {
-	// allowed types: array, boolean, integer, number, object, string
-	if tp == cconv.Integer || tp == cconv.Long {
-		return "integer"
-	}
-	if tp == cconv.Double || tp == cconv.Float {
-		return "number"
-	}
-	if tp == cconv.String {
-		return "string"
-	}
-	if tp == cconv.Boolean {
-		return "boolean"
-	}
-	if tp == cconv.Array {
-		return "array"
-	}
-
-	return "object"
 }
