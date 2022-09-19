@@ -1,7 +1,9 @@
 package services
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -164,7 +166,6 @@ func (c *RestService) Configure(ctx context.Context, config *cconf.ConfigParams)
 	c.DependencyResolver.Configure(ctx, config)
 	c.BaseRoute = config.GetAsStringWithDefault("base_route", c.BaseRoute)
 	c.SwaggerEnabled = config.GetAsBooleanWithDefault("swagger.enable", c.SwaggerEnabled)
-	c.SwaggerEnabled = config.GetAsBooleanWithDefault("swagger.enabled", c.SwaggerEnabled)
 	c.SwaggerRoute = config.GetAsStringWithDefault("swagger.route", c.SwaggerRoute)
 }
 
@@ -475,16 +476,21 @@ func (c *RestService) GetParam(req *http.Request, name string) string {
 //   - target  	- pointer on target variable for decode
 // Returns error
 func (c *RestService) DecodeBody(req *http.Request, target any) error {
+	bodyBytes, err := ioutil.ReadAll(req.Body)
 
-	bytes, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		return err
 	}
-	defer req.Body.Close()
-	target, err = cconv.JsonConverter.FromJson(string(bytes))
+
+	err = json.Unmarshal(bodyBytes, target)
+
 	if err != nil {
 		return err
 	}
+
+	_ = req.Body.Close()
+	req.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+
 	return nil
 }
 

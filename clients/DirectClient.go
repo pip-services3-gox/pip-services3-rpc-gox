@@ -2,6 +2,7 @@ package clients
 
 import (
 	"context"
+
 	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
 	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
 	crefer "github.com/pip-services3-gox/pip-services3-commons-gox/refer"
@@ -69,7 +70,7 @@ type DirectClient struct {
 	//The performance counters
 	Counters *ccount.CompositeCounters
 	//The dependency resolver to get controller reference.
-	DependencyResolver crefer.DependencyResolver
+	DependencyResolver *crefer.DependencyResolver
 	// The tracer.
 	Tracer *ctrace.CompositeTracer
 }
@@ -80,7 +81,7 @@ func NewDirectClient() *DirectClient {
 		Opened:             true,
 		Logger:             clog.NewCompositeLogger(),
 		Counters:           ccount.NewCompositeCounters(),
-		DependencyResolver: *crefer.NewDependencyResolver(),
+		DependencyResolver: crefer.NewDependencyResolver(),
 		Tracer:             ctrace.NewCompositeTracer(context.Background(), nil),
 	}
 	dc.DependencyResolver.Put(context.Background(), "controller", "none")

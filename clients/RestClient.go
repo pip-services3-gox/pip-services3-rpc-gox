@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 	"io/ioutil"
 	"math"
 	"net/http"
 	neturl "net/url"
 	"strings"
 	"time"
+
+	"github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 
 	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
 	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
@@ -35,9 +36,9 @@ import (
 //			- uri:                   resource URI or connection string with all parameters in it
 //		- options:
 //			- retries:               number of retries (default: 3)
-//			- connectTimeout:        connection timeout in milliseconds (default: 10 sec)
+//			- connect_timeout:        connection timeout in milliseconds (default: 10 sec)
 //			- timeout:               invocation timeout in milliseconds (default: 10 sec)
-//			- correlation_id_place 	 place for adding correalationId, query - in query string, headers - in headers, both - in query and headers (default: query)
+//			- correlation_id 	 place for adding correalationId, query - in query string, headers - in headers, both - in query and headers (default: query)
 //
 //	References:
 //		- *:logger:*:*:1.0         (optional) ILogger components to pass log messages
@@ -74,7 +75,7 @@ import (
 //		result, err := client.GetData("123", "1")
 //		...
 type RestClient struct {
-	defaultConfig cconf.ConfigParams
+	defaultConfig *cconf.ConfigParams
 	//The HTTP client.
 	Client *http.Client
 	//The connection resolver.
@@ -86,13 +87,13 @@ type RestClient struct {
 	// The tracer.
 	Tracer *ctrace.CompositeTracer
 	//The configuration options.
-	Options cconf.ConfigParams
+	Options *cconf.ConfigParams
 	//The base route.
 	BaseRoute string
 	//The number of retries.
 	Retries int
 	//The default headers to be added to every request.
-	Headers cdata.StringValueMap
+	Headers *cdata.StringValueMap
 	//The connection timeout in milliseconds.
 	ConnectTimeout int
 	//The invocation timeout in milliseconds.
@@ -114,7 +115,7 @@ const (
 //	Returns: pointer on NewRestClient
 func NewRestClient() *RestClient {
 	rc := RestClient{}
-	rc.defaultConfig = *cconf.NewConfigParamsFromTuples(
+	rc.defaultConfig = cconf.NewConfigParamsFromTuples(
 		"connection.protocol", "http",
 		"connection.host", "0.0.0.0",
 		"connection.port", 3000,
@@ -130,9 +131,9 @@ func NewRestClient() *RestClient {
 	rc.Logger = clog.NewCompositeLogger()
 	rc.Counters = ccount.NewCompositeCounters()
 	rc.Tracer = ctrace.NewCompositeTracer(context.Background(), nil)
-	rc.Options = *cconf.NewEmptyConfigParams()
+	rc.Options = cconf.NewEmptyConfigParams()
 	rc.Retries = 1
-	rc.Headers = *cdata.NewEmptyStringValueMap()
+	rc.Headers = cdata.NewEmptyStringValueMap()
 	rc.ConnectTimeout = 10000
 	rc.passCorrelationId = "query"
 	return &rc
@@ -143,13 +144,17 @@ func NewRestClient() *RestClient {
 //		- ctx context.Context
 //		- config *cconf.ConfigParams   configuration parameters to be set.
 func (c *RestClient) Configure(ctx context.Context, config *cconf.ConfigParams) {
-	config = config.SetDefaults(&c.defaultConfig)
+	config = config.SetDefaults(c.defaultConfig)
 	c.ConnectionResolver.Configure(ctx, config)
-	c.Options = *c.Options.Override(config.GetSection("options"))
+	c.Options = c.Options.Override(config.GetSection("options"))
+
 	c.Retries = config.GetAsIntegerWithDefault("options.retries", c.Retries)
-	c.ConnectTimeout = config.GetAsIntegerWithDefault("options.connectTimeout", c.ConnectTimeout)
+	c.ConnectTimeout = config.GetAsIntegerWithDefault("options.connect_timeout", c.ConnectTimeout)
 	c.Timeout = config.GetAsIntegerWithDefault("options.timeout", c.Timeout)
+
 	c.BaseRoute = config.GetAsStringWithDefault("base_route", c.BaseRoute)
+
+	c.passCorrelationId = config.GetAsStringWithDefault("options.correlation_id_place", c.passCorrelationId)
 	c.passCorrelationId = config.GetAsStringWithDefault("options.correlation_id", c.passCorrelationId)
 }
 
@@ -220,7 +225,7 @@ func (c *RestClient) Open(ctx context.Context, correlationId string) error {
 
 	c.Uri = connection.Uri()
 	c.Client = &http.Client{
-		Timeout: time.Duration(c.Timeout) * time.Millisecond,
+		Timeout: time.Duration(c.Timeout+c.ConnectTimeout) * time.Millisecond,
 	}
 	if c.Client == nil {
 		return cerr.NewConnectionError(

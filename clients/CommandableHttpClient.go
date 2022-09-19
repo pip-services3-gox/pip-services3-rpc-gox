@@ -2,8 +2,9 @@ package clients
 
 import (
 	"context"
-	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	"net/http"
+
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 )
 
 // CommandableHttpClient is abstract client that calls commandable HTTP service.
@@ -33,7 +34,6 @@ import (
 //	Example:
 //		type MyCommandableHttpClient struct{
 //			*CommandableHttpClient
-//			prototype reflect.Type // type of operation data
 //			...
 //		}
 //		func (c * MyCommandableHttpClient) GetData(correlationId string, id string)(result MyData, err error){

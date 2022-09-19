@@ -1,8 +1,10 @@
 package services
 
 import (
+	"net"
 	"net/http"
 	"regexp"
+	"strings"
 )
 
 // HttpRequestDetector helper class that retrieves parameters from HTTP requests.
@@ -136,35 +138,27 @@ func (c *_THttpRequestDetector) DetectBrowser(req *http.Request) string {
 //		nil will be returned.
 func (c *_THttpRequestDetector) DetectAddress(req *http.Request) string {
 	var ip string
-	// TODO: need to write!!
 
-	// if req.headers["x-forwarded-for"] {
-	// 	ip = req.headers["x-forwarded-for"].split(",")[0]
-	// }
-
-	// if ip == nil && req.ip {
-	// 	ip = req.ip
-	// }
-
-	// if ip == nil && req.connection {
-	// 	ip = req.connection.remoteAddress
-	// 	if !ip && req.connection.socket {
-	// 		ip = req.connection.socket.remoteAddress
-	// 	}
-	// }
-
-	// if ip == nil && req.socket {
-	// 	ip = req.socket.remoteAddress
-	// }
-
-	// // Remove port
-	// if ip != nil {
-	// 	ip = ip.toString()
-	// 	var index = ip.indexOf(":")
-	// 	if index > 0 {
-	// 		ip = ip.substring(0, index)
-	// 	}
-	// }
+	if len(req.Header.Get("CF-Connecting-IP")) > 1 {
+		ip = req.Header.Get("CF-Connecting-IP")
+		ip = string(net.ParseIP(ip))
+	} else if len(req.Header.Get("X-Forwarded-For")) > 1 {
+		ip = req.Header.Get("X-Forwarded-For")
+		ip = string(net.ParseIP(ip))
+	} else if len(req.Header.Get("X-Real-IP")) > 1 {
+		ip = req.Header.Get("X-Real-IP")
+		ip = string(net.ParseIP(ip))
+	} else {
+		ip = req.RemoteAddr
+		if strings.Contains(ip, ":") {
+			res := strings.Split(ip, ":")
+			if len(res) > 0 {
+				ip = string(net.ParseIP(res[0]))
+			}
+		} else {
+			ip = string(net.ParseIP(ip))
+		}
+	}
 
 	return ip
 }

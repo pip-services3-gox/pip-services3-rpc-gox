@@ -5,8 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
-	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -14,6 +12,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -309,7 +310,7 @@ func (c *HttpEndpoint) Register(registration IRegisterable) {
 //		- registration  IRegisterable  the registration to remove.
 //	See IRegisterable
 func (c *HttpEndpoint) Unregister(registration IRegisterable) {
-	for i := 0; i < len(c.registrations); {
+	for i := range c.registrations {
 		if c.registrations[i] == registration {
 			if i == len(c.registrations)-1 {
 				c.registrations = c.registrations[:i]

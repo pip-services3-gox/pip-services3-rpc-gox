@@ -5,11 +5,11 @@ import (
 )
 
 type TestCommandableHttpClient struct {
-	clients.CommandableHttpClient
+	*clients.CommandableHttpClient
 }
 
 func NewTestCommandableHttpClient(baseRoute string) *TestCommandableHttpClient {
 	c := &TestCommandableHttpClient{}
-	c.CommandableHttpClient = *clients.NewCommandableHttpClient(baseRoute)
+	c.CommandableHttpClient = clients.NewCommandableHttpClient(baseRoute)
 	return c
 }

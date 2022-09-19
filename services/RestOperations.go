@@ -1,8 +1,9 @@
 package services
 
 import (
+	"bytes"
 	"context"
-	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
@@ -116,16 +117,21 @@ func (c *RestOperations) GetParam(req *http.Request, name string) string {
 //		- target pointer on target variable for decode
 // Returns: error
 func (c *RestOperations) DecodeBody(req *http.Request, target any) error {
+	bodyBytes, err := ioutil.ReadAll(req.Body)
 
-	bytes, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		return err
 	}
-	defer req.Body.Close()
-	target, err = cconv.JsonConverter.FromJson(string(bytes))
+
+	err = json.Unmarshal(bodyBytes, target)
+
 	if err != nil {
 		return err
 	}
+
+	_ = req.Body.Close()
+	req.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+
 	return nil
 }
 
