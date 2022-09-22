@@ -6,14 +6,15 @@ import (
 )
 
 type HeartbeatOperations struct {
-	RestOperations
+	*RestOperations
 }
 
 // NewHeartbeatOperations creates new instance HeartbeatOperations
 //	Returns: *HeartbeatOperations
 func NewHeartbeatOperations() *HeartbeatOperations {
-	hbo := HeartbeatOperations{}
-	return &hbo
+	return &HeartbeatOperations{
+		RestOperations: NewRestOperations(),
+	}
 }
 
 // GetHeartbeatOperation is a heartbeat method are insert timestamp into HTTP result

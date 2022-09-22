@@ -13,8 +13,14 @@ import (
 )
 
 type AboutOperations struct {
-	RestOperations
+	*RestOperations
 	contextInfo *cinfo.ContextInfo
+}
+
+func NewAboutOperations() *AboutOperations {
+	return &AboutOperations{
+		RestOperations: NewRestOperations(),
+	}
 }
 
 func (c *AboutOperations) SetReferences(ctx context.Context, references crefer.IReferences) {

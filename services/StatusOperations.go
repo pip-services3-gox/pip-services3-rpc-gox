@@ -12,7 +12,7 @@ import (
 
 // StatusOperations helper class for status service
 type StatusOperations struct {
-	RestOperations
+	*RestOperations
 	startTime   time.Time
 	references2 crefer.IReferences
 	contextInfo *cinfo.ContextInfo
@@ -21,6 +21,7 @@ type StatusOperations struct {
 // NewStatusOperations creates new instance of StatusOperations
 func NewStatusOperations() *StatusOperations {
 	c := StatusOperations{}
+	c.RestOperations = NewRestOperations()
 	c.startTime = time.Now()
 	c.DependencyResolver.Put(
 		context.Background(),
@@ -74,7 +75,7 @@ func (c *StatusOperations) Status(res http.ResponseWriter, req *http.Request) {
 		description = c.contextInfo.Description
 	}
 
-	uptime := time.Now().Sub(c.startTime)
+	uptime := time.Since(c.startTime)
 
 	properties := make(map[string]string)
 	if c.contextInfo != nil {
