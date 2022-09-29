@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 	"io/ioutil"
 	"net/http"
 	"testing"
+
+	cdata "github.com/pip-services3-gox/pip-services3-commons-gox/data"
 
 	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
 	tdata "github.com/pip-services3-gox/pip-services3-rpc-gox/test/data"
@@ -90,6 +91,7 @@ func TestDummyRestService(t *testing.T) {
 	jsonErr = json.Unmarshal(resBody, &dummy)
 	assert.Nil(t, putErr)
 	assert.NotNil(t, dummy)
+	assert.Equal(t, dummy.Id, dummy1.Id)
 
 	assert.Equal(t, dummy.Content, "Updated Content 1")
 	assert.Equal(t, dummy.Key, _dummy1.Key)
