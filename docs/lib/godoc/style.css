@@ -428,7 +428,7 @@ div#learn .popout {
   display: block;
   cursor: pointer;
   font-size: 0.75rem;
-  background: url(http://localhost:6060/doc/share.png) no-repeat;
+  background: url(/doc/share.png) no-repeat;
   background-position: right center;
   padding: 0.375rem 1.688rem;
 }

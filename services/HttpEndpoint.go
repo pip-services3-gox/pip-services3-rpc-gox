@@ -52,10 +52,10 @@ import (
 //
 //	Examples:
 //		endpoint := NewHttpEndpoint();
-//		endpoint.Configure(config);
-//		endpoint.SetReferences(references);
+//		endpoint.Configure(context.Background(), config);
+//		endpoint.SetReferences(context.Background(), references);
 //		...
-//		endpoint.Open(correlationId)
+//		endpoint.Open(context.Background(), correlationId)
 type HttpEndpoint struct {
 	defaultConfig          *cconf.ConfigParams
 	server                 *http.Server
@@ -102,7 +102,7 @@ func NewHttpEndpoint() *HttpEndpoint {
 	c.maintenanceEnabled = false
 	c.fileMaxSize = DefaultFileMaxSize
 	c.protocolUpgradeEnabled = false
-	c.registrations = make([]IRegisterable, 0, 0)
+	c.registrations = make([]IRegisterable, 0)
 	c.allowedHeaders = []string{
 		//"Accept",
 		//"Content-Type",
@@ -140,14 +140,14 @@ func (c *HttpEndpoint) Configure(ctx context.Context, config *cconf.ConfigParams
 	c.protocolUpgradeEnabled = config.GetAsBooleanWithDefault("options.protocol_upgrade_enabled", c.protocolUpgradeEnabled)
 
 	headers := strings.Split(config.GetAsStringWithDefault("cors_headers", ""), ",")
-	if headers != nil && len(headers) > 0 {
+	if len(headers) > 0 {
 		for _, header := range headers {
 			c.AddCorsHeader(strings.TrimSpace(header), "")
 		}
 	}
 
 	origins := strings.Split(config.GetAsStringWithDefault("cors_origins", ""), ",")
-	if origins != nil && len(origins) > 0 {
+	if len(origins) > 0 {
 		for _, origin := range origins {
 			c.AddCorsHeader("", strings.TrimSpace(origin))
 		}

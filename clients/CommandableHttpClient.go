@@ -36,7 +36,7 @@ import (
 //			*CommandableHttpClient
 //			...
 //		}
-//		func (c * MyCommandableHttpClient) GetData(correlationId string, id string)(result MyData, err error){
+//		func (c * MyCommandableHttpClient) GetData(ctx context.Context, correlationId string, id string)(result MyData, err error){
 //			params:= cdata.NewEmptyStringValueMap()
 //			params.Set("id",id)
 //			res, err := c.CallCommand(
@@ -53,13 +53,13 @@ import (
 //
 //
 //		client = NewMyCommandableHttpClient();
-//		client.Configure(cconf.NewConfigParamsFromTuples(
+//		client.Configure(context.Background(), cconf.NewConfigParamsFromTuples(
 //			"connection.protocol", "http",
 //			"connection.host", "localhost",
 //			"connection.port", 8080
 //		));
 //
-//		result, err := client.GetData("123", "1")
+//		result, err := client.GetData(context.Background(), "123", "1")
 //		...
 type CommandableHttpClient struct {
 	*RestClient

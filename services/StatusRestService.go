@@ -49,13 +49,13 @@ import (
 //
 //	Example:
 //		service = NewStatusService();
-//		service.Configure(cref.NewConfigParamsFromTuples(
+//		service.Configure(context.Background(), cref.NewConfigParamsFromTuples(
 //			"connection.protocol", "http",
 //			"connection.host", "localhost",
 //			"connection.port", 8080,
 //		));
 //
-//		opnErr:= service.Open("123")
+//		opnErr:= service.Open(context.Background(), "123")
 //		if opnErr == nil {
 //			fmt.Println("The Status service is accessible at http://localhost:8080/status");
 //		}
@@ -132,7 +132,7 @@ func (c *StatusRestService) status(res http.ResponseWriter, req *http.Request) {
 		description = c.contextInfo.Description
 	}
 
-	uptime := time.Now().Sub(c.startTime)
+	uptime := time.Since(c.startTime)
 
 	properties := make(map[string]string, 0)
 	if c.contextInfo != nil {

@@ -7,15 +7,15 @@
 
   <title>auth - Go Documentation Server</title>
 
-<link type="text/css" rel="stylesheet" href="../../lib/godoc/style.css">
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
 
 <script>window.initFuncs = [];</script>
-<script src="../../lib/godoc/jquery.js" defer></script>
+<script src="/lib/godoc/jquery.js" defer></script>
 
 
 
-<script>var goVersion = "go1.18.3";</script>
-<script src="../../lib/godoc/godocs.js" defer></script>
+<script>var goVersion = "go1.18.6";</script>
+<script src="/lib/godoc/godocs.js" defer></script>
 </head>
 <body>
 
@@ -24,10 +24,10 @@
 </div><!-- #lowframe -->
 
 <div id="topbar" class="wide"><div class="container">
-<div class="top-heading" id="heading-wide"><a href="../index.html">Go Documentation Server</a></div>
-<div class="top-heading" id="heading-narrow"><a href="../index.html">GoDoc</a></div>
-<a href="index.html#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
-<form method="GET" action="http://localhost:6060/search">
+<div class="top-heading" id="heading-wide"><a href="/pkg/">Go Documentation Server</a></div>
+<div class="top-heading" id="heading-narrow"><a href="/pkg/">GoDoc</a></div>
+<a href="#" id="menu-button"><span id="menu-button-arrow">&#9661;</span></a>
+<form method="GET" action="/search">
 <div id="menu">
 
 <span class="search-box"><input type="search" id="search" name="q" placeholder="Search" aria-label="Search" required><button type="submit"><span><!-- magnifying glass: --><svg width="24" height="24" viewBox="0 0 24 24"><title>submit search</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M0 0h24v24H0z" fill="none"/></svg></span></button></span>
@@ -80,8 +80,8 @@
 			<dd><code>import "auth"</code></dd>
 			</dl>
 			<dl>
-			<dd><a href="index.html#pkg-overview" class="overviewLink">Overview</a></dd>
-			<dd><a href="index.html#pkg-index" class="indexLink">Index</a></dd>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
 			
 			
 			</dl>
@@ -113,39 +113,39 @@
 			
 			
 				
-				<dd><a href="index.html#BasicAuthManager">type BasicAuthManager</a></dd>
+				<dd><a href="#BasicAuthManager">type BasicAuthManager</a></dd>
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#BasicAuthManager.Anybody">func (c *BasicAuthManager) Anybody() func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#BasicAuthManager.Anybody">func (c *BasicAuthManager) Anybody() func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#BasicAuthManager.Signed">func (c *BasicAuthManager) Signed() func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#BasicAuthManager.Signed">func (c *BasicAuthManager) Signed() func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
 				
 			
 				
-				<dd><a href="index.html#OwnerAuthManager">type OwnerAuthManager</a></dd>
+				<dd><a href="#OwnerAuthManager">type OwnerAuthManager</a></dd>
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#OwnerAuthManager.Owner">func (c *OwnerAuthManager) Owner(idParam string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#OwnerAuthManager.Owner">func (c *OwnerAuthManager) Owner(idParam string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#OwnerAuthManager.OwnerOrAdmin">func (c *OwnerAuthManager) OwnerOrAdmin(idParam string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#OwnerAuthManager.OwnerOrAdmin">func (c *OwnerAuthManager) OwnerOrAdmin(idParam string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
 				
 			
 				
-				<dd><a href="index.html#RoleAuthManager">type RoleAuthManager</a></dd>
+				<dd><a href="#RoleAuthManager">type RoleAuthManager</a></dd>
 				
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#RoleAuthManager.Admin">func (c *RoleAuthManager) Admin() func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#RoleAuthManager.Admin">func (c *RoleAuthManager) Admin() func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#RoleAuthManager.UserInRole">func (c *RoleAuthManager) UserInRole(role string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#RoleAuthManager.UserInRole">func (c *RoleAuthManager) UserInRole(role string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="index.html#RoleAuthManager.UserInRoles">func (c *RoleAuthManager) UserInRoles(roles []string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#RoleAuthManager.UserInRoles">func (c *RoleAuthManager) UserInRoles(roles []string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc)</a></dd>
 				
 			
 			
@@ -159,11 +159,11 @@
 			<p>
 			<span style="font-size:90%">
 			
-				<a href="http://localhost:6060/src/auth/BasicAuthManager.go">BasicAuthManager.go</a>
+				<a href="/src/auth/BasicAuthManager.go">BasicAuthManager.go</a>
 			
-				<a href="http://localhost:6060/src/auth/OwnerAuthManager.go">OwnerAuthManager.go</a>
+				<a href="/src/auth/OwnerAuthManager.go">OwnerAuthManager.go</a>
 			
-				<a href="http://localhost:6060/src/auth/RoleAuthManager.go">RoleAuthManager.go</a>
+				<a href="/src/auth/RoleAuthManager.go">RoleAuthManager.go</a>
 			
 			</span>
 			</p>
@@ -179,8 +179,8 @@
 		
 			
 			
-			<h2 id="BasicAuthManager">type <a href="http://localhost:6060/src/auth/BasicAuthManager.go?s=250:282#L1">BasicAuthManager</a>
-				<a class="permalink" href="index.html#BasicAuthManager">&#xb6;</a>
+			<h2 id="BasicAuthManager">type <a href="/src/auth/BasicAuthManager.go?s=260:293#L1">BasicAuthManager</a>
+				<a class="permalink" href="#BasicAuthManager">&#xb6;</a>
 				
 				
 			</h2>
@@ -201,24 +201,24 @@
 
 			
 				
-				<h3 id="BasicAuthManager.Anybody">func (*BasicAuthManager) <a href="http://localhost:6060/src/auth/BasicAuthManager.go?s=284:392#L4">Anybody</a>
-					<a class="permalink" href="index.html#BasicAuthManager.Anybody">&#xb6;</a>
+				<h3 id="BasicAuthManager.Anybody">func (*BasicAuthManager) <a href="/src/auth/BasicAuthManager.go?s=297:405#L4">Anybody</a>
+					<a class="permalink" href="#BasicAuthManager.Anybody">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (c *<a href="index.html#BasicAuthManager">BasicAuthManager</a>) Anybody() func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
+				<pre>func (c *<a href="#BasicAuthManager">BasicAuthManager</a>) Anybody() func(res <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#Request">Request</a>, next <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
 				
 				
 				
 				
 			
 				
-				<h3 id="BasicAuthManager.Signed">func (*BasicAuthManager) <a href="http://localhost:6060/src/auth/BasicAuthManager.go?s=510:617#L10">Signed</a>
-					<a class="permalink" href="index.html#BasicAuthManager.Signed">&#xb6;</a>
+				<h3 id="BasicAuthManager.Signed">func (*BasicAuthManager) <a href="/src/auth/BasicAuthManager.go?s=529:636#L10">Signed</a>
+					<a class="permalink" href="#BasicAuthManager.Signed">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (c *<a href="index.html#BasicAuthManager">BasicAuthManager</a>) Signed() func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
+				<pre>func (c *<a href="#BasicAuthManager">BasicAuthManager</a>) Signed() func(res <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#Request">Request</a>, next <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
 				
 				
 				
@@ -227,8 +227,8 @@
 		
 			
 			
-			<h2 id="OwnerAuthManager">type <a href="http://localhost:6060/src/auth/OwnerAuthManager.go?s=276:308#L2">OwnerAuthManager</a>
-				<a class="permalink" href="index.html#OwnerAuthManager">&#xb6;</a>
+			<h2 id="OwnerAuthManager">type <a href="/src/auth/OwnerAuthManager.go?s=287:320#L2">OwnerAuthManager</a>
+				<a class="permalink" href="#OwnerAuthManager">&#xb6;</a>
 				
 				
 			</h2>
@@ -249,24 +249,24 @@
 
 			
 				
-				<h3 id="OwnerAuthManager.Owner">func (*OwnerAuthManager) <a href="http://localhost:6060/src/auth/OwnerAuthManager.go?s=310:430#L5">Owner</a>
-					<a class="permalink" href="index.html#OwnerAuthManager.Owner">&#xb6;</a>
+				<h3 id="OwnerAuthManager.Owner">func (*OwnerAuthManager) <a href="/src/auth/OwnerAuthManager.go?s=324:444#L5">Owner</a>
+					<a class="permalink" href="#OwnerAuthManager.Owner">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (c *<a href="index.html#OwnerAuthManager">OwnerAuthManager</a>) Owner(idParam <a href="http://localhost:6060/pkg/builtin/#string">string</a>) func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
+				<pre>func (c *<a href="#OwnerAuthManager">OwnerAuthManager</a>) Owner(idParam <a href="/pkg/builtin/#string">string</a>) func(res <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#Request">Request</a>, next <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
 				
 				
 				
 				
 			
 				
-				<h3 id="OwnerAuthManager.OwnerOrAdmin">func (*OwnerAuthManager) <a href="http://localhost:6060/src/auth/OwnerAuthManager.go?s=1288:1415#L43">OwnerOrAdmin</a>
-					<a class="permalink" href="index.html#OwnerAuthManager.OwnerOrAdmin">&#xb6;</a>
+				<h3 id="OwnerAuthManager.OwnerOrAdmin">func (*OwnerAuthManager) <a href="/src/auth/OwnerAuthManager.go?s=1340:1467#L43">OwnerOrAdmin</a>
+					<a class="permalink" href="#OwnerAuthManager.OwnerOrAdmin">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (c *<a href="index.html#OwnerAuthManager">OwnerAuthManager</a>) OwnerOrAdmin(idParam <a href="http://localhost:6060/pkg/builtin/#string">string</a>) func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
+				<pre>func (c *<a href="#OwnerAuthManager">OwnerAuthManager</a>) OwnerOrAdmin(idParam <a href="/pkg/builtin/#string">string</a>) func(res <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#Request">Request</a>, next <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
 				
 				
 				
@@ -275,8 +275,8 @@
 		
 			
 			
-			<h2 id="RoleAuthManager">type <a href="http://localhost:6060/src/auth/RoleAuthManager.go?s=261:292#L2">RoleAuthManager</a>
-				<a class="permalink" href="index.html#RoleAuthManager">&#xb6;</a>
+			<h2 id="RoleAuthManager">type <a href="/src/auth/RoleAuthManager.go?s=272:304#L2">RoleAuthManager</a>
+				<a class="permalink" href="#RoleAuthManager">&#xb6;</a>
 				
 				
 			</h2>
@@ -297,36 +297,36 @@
 
 			
 				
-				<h3 id="RoleAuthManager.Admin">func (*RoleAuthManager) <a href="http://localhost:6060/src/auth/RoleAuthManager.go?s=1719:1824#L52">Admin</a>
-					<a class="permalink" href="index.html#RoleAuthManager.Admin">&#xb6;</a>
+				<h3 id="RoleAuthManager.Admin">func (*RoleAuthManager) <a href="/src/auth/RoleAuthManager.go?s=1780:1885#L52">Admin</a>
+					<a class="permalink" href="#RoleAuthManager.Admin">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (c *<a href="index.html#RoleAuthManager">RoleAuthManager</a>) Admin() func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
+				<pre>func (c *<a href="#RoleAuthManager">RoleAuthManager</a>) Admin() func(res <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#Request">Request</a>, next <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
 				
 				
 				
 				
 			
 				
-				<h3 id="RoleAuthManager.UserInRole">func (*RoleAuthManager) <a href="http://localhost:6060/src/auth/RoleAuthManager.go?s=1554:1675#L48">UserInRole</a>
-					<a class="permalink" href="index.html#RoleAuthManager.UserInRole">&#xb6;</a>
+				<h3 id="RoleAuthManager.UserInRole">func (*RoleAuthManager) <a href="/src/auth/RoleAuthManager.go?s=1611:1732#L48">UserInRole</a>
+					<a class="permalink" href="#RoleAuthManager.UserInRole">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (c *<a href="index.html#RoleAuthManager">RoleAuthManager</a>) UserInRole(role <a href="http://localhost:6060/pkg/builtin/#string">string</a>) func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
+				<pre>func (c *<a href="#RoleAuthManager">RoleAuthManager</a>) UserInRole(role <a href="/pkg/builtin/#string">string</a>) func(res <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#Request">Request</a>, next <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
 				
 				
 				
 				
 			
 				
-				<h3 id="RoleAuthManager.UserInRoles">func (*RoleAuthManager) <a href="http://localhost:6060/src/auth/RoleAuthManager.go?s=294:419#L5">UserInRoles</a>
-					<a class="permalink" href="index.html#RoleAuthManager.UserInRoles">&#xb6;</a>
+				<h3 id="RoleAuthManager.UserInRoles">func (*RoleAuthManager) <a href="/src/auth/RoleAuthManager.go?s=308:433#L5">UserInRoles</a>
+					<a class="permalink" href="#RoleAuthManager.UserInRoles">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func (c *<a href="index.html#RoleAuthManager">RoleAuthManager</a>) UserInRoles(roles []<a href="http://localhost:6060/pkg/builtin/#string">string</a>) func(res <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#Request">Request</a>, next <a href="http://localhost:6060/pkg/net/http/">http</a>.<a href="http://localhost:6060/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
+				<pre>func (c *<a href="#RoleAuthManager">RoleAuthManager</a>) UserInRoles(roles []<a href="/pkg/builtin/#string">string</a>) func(res <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#ResponseWriter">ResponseWriter</a>, req *<a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#Request">Request</a>, next <a href="/pkg/net/http/">http</a>.<a href="/pkg/net/http/#HandlerFunc">HandlerFunc</a>)</pre>
 				
 				
 				
@@ -344,11 +344,11 @@
 
 
 <div id="footer">
-Build version go1.18.3.<br>
+Build version go1.18.6.<br>
 Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,
-and code is licensed under a <a href="http://localhost:6060/LICENSE">BSD license</a>.<br>
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
 <a href="https://golang.org/doc/tos.html">Terms of Service</a> |
 <a href="https://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
 </div>

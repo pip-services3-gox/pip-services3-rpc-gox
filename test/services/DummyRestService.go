@@ -188,7 +188,7 @@ func (c *DummyRestService) Register() {
 
 	c.RegisterRoute(
 		http.MethodGet, "/dummies",
-		&cvalid.NewObjectSchema().WithOptionalProperty("skip", cconv.String).
+		cvalid.NewObjectSchema().WithOptionalProperty("skip", cconv.String).
 			WithOptionalProperty("take", cconv.String).
 			WithOptionalProperty("total", cconv.String).
 			WithOptionalProperty("body", cvalid.NewFilterParamsSchema()).Schema,
@@ -197,46 +197,46 @@ func (c *DummyRestService) Register() {
 
 	c.RegisterRoute(
 		http.MethodGet, "/dummies/check/correlation_id",
-		&cvalid.NewObjectSchema().Schema,
+		cvalid.NewObjectSchema().Schema,
 		c.checkCorrelationId,
 	)
 
 	c.RegisterRoute(
 		http.MethodGet, "/dummies/check/error_propagation",
-		&cvalid.NewObjectSchema().Schema,
+		cvalid.NewObjectSchema().Schema,
 		c.checkErrorPropagation,
 	)
 
 	c.RegisterRoute(
 		http.MethodGet, "/dummies/check/graceful_shutdown",
-		&cvalid.NewObjectSchema().Schema,
+		cvalid.NewObjectSchema().Schema,
 		c.checkGracefulShutdownContext,
 	)
 
 	c.RegisterRoute(
 		http.MethodGet, "/dummies/{dummy_id}",
-		&cvalid.NewObjectSchema().
+		cvalid.NewObjectSchema().
 			WithRequiredProperty("dummy_id", cconv.String).Schema,
 		c.getOneById,
 	)
 
 	c.RegisterRoute(
 		http.MethodPost, "/dummies",
-		&cvalid.NewObjectSchema().
+		cvalid.NewObjectSchema().
 			WithRequiredProperty("body", tdata.NewDummySchema()).Schema,
 		c.create,
 	)
 
 	c.RegisterRoute(
 		http.MethodPut, "/dummies",
-		&cvalid.NewObjectSchema().
+		cvalid.NewObjectSchema().
 			WithRequiredProperty("body", tdata.NewDummySchema()).Schema,
 		c.update,
 	)
 
 	c.RegisterRoute(
 		http.MethodDelete, "/dummies/{dummy_id}",
-		&cvalid.NewObjectSchema().
+		cvalid.NewObjectSchema().
 			WithRequiredProperty("dummy_id", cconv.String).Schema,
 		c.deleteById,
 	)

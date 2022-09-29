@@ -61,7 +61,7 @@ type IRestServiceOverrides interface {
 //			c.RestService = services.NewRestService()
 //			c.RestService.IRegisterable = &c
 //			c.numberOfCalls = 0
-//			c.DependencyResolver.Put("controller", crefer.NewDescriptor("mygroup", "controller", "*", "*", "1.0"))
+//			c.DependencyResolver.Put(context.Background(), "controller", crefer.NewDescriptor("mygroup", "controller", "*", "*", "1.0"))
 //			return &c
 //		}
 //
@@ -106,7 +106,7 @@ type IRestServiceOverrides interface {
 //			cref.NewDescriptor("mygroup","controller","default","default","1.0"), controller
 //		));
 //
-//		opnRes := service.Open("123")
+//		opnRes := service.Open(context.Background(), "123")
 //		if opnErr == nil {
 //			fmt.Println("The REST service is running on port 8080");
 //		}
@@ -150,7 +150,7 @@ func InheritRestService(overrides IRestServiceOverrides) *RestService {
 	rs.DependencyResolver.Configure(context.TODO(), rs.defaultConfig)
 	rs.Logger = clog.NewCompositeLogger()
 	rs.Counters = ccount.NewCompositeCounters()
-	rs.Tracer = ctrace.NewCompositeTracer(context.TODO(), nil)
+	rs.Tracer = ctrace.NewCompositeTracer()
 	rs.SwaggerEnabled = false
 	rs.SwaggerRoute = "swagger"
 	return &rs

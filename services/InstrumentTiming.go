@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+
 	ccount "github.com/pip-services3-gox/pip-services3-components-gox/count"
 	clog "github.com/pip-services3-gox/pip-services3-components-gox/log"
 	ctrace "github.com/pip-services3-gox/pip-services3-components-gox/trace"
@@ -44,10 +45,10 @@ func (c *InstrumentTiming) clear() {
 }
 
 func (c *InstrumentTiming) EndTiming(ctx context.Context, err error) {
-	if err == nil {
-		c.EndSuccess(ctx)
-	} else {
+	if err != nil {
 		c.EndFailure(ctx, err)
+	} else {
+		c.EndSuccess(ctx)
 	}
 }
 

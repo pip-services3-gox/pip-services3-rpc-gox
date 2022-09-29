@@ -23,10 +23,10 @@ import (
 //		- ...                          other connection parameters
 //
 //		- connections:                   alternative to connection
-//		- [connection params 1]:       first connection parameters
-//		-  ...
-//		- [connection params N]:       Nth connection parameters
-//		-  ...
+//			- [connection params 1]:       first connection parameters
+//			-  ...
+//			- [connection params N]:       Nth connection parameters
+//			-  ...
 //
 //	References:
 //		- *:discovery:*:*:1.0            (optional) IDiscovery services
@@ -41,22 +41,22 @@ import (
 //		);
 //
 //		connectionResolver = NewHttpConnectionResolver();
-//		connectionResolver.Configure(config);
-//		connectionResolver.SetReferences(references);
+//		connectionResolver.Configure(context.Background(), config);
+//		connectionResolver.SetReferences(context.Background(), references);
 //
 //		connection, err := connectionResolver.Resolve("123")
 //		// Now use connection...
 type HttpConnectionResolver struct {
 	//The base connection resolver.
-	ConnectionResolver ccon.ConnectionResolver
+	ConnectionResolver *ccon.ConnectionResolver
 	//The base credential resolver.
-	CredentialResolver cauth.CredentialResolver
+	CredentialResolver *cauth.CredentialResolver
 }
 
 // NewHttpConnectionResolver creates new instance NewHttpConnectionResolver
 // 	Returns: pointer on NewHttpConnectionResolver
 func NewHttpConnectionResolver() *HttpConnectionResolver {
-	return &HttpConnectionResolver{*ccon.NewEmptyConnectionResolver(), *cauth.NewEmptyCredentialResolver()}
+	return &HttpConnectionResolver{ccon.NewEmptyConnectionResolver(), cauth.NewEmptyCredentialResolver()}
 }
 
 // Configure method are configures component by passing configuration parameters.
@@ -86,8 +86,8 @@ func (c *HttpConnectionResolver) validateConnection(correlationId string, connec
 		return nil
 	}
 
-	protocol := connection.Protocol() //"http"
-	if "http" != protocol && "https" != protocol {
+	protocol := connection.Protocol() // "http"
+	if protocol != "http" && protocol != "https" {
 		return cerr.NewConfigError(correlationId, "WRONG_PROTOCOL", "Protocol is not supported by REST connection").WithDetails("protocol", protocol)
 	}
 	host := connection.Host()
@@ -160,6 +160,9 @@ func (c *HttpConnectionResolver) Resolve(correlationId string) (connection *ccon
 	}
 
 	credential, err = c.CredentialResolver.Lookup(context.TODO(), correlationId)
+	if err != nil {
+		return nil, nil, err
+	}
 	err = c.validateConnection(correlationId, connection, credential)
 	if err == nil && connection != nil {
 		c.updateConnection(connection)

@@ -44,7 +44,7 @@ import (
 //			"connection.port", 8080,
 //		));
 //
-//		opnErr := service.Open("123")
+//		opnErr := service.Open(context.Background(), "123")
 //		if opnErr == nil {
 //			fmt.Println("The Heartbeat service is accessible at http://+:8080/ping");
 //		}

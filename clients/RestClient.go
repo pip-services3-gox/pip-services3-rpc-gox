@@ -53,16 +53,18 @@ import (
 //			*RestClient
 //		}
 //		...
-//		func (c *MyRestClient) GetData(correlationId string, id string) (result *tdata.MyDataPage, err error) {
+//		func (c *MyRestClient) GetData(ctx context.Context, correlationId string, id string) (result *tdata.MyDataPage[MyData], err error) {
+//			timind := c.Instrument(ctx, correlationId, "myData.get_page_by_filter")
+// 			defer timing.EndTiming(ctx)
+//
 //			params := cdata.NewEmptyStringValueMap()
 //			params.Set("id", id)
-//			calValue, calErr := c.Call(MyDataPageType, "get", "/data", correlationId, params, nil)
+//			response, calErr := c.Call(MyDataPageType, "get", "/data", correlationId, params, nil)
 //			if calErr != nil {
 //				return nil, calErr
 //			}
-//			result, _ = calValue.(*tdata.MyDataPage)
-//			c.Instrument(correlationId, "myData.get_page_by_filter")
-//			return result, nil
+//
+//			return return clients.HandleHttpResponse[*tdata.MyDataPage[MyData]](response, correlationId)
 //		}
 //
 //		client := NewMyRestClient();
@@ -72,7 +74,7 @@ import (
 //			"connection.port", 8080,
 //		));
 //
-//		result, err := client.GetData("123", "1")
+//		result, err := client.GetData(context.Background(), "123", "1")
 //		...
 type RestClient struct {
 	defaultConfig *cconf.ConfigParams
@@ -130,7 +132,7 @@ func NewRestClient() *RestClient {
 	rc.ConnectionResolver = *rpccon.NewHttpConnectionResolver()
 	rc.Logger = clog.NewCompositeLogger()
 	rc.Counters = ccount.NewCompositeCounters()
-	rc.Tracer = ctrace.NewCompositeTracer(context.Background(), nil)
+	rc.Tracer = ctrace.NewCompositeTracer()
 	rc.Options = cconf.NewEmptyConfigParams()
 	rc.Retries = 1
 	rc.Headers = cdata.NewEmptyStringValueMap()

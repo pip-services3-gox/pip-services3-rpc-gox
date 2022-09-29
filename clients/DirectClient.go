@@ -31,11 +31,12 @@ import (
 //		type MyDirectClient struct {
 //			*DirectClient
 //		}
-//		func MyDirectClient()* MyDirectClient {
+//		func NewMyDirectClient()* MyDirectClient {
 //			c:= MyDirectClient{}
 //			c.DirectClient = NewDirectClient()
 //			c.DependencyResolver.Put(context.Background(), "controller", cref.NewDescriptor(
 //              "mygroup", "controller", "*", "*", "*"));
+//			return &c
 //		}
 //
 //		func (c *MyDirectClient) SetReferences(ctx context.Context, references cref.IReferences) {
@@ -47,19 +48,19 @@ import (
 //			c.specificController = specificController
 //		}
 //		...
-//		func (c * MyDirectClient) GetData(correlationId string, id string)(result MyData, err error) {
-//			timing := c.Instrument(correlationId, "myclient.get_data")
-//			cmRes, cmdErr := c.specificController.GetData(correlationId, id)
-//			timing.EndTiming();
-//			return  c.InstrumentError(correlationId, "myclient.get_data", cmdRes, cmdErr)
+//		func (c * MyDirectClient) GetData(ctx context.Context, correlationId string, id string)(result MyData, err error) {
+//			timing := c.Instrument(ctx, correlationId, "myclient.get_data")
+//			defer timing.EndTiming(ctx);
+//
+//			return c.specificController.GetData(ctx, correlationId, id)
 //		}
 //		...
 //
 //		client = NewMyDirectClient();
-//		client.SetReferences(cref.NewReferencesFromTuples(
+//		client.SetReferences(context.Background(), cref.NewReferencesFromTuples(
 //			cref.NewDescriptor("mygroup","controller","default","default","1.0"), controller,
 //		));
-//		res, err := client.GetData("123", "1")
+//		res, err := client.GetData(context.Background(), "123", "1")
 type DirectClient struct {
 	//The controller reference.
 	Controller any
@@ -82,7 +83,7 @@ func NewDirectClient() *DirectClient {
 		Logger:             clog.NewCompositeLogger(),
 		Counters:           ccount.NewCompositeCounters(),
 		DependencyResolver: crefer.NewDependencyResolver(),
-		Tracer:             ctrace.NewCompositeTracer(context.Background(), nil),
+		Tracer:             ctrace.NewCompositeTracer(),
 	}
 	dc.DependencyResolver.Put(context.Background(), "controller", "none")
 	return &dc

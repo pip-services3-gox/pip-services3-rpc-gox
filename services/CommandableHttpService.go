@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"io/ioutil"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	ccomands "github.com/pip-services3-gox/pip-services3-commons-gox/commands"
 	cconf "github.com/pip-services3-gox/pip-services3-commons-gox/config"
 	crun "github.com/pip-services3-gox/pip-services3-commons-gox/run"
-	"io/ioutil"
-	"net/http"
 )
 
 // CommandableHttpService abstract service that receives remove calls via HTTP/REST protocol
@@ -49,21 +50,21 @@ import (
 //			c := MyCommandableHttpService{
 //				CommandableHttpService: services.NewCommandableHttpService("dummies"),
 //			}
-//			c.DependencyResolver.Put("controller", cref.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
+//			c.DependencyResolver.Put(context.Background(), "controller", cref.NewDescriptor("pip-services-dummies", "controller", "default", "*", "*"))
 //			return &c
 //		}
 //
 //		service := NewMyCommandableHttpService();
-//		service.Configure(cconf.NewConfigParamsFromTuples(
+//		service.Configure(context.Background(), cconf.NewConfigParamsFromTuples(
 //			"connection.protocol", "http",
 //			"connection.host", "localhost",
 //			"connection.port", 8080,
 //		));
-//		service.SetReferences(cref.NewReferencesFromTuples(
+//		service.SetReferences(context.Background(), cref.NewReferencesFromTuples(
 //			cref.NewDescriptor("mygroup","controller","default","default","1.0"), controller
 //		));
 //
-//		opnErr:=service.Open("123")
+//		opnErr := service.Open(context.Background(), "123")
 //		if opnErr == nil {
 //			fmt.Println("The REST service is running on port 8080");
 //		}
