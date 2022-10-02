@@ -140,7 +140,7 @@
 				<dd><a href="#CommandableHttpService">type CommandableHttpService</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#InheritCommandableHttpService">func InheritCommandableHttpService(overrides IRestServiceOverrides, baseRoute string) *CommandableHttpService</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#InheritCommandableHttpService">func InheritCommandableHttpService(overrides IRegisterable, baseRoute string) *CommandableHttpService</a></dd>
 				
 				
 					
@@ -248,11 +248,6 @@
 				
 			
 				
-				<dd><a href="#IRestServiceOverrides">type IRestServiceOverrides</a></dd>
-				
-				
-			
-				
 				<dd><a href="#ISchemaBaseWithValueType">type ISchemaBaseWithValueType</a></dd>
 				
 				
@@ -353,7 +348,7 @@
 				<dd><a href="#RestService">type RestService</a></dd>
 				
 					
-					<dd>&nbsp; &nbsp; <a href="#InheritRestService">func InheritRestService(overrides IRestServiceOverrides) *RestService</a></dd>
+					<dd>&nbsp; &nbsp; <a href="#InheritRestService">func InheritRestService(overrides IRegisterable) *RestService</a></dd>
 				
 				
 					
@@ -707,12 +702,12 @@ Example:
 
 			
 				
-				<h3 id="InheritCommandableHttpService">func <a href="/src/services/CommandableHttpService.go?s=3752:3861#L85">InheritCommandableHttpService</a>
+				<h3 id="InheritCommandableHttpService">func <a href="/src/services/CommandableHttpService.go?s=3752:3853#L85">InheritCommandableHttpService</a>
 					<a class="permalink" href="#InheritCommandableHttpService">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func InheritCommandableHttpService(overrides <a href="#IRestServiceOverrides">IRestServiceOverrides</a>, baseRoute <a href="/pkg/builtin/#string">string</a>) *<a href="#CommandableHttpService">CommandableHttpService</a></pre>
+				<pre>func InheritCommandableHttpService(overrides <a href="#IRegisterable">IRegisterable</a>, baseRoute <a href="/pkg/builtin/#string">string</a>) *<a href="#CommandableHttpService">CommandableHttpService</a></pre>
 				<p>
 InheritCommandableHttpService creates a new instance of the service.
 </p>
@@ -728,7 +723,7 @@ Returns: *CommandableHttpService pointer on new instance CommandableHttpService
 
 			
 				
-				<h3 id="CommandableHttpService.Configure">func (*CommandableHttpService) <a href="/src/services/CommandableHttpService.go?s=4254:4345#L98">Configure</a>
+				<h3 id="CommandableHttpService.Configure">func (*CommandableHttpService) <a href="/src/services/CommandableHttpService.go?s=4246:4337#L98">Configure</a>
 					<a class="permalink" href="#CommandableHttpService.Configure">&#xb6;</a>
 					
 					
@@ -747,7 +742,7 @@ Configure method configures component by passing configuration parameters.
 				
 			
 				
-				<h3 id="CommandableHttpService.Register">func (*CommandableHttpService) <a href="/src/services/CommandableHttpService.go?s=4544:4587#L104">Register</a>
+				<h3 id="CommandableHttpService.Register">func (*CommandableHttpService) <a href="/src/services/CommandableHttpService.go?s=4536:4579#L104">Register</a>
 					<a class="permalink" href="#CommandableHttpService.Register">&#xb6;</a>
 					
 					
@@ -1399,30 +1394,6 @@ IRegisterable is interface to perform on-demand registrations.
 		
 			
 			
-			<h2 id="IRestServiceOverrides">type <a href="/src/services/RestService.go?s=792:846#L13">IRestServiceOverrides</a>
-				<a class="permalink" href="#IRestServiceOverrides">&#xb6;</a>
-				
-				
-			</h2>
-			
-			<pre>type IRestServiceOverrides interface {
-    Register()
-}</pre>
-
-			
-
-			
-
-			
-			
-			
-
-			
-
-			
-		
-			
-			
 			<h2 id="ISchemaBaseWithValueType">type <a href="/src/services/CommandableSwaggerDocument.go?s=4315:4398#L162">ISchemaBaseWithValueType</a>
 				<a class="permalink" href="#ISchemaBaseWithValueType">&#xb6;</a>
 				
@@ -1904,7 +1875,7 @@ SetReferences method are sets references to this RestOperations logger, counters
 		
 			
 			
-			<h2 id="RestService">type <a href="/src/services/RestService.go?s=4133:4781#L103">RestService</a>
+			<h2 id="RestService">type <a href="/src/services/RestService.go?s=4075:4715#L99">RestService</a>
 				<a class="permalink" href="#RestService">&#xb6;</a>
 				
 				
@@ -1998,7 +1969,7 @@ Example:
 </pre>
 
 			<pre>type RestService struct {
-<span id="RestService.Overrides"></span>    Overrides <a href="#IRestServiceOverrides">IRestServiceOverrides</a>
+<span id="RestService.Overrides"></span>    Overrides <a href="#IRegisterable">IRegisterable</a>
 
     <span class="comment">//The base route.</span>
 <span id="RestService.BaseRoute"></span>    BaseRoute <a href="/pkg/builtin/#string">string</a>
@@ -2030,12 +2001,12 @@ Example:
 
 			
 				
-				<h3 id="InheritRestService">func <a href="/src/services/RestService.go?s=4844:4913#L130">InheritRestService</a>
+				<h3 id="InheritRestService">func <a href="/src/services/RestService.go?s=4778:4839#L126">InheritRestService</a>
 					<a class="permalink" href="#InheritRestService">&#xb6;</a>
 					
 					
 				</h3>
-				<pre>func InheritRestService(overrides <a href="#IRestServiceOverrides">IRestServiceOverrides</a>) *<a href="#RestService">RestService</a></pre>
+				<pre>func InheritRestService(overrides <a href="#IRegisterable">IRegisterable</a>) *<a href="#RestService">RestService</a></pre>
 				<p>
 InheritRestService creates new instance of RestService
 </p>
@@ -2046,7 +2017,7 @@ InheritRestService creates new instance of RestService
 
 			
 				
-				<h3 id="RestService.Close">func (*RestService) <a href="/src/services/RestService.go?s=10423:10499#L295">Close</a>
+				<h3 id="RestService.Close">func (*RestService) <a href="/src/services/RestService.go?s=10349:10425#L291">Close</a>
 					<a class="permalink" href="#RestService.Close">&#xb6;</a>
 					
 					
@@ -2066,7 +2037,7 @@ Returns: error or nil no errors occurred.
 				
 			
 				
-				<h3 id="RestService.Configure">func (*RestService) <a href="/src/services/RestService.go?s=5682:5762#L153">Configure</a>
+				<h3 id="RestService.Configure">func (*RestService) <a href="/src/services/RestService.go?s=5608:5688#L149">Configure</a>
 					<a class="permalink" href="#RestService.Configure">&#xb6;</a>
 					
 					
@@ -2085,7 +2056,7 @@ Configure method are configures component by passing configuration parameters.
 				
 			
 				
-				<h3 id="RestService.DecodeBody">func (*RestService) <a href="/src/services/RestService.go?s=16627:16696#L468">DecodeBody</a>
+				<h3 id="RestService.DecodeBody">func (*RestService) <a href="/src/services/RestService.go?s=16553:16622#L464">DecodeBody</a>
 					<a class="permalink" href="#RestService.DecodeBody">&#xb6;</a>
 					
 					
@@ -2107,7 +2078,7 @@ Returns error
 				
 			
 				
-				<h3 id="RestService.GetCorrelationId">func (*RestService) <a href="/src/services/RestService.go?s=18000:18064#L521">GetCorrelationId</a>
+				<h3 id="RestService.GetCorrelationId">func (*RestService) <a href="/src/services/RestService.go?s=17926:17990#L517">GetCorrelationId</a>
 					<a class="permalink" href="#RestService.GetCorrelationId">&#xb6;</a>
 					
 					
@@ -2126,7 +2097,7 @@ Returns: string correlation_id or empty string
 				
 			
 				
-				<h3 id="RestService.GetFilterParams">func (*RestService) <a href="/src/services/RestService.go?s=17558:17634#L505">GetFilterParams</a>
+				<h3 id="RestService.GetFilterParams">func (*RestService) <a href="/src/services/RestService.go?s=17484:17560#L501">GetFilterParams</a>
 					<a class="permalink" href="#RestService.GetFilterParams">&#xb6;</a>
 					
 					
@@ -2145,7 +2116,7 @@ Returns: filter params
 				
 			
 				
-				<h3 id="RestService.GetPagingParams">func (*RestService) <a href="/src/services/RestService.go?s=17095:17171#L491">GetPagingParams</a>
+				<h3 id="RestService.GetPagingParams">func (*RestService) <a href="/src/services/RestService.go?s=17021:17097#L487">GetPagingParams</a>
 					<a class="permalink" href="#RestService.GetPagingParams">&#xb6;</a>
 					
 					
@@ -2164,7 +2135,7 @@ Returns: paging params
 				
 			
 				
-				<h3 id="RestService.GetParam">func (*RestService) <a href="/src/services/RestService.go?s=16277:16346#L455">GetParam</a>
+				<h3 id="RestService.GetParam">func (*RestService) <a href="/src/services/RestService.go?s=16203:16272#L451">GetParam</a>
 					<a class="permalink" href="#RestService.GetParam">&#xb6;</a>
 					
 					
@@ -2184,7 +2155,7 @@ Returns value or empty string if param not exists
 				
 			
 				
-				<h3 id="RestService.Instrument">func (*RestService) <a href="/src/services/RestService.go?s=8132:8238#L228">Instrument</a>
+				<h3 id="RestService.Instrument">func (*RestService) <a href="/src/services/RestService.go?s=8058:8164#L224">Instrument</a>
 					<a class="permalink" href="#RestService.Instrument">&#xb6;</a>
 					
 					
@@ -2206,7 +2177,7 @@ Returns: Timing object to end the time measurement.
 				
 			
 				
-				<h3 id="RestService.InstrumentError">func (*RestService) <a href="/src/services/RestService.go?s=9031:9174#L247">InstrumentError</a>
+				<h3 id="RestService.InstrumentError">func (*RestService) <a href="/src/services/RestService.go?s=8957:9100#L243">InstrumentError</a>
 					<a class="permalink" href="#RestService.InstrumentError">&#xb6;</a>
 					
 					
@@ -2230,7 +2201,7 @@ Returns: result any, err error (optional) an execution callback
 				
 			
 				
-				<h3 id="RestService.IsOpen">func (*RestService) <a href="/src/services/RestService.go?s=9491:9526#L259">IsOpen</a>
+				<h3 id="RestService.IsOpen">func (*RestService) <a href="/src/services/RestService.go?s=9417:9452#L255">IsOpen</a>
 					<a class="permalink" href="#RestService.IsOpen">&#xb6;</a>
 					
 					
@@ -2247,7 +2218,7 @@ IsOpen method checks if the component is opened.
 				
 			
 				
-				<h3 id="RestService.Open">func (*RestService) <a href="/src/services/RestService.go?s=9776:9851#L268">Open</a>
+				<h3 id="RestService.Open">func (*RestService) <a href="/src/services/RestService.go?s=9702:9777#L264">Open</a>
 					<a class="permalink" href="#RestService.Open">&#xb6;</a>
 					
 					
@@ -2267,7 +2238,7 @@ Returns: error or nil no errors occured.
 				
 			
 				
-				<h3 id="RestService.Register">func (*RestService) <a href="/src/services/RestService.go?s=19157:19189#L561">Register</a>
+				<h3 id="RestService.Register">func (*RestService) <a href="/src/services/RestService.go?s=19083:19115#L557">Register</a>
 					<a class="permalink" href="#RestService.Register">&#xb6;</a>
 					
 					
@@ -2282,7 +2253,7 @@ Register method are registers all service routes in HTTP endpoint.
 				
 			
 				
-				<h3 id="RestService.RegisterInterceptor">func (*RestService) <a href="/src/services/RestService.go?s=15828:15965#L440">RegisterInterceptor</a>
+				<h3 id="RestService.RegisterInterceptor">func (*RestService) <a href="/src/services/RestService.go?s=15754:15891#L436">RegisterInterceptor</a>
 					<a class="permalink" href="#RestService.RegisterInterceptor">&#xb6;</a>
 					
 					
@@ -2302,7 +2273,7 @@ RegisterInterceptor method are registers a middleware for a given route in HTTP 
 				
 			
 				
-				<h3 id="RestService.RegisterOpenApiSpec">func (*RestService) <a href="/src/services/RestService.go?s=18552:18609#L544">RegisterOpenApiSpec</a>
+				<h3 id="RestService.RegisterOpenApiSpec">func (*RestService) <a href="/src/services/RestService.go?s=18478:18535#L540">RegisterOpenApiSpec</a>
 					<a class="permalink" href="#RestService.RegisterOpenApiSpec">&#xb6;</a>
 					
 					
@@ -2314,7 +2285,7 @@ RegisterInterceptor method are registers a middleware for a given route in HTTP 
 				
 			
 				
-				<h3 id="RestService.RegisterOpenApiSpecFromFile">func (*RestService) <a href="/src/services/RestService.go?s=18236:18298#L529">RegisterOpenApiSpecFromFile</a>
+				<h3 id="RestService.RegisterOpenApiSpecFromFile">func (*RestService) <a href="/src/services/RestService.go?s=18162:18224#L525">RegisterOpenApiSpecFromFile</a>
 					<a class="permalink" href="#RestService.RegisterOpenApiSpecFromFile">&#xb6;</a>
 					
 					
@@ -2326,7 +2297,7 @@ RegisterInterceptor method are registers a middleware for a given route in HTTP 
 				
 			
 				
-				<h3 id="RestService.RegisterRoute">func (*RestService) <a href="/src/services/RestService.go?s=14222:14368#L400">RegisterRoute</a>
+				<h3 id="RestService.RegisterRoute">func (*RestService) <a href="/src/services/RestService.go?s=14148:14294#L396">RegisterRoute</a>
 					<a class="permalink" href="#RestService.RegisterRoute">&#xb6;</a>
 					
 					
@@ -2348,7 +2319,7 @@ RegisterRoute method are registers a route in HTTP endpoint.
 				
 			
 				
-				<h3 id="RestService.RegisterRouteWithAuth">func (*RestService) <a href="/src/services/RestService.go?s=14975:15214#L417">RegisterRouteWithAuth</a>
+				<h3 id="RestService.RegisterRouteWithAuth">func (*RestService) <a href="/src/services/RestService.go?s=14901:15140#L413">RegisterRouteWithAuth</a>
 					<a class="permalink" href="#RestService.RegisterRouteWithAuth">&#xb6;</a>
 					
 					
@@ -2372,7 +2343,7 @@ RegisterRouteWithAuth method are registers a route with authorization in HTTP en
 				
 			
 				
-				<h3 id="RestService.SendCreatedResult">func (*RestService) <a href="/src/services/RestService.go?s=12081:12187#L341">SendCreatedResult</a>
+				<h3 id="RestService.SendCreatedResult">func (*RestService) <a href="/src/services/RestService.go?s=12007:12113#L337">SendCreatedResult</a>
 					<a class="permalink" href="#RestService.SendCreatedResult">&#xb6;</a>
 					
 					
@@ -2398,7 +2369,7 @@ If error occur it sends ErrorDescription with approproate status code.
 				
 			
 				
-				<h3 id="RestService.SendDeletedResult">func (*RestService) <a href="/src/services/RestService.go?s=12803:12909#L356">SendDeletedResult</a>
+				<h3 id="RestService.SendDeletedResult">func (*RestService) <a href="/src/services/RestService.go?s=12729:12835#L352">SendDeletedResult</a>
 					<a class="permalink" href="#RestService.SendDeletedResult">&#xb6;</a>
 					
 					
@@ -2424,7 +2395,7 @@ If error occur it sends ErrorDescription with appropriate status code.
 				
 			
 				
-				<h3 id="RestService.SendError">func (*RestService) <a href="/src/services/RestService.go?s=13295:13381#L367">SendError</a>
+				<h3 id="RestService.SendError">func (*RestService) <a href="/src/services/RestService.go?s=13221:13307#L363">SendError</a>
 					<a class="permalink" href="#RestService.SendError">&#xb6;</a>
 					
 					
@@ -2446,7 +2417,7 @@ If status code is not defined, it uses 500 status code.
 				
 			
 				
-				<h3 id="RestService.SendResult">func (*RestService) <a href="/src/services/RestService.go?s=11367:11466#L326">SendResult</a>
+				<h3 id="RestService.SendResult">func (*RestService) <a href="/src/services/RestService.go?s=11293:11392#L322">SendResult</a>
 					<a class="permalink" href="#RestService.SendResult">&#xb6;</a>
 					
 					
@@ -2472,7 +2443,7 @@ If error occur it sends ErrorDescription with approproate status code.
 				
 			
 				
-				<h3 id="RestService.SetReferences">func (*RestService) <a href="/src/services/RestService.go?s=6326:6413#L166">SetReferences</a>
+				<h3 id="RestService.SetReferences">func (*RestService) <a href="/src/services/RestService.go?s=6252:6339#L162">SetReferences</a>
 					<a class="permalink" href="#RestService.SetReferences">&#xb6;</a>
 					
 					
@@ -2491,7 +2462,7 @@ SetReferences method are sets references to dependent components.
 				
 			
 				
-				<h3 id="RestService.UnsetReferences">func (*RestService) <a href="/src/services/RestService.go?s=7275:7314#L199">UnsetReferences</a>
+				<h3 id="RestService.UnsetReferences">func (*RestService) <a href="/src/services/RestService.go?s=7201:7240#L195">UnsetReferences</a>
 					<a class="permalink" href="#RestService.UnsetReferences">&#xb6;</a>
 					
 					

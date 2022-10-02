@@ -92,7 +92,7 @@ type CommandableHttpService struct {
 //		- overrides references to child class that overrides virtual methods
 //		- baseRoute string a service base route.
 //	Returns: *CommandableHttpService pointer on new instance CommandableHttpService
-func InheritCommandableHttpService(overrides IRestServiceOverrides, baseRoute string) *CommandableHttpService {
+func InheritCommandableHttpService(overrides IRegisterable, baseRoute string) *CommandableHttpService {
 	c := &CommandableHttpService{}
 	c.RestService = InheritRestService(overrides)
 	c.BaseRoute = baseRoute

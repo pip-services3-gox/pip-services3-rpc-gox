@@ -20,10 +20,6 @@ import (
 	ctrace "github.com/pip-services3-gox/pip-services3-components-gox/trace"
 )
 
-type IRestServiceOverrides interface {
-	Register()
-}
-
 // RestService Abstract service that receives remove calls via HTTP/REST protocol.
 //
 //	Configuration parameters:
@@ -111,7 +107,7 @@ type IRestServiceOverrides interface {
 //			fmt.Println("The REST service is running on port 8080");
 //		}
 type RestService struct {
-	Overrides IRestServiceOverrides
+	Overrides IRegisterable
 
 	defaultConfig *cconf.ConfigParams
 	config        *cconf.ConfigParams
@@ -137,7 +133,7 @@ type RestService struct {
 }
 
 // InheritRestService creates new instance of RestService
-func InheritRestService(overrides IRestServiceOverrides) *RestService {
+func InheritRestService(overrides IRegisterable) *RestService {
 	rs := RestService{
 		Overrides: overrides,
 	}
