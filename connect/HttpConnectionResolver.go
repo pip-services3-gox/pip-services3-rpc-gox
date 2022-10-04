@@ -104,12 +104,14 @@ func (c *HttpConnectionResolver) validateConnection(correlationId string, connec
 		if credential == nil {
 			return cerr.NewConfigError(correlationId, "NO_CREDENTIAL", "SSL certificates are not configured for HTTPS protocol")
 		} else {
-			if _, ok := credential.GetAsNullableString("ssl_key_file"); !ok {
-				return cerr.NewConfigError(
-					correlationId, "NO_SSL_KEY_FILE", "SSL key file is not configured in credentials")
-			} else if _, ok := credential.GetAsNullableString("ssl_crt_file"); !ok {
-				return cerr.NewConfigError(
-					correlationId, "NO_SSL_CRT_FILE", "SSL crt file is not configured in credentials")
+			if _, ok := credential.GetAsNullableString("internal_network"); !ok {
+				if _, ok := credential.GetAsNullableString("ssl_key_file"); !ok {
+					return cerr.NewConfigError(
+						correlationId, "NO_SSL_KEY_FILE", "SSL key file is not configured in credentials")
+				} else if _, ok := credential.GetAsNullableString("ssl_crt_file"); !ok {
+					return cerr.NewConfigError(
+						correlationId, "NO_SSL_CRT_FILE", "SSL crt file is not configured in credentials")
+				}
 			}
 		}
 	}
