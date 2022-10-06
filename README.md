@@ -5,23 +5,23 @@ This module is a part of the [Pip.Services](http://pipservices.org) polyglot mic
 The rpc module provides the synchronous communication using local calls or the HTTP(S) protocol. It contains both server and client side implementations.
 
 The module contains the following packages:
-- [**Auth**](https://godoc.org/github.com/pip-services3-gox/pip-services3-rpc-gox/auth) - authentication and authorization components
-- [**Build**](https://godoc.org/github.com/pip-services3-gox/pip-services3-rpc-gox/build) - HTTP service factory
-- [**Clients**](https://godoc.org/github.com/pip-services3-gox/pip-services3-rpc-gox/clients) - mechanisms for retrieving connection settings from the microservice’s configuration and providing clients and services with these settings
-- [**Connect**](https://godoc.org/github.com/pip-services3-gox/pip-services3-rpc-gox/connect) - helper module to retrieve connections for HTTP-based services and clients
-- [**Services**](https://godoc.org/github.com/pip-services3-gox/pip-services3-rpc-gox/services) - basic implementation of services for connecting via the HTTP/REST protocol and using the Commandable pattern over HTTP
+- **Auth** - authentication and authorization components
+- **Build** - HTTP service factory
+- **Clients** - mechanisms for retrieving connection settings from the microservice’s configuration and providing clients and services with these settings
+- **Connect** - helper module to retrieve connections for HTTP-based services and clients
+- **Services** - basic implementation of services for connecting via the HTTP/REST protocol and using the Commandable pattern over HTTP
 
 <a name="links"></a> Quick links:
 
-* [Your first microservice in Golang](https://www.pipservices.org/docs/quickstart/golang) 
-* [Data Microservice. Step 5](https://www.pipservices.org/docs/tutorials/data-microservice/service)
-* [Microservice Facade](https://www.pipservices.org/docs/tutorials/microservice-facade/microservice-facade-main) 
-* [Client Library. Step 2](https://www.pipservices.org/docs/tutorials/client-lib/direct-client)
-* [Client Library. Step 3](https://www.pipservices.org/docs/tutorials/client-lib/http-client)
+* [Your first microservice in Golang](http://docs.pipservices.org/getting_started/your_first_microservice/) 
+* [Data Microservice. Step 6](http://docs.pipservices.org/getting_started/tutorials/data_microservice/step5/)
+* [Microservice Facade](http://docs.pipservices.org/getting_started/tutorials/microservice_facade/) 
+* [Client Library. Step 3](http://docs.pipservices.org/getting_started/tutorials/client_library/step2/)
+* [Client Library. Step 4](http://docs.pipservices.org/getting_started/tutorials/client_library/step3/)
 * [API Reference](https://godoc.org/github.com/pip-services3-gox/pip-services3-rpc-gox/)
 * [Change Log](CHANGELOG.md)
-* [Get Help](https://www.pipservices.org/community/help)
-* [Contribute](https://www.pipservices.org/community/contribute)
+* [Get Help](http://docs.pipservices.org/get_help/)
+* [Contribute](http://docs.pipservices.org/contribute/)
 
 
 ## Use
