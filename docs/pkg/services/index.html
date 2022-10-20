@@ -14,7 +14,7 @@
 
 
 
-<script>var goVersion = "go1.18.6";</script>
+<script>var goVersion = "go1.18.7";</script>
 <script src="/lib/godoc/godocs.js" defer></script>
 </head>
 <body>
@@ -1046,7 +1046,7 @@ Register all service routes in HTTP endpoint.
 		
 			
 			
-			<h2 id="HttpEndpoint">type <a href="/src/services/HttpEndpoint.go?s=2293:2829#L49">HttpEndpoint</a>
+			<h2 id="HttpEndpoint">type <a href="/src/services/HttpEndpoint.go?s=2360:2896#L51">HttpEndpoint</a>
 				<a class="permalink" href="#HttpEndpoint">&#xb6;</a>
 				
 				
@@ -1057,6 +1057,9 @@ at which a given service can be accessed by a client.
 </p>
 <pre>Configuration parameters:
 	Parameters to pass to the configure method for component configuration:
+
+	- cors_headers - a comma-separated list of allowed CORS headers
+	- cors_origins - a comma-separated list of allowed CORS origins
 	- connection(s) - the connection resolver&#34;s connections:
 		- &#34;connection.discovery_key&#34; - the key to use for connection resolving in a discovery service;
 		- &#34;connection.protocol&#34; - the connection&#34;s protocol;
@@ -1067,7 +1070,6 @@ at which a given service can be accessed by a client.
 		- &#34;credential.ssl_key_file&#34; - the SSL func (c *HttpEndpoint )key in PEM
 		- &#34;credential.ssl_crt_file&#34; - the SSL certificate in PEM
 		- &#34;credential.ssl_ca_file&#34; - the certificate authorities (root cerfiticates) in PEM
-	- cors-headers - pair CORS headers: origin. Example: MyHeader1: \*.\*
 
 References:
 	A logger, counters, and a connection resolver can be referenced by passing the
@@ -1099,7 +1101,7 @@ Examples:
 
 			
 				
-				<h3 id="NewHttpEndpoint">func <a href="/src/services/HttpEndpoint.go?s=3017:3053#L72">NewHttpEndpoint</a>
+				<h3 id="NewHttpEndpoint">func <a href="/src/services/HttpEndpoint.go?s=3084:3120#L74">NewHttpEndpoint</a>
 					<a class="permalink" href="#NewHttpEndpoint">&#xb6;</a>
 					
 					
@@ -1115,7 +1117,7 @@ NewHttpEndpoint creates new HttpEndpoint
 
 			
 				
-				<h3 id="HttpEndpoint.AddCorsHeader">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=15885:15951#L447">AddCorsHeader</a>
+				<h3 id="HttpEndpoint.AddCorsHeader">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=15952:16018#L449">AddCorsHeader</a>
 					<a class="permalink" href="#HttpEndpoint.AddCorsHeader">&#xb6;</a>
 					
 					
@@ -1131,7 +1133,7 @@ must be called before to opening endpoint
 				
 			
 				
-				<h3 id="HttpEndpoint.Close">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=10077:10154#L272">Close</a>
+				<h3 id="HttpEndpoint.Close">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=10144:10221#L274">Close</a>
 					<a class="permalink" href="#HttpEndpoint.Close">&#xb6;</a>
 					
 					
@@ -1151,7 +1153,7 @@ Returns: error an error if one is raised.
 				
 			
 				
-				<h3 id="HttpEndpoint.Configure">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=4941:5022#L124">Configure</a>
+				<h3 id="HttpEndpoint.Configure">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=5008:5089#L126">Configure</a>
 					<a class="permalink" href="#HttpEndpoint.Configure">&#xb6;</a>
 					
 					
@@ -1180,7 +1182,7 @@ Parameters:
 				
 			
 				
-				<h3 id="HttpEndpoint.GetCorrelationId">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=11910:11975#L333">GetCorrelationId</a>
+				<h3 id="HttpEndpoint.GetCorrelationId">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=11977:12042#L335">GetCorrelationId</a>
 					<a class="permalink" href="#HttpEndpoint.GetCorrelationId">&#xb6;</a>
 					
 					
@@ -1199,7 +1201,7 @@ Returns: string correlation_id or empty string
 				
 			
 				
-				<h3 id="HttpEndpoint.IsOpen">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=6582:6618#L162">IsOpen</a>
+				<h3 id="HttpEndpoint.IsOpen">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=6649:6685#L164">IsOpen</a>
 					<a class="permalink" href="#HttpEndpoint.IsOpen">&#xb6;</a>
 					
 					
@@ -1214,7 +1216,7 @@ IsOpen method is  whether this endpoint is open with an actively listening REST 
 				
 			
 				
-				<h3 id="HttpEndpoint.Open">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=7005:7081#L172">Open</a>
+				<h3 id="HttpEndpoint.Open">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=7072:7148#L174">Open</a>
 					<a class="permalink" href="#HttpEndpoint.Open">&#xb6;</a>
 					
 					
@@ -1235,7 +1237,7 @@ Returns: error an error if one is raised.
 				
 			
 				
-				<h3 id="HttpEndpoint.Register">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=10770:10829#L293">Register</a>
+				<h3 id="HttpEndpoint.Register">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=10837:10896#L295">Register</a>
 					<a class="permalink" href="#HttpEndpoint.Register">&#xb6;</a>
 					
 					
@@ -1254,7 +1256,7 @@ See IRegisterable
 				
 			
 				
-				<h3 id="HttpEndpoint.RegisterInterceptor">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=15250:15382#L429">RegisterInterceptor</a>
+				<h3 id="HttpEndpoint.RegisterInterceptor">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=15317:15449#L431">RegisterInterceptor</a>
 					<a class="permalink" href="#HttpEndpoint.RegisterInterceptor">&#xb6;</a>
 					
 					
@@ -1273,7 +1275,7 @@ Parameters:
 				
 			
 				
-				<h3 id="HttpEndpoint.RegisterRoute">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=12589:12704#L348">RegisterRoute</a>
+				<h3 id="HttpEndpoint.RegisterRoute">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=12656:12771#L350">RegisterRoute</a>
 					<a class="permalink" href="#HttpEndpoint.RegisterRoute">&#xb6;</a>
 					
 					
@@ -1296,7 +1298,7 @@ by the given method and route.
 				
 			
 				
-				<h3 id="HttpEndpoint.RegisterRouteWithAuth">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=14577:14781#L411">RegisterRouteWithAuth</a>
+				<h3 id="HttpEndpoint.RegisterRouteWithAuth">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=14644:14848#L413">RegisterRouteWithAuth</a>
 					<a class="permalink" href="#HttpEndpoint.RegisterRouteWithAuth">&#xb6;</a>
 					
 					
@@ -1321,7 +1323,7 @@ Parameters:
 				
 			
 				
-				<h3 id="HttpEndpoint.SetReferences">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=6253:6341#L155">SetReferences</a>
+				<h3 id="HttpEndpoint.SetReferences">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=6320:6408#L157">SetReferences</a>
 					<a class="permalink" href="#HttpEndpoint.SetReferences">&#xb6;</a>
 					
 					
@@ -1344,7 +1346,7 @@ Parameters:
 				
 			
 				
-				<h3 id="HttpEndpoint.Unregister">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=11100:11161#L302">Unregister</a>
+				<h3 id="HttpEndpoint.Unregister">func (*HttpEndpoint) <a href="/src/services/HttpEndpoint.go?s=11167:11228#L304">Unregister</a>
 					<a class="permalink" href="#HttpEndpoint.Unregister">&#xb6;</a>
 					
 					
@@ -2727,7 +2729,7 @@ SetReferences method are sets references to dependent components.
 
 
 <div id="footer">
-Build version go1.18.6.<br>
+Build version go1.18.7.<br>
 Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,
