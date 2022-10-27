@@ -15,7 +15,7 @@ type RoleAuthManager struct {
 func (c *RoleAuthManager) UserInRoles(roles []string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
 	return func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
 
-		user, ok := req.Context().Value("user").(cdata.AnyValueMap)
+		user, ok := req.Context().Value(User).(cdata.AnyValueMap)
 		if !ok {
 			services.HttpResponseSender.SendError(
 				res, req,
@@ -47,7 +47,7 @@ func (c *RoleAuthManager) UserInRoles(roles []string) func(res http.ResponseWrit
 					res, req,
 					cerr.NewUnauthorizedError(
 						"", "NOT_IN_ROLE",
-						"User must be "+strings.Join(roles, " or ")+" to perform this operation").WithDetails("roles", roles).WithStatus(403))
+						"User must be "+strings.Join(roles, " or ")+" to perform this operation").WithDetails(string(Roles), roles).WithStatus(403))
 			} else {
 				next.ServeHTTP(res, req)
 			}
@@ -60,5 +60,5 @@ func (c *RoleAuthManager) UserInRole(role string) func(res http.ResponseWriter, 
 }
 
 func (c *RoleAuthManager) Admin() func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
-	return c.UserInRole("admin")
+	return c.UserInRole(string(Admin))
 }

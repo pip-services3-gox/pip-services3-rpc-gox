@@ -14,11 +14,11 @@ type OwnerAuthManager struct {
 
 func (c *OwnerAuthManager) Owner(idParam string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
 	if idParam == "" {
-		idParam = "user_id"
+		idParam = string(UserId)
 	}
 	return func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
 
-		_, ok := req.Context().Value("user").(cdata.AnyValueMap)
+		_, ok := req.Context().Value(User).(cdata.AnyValueMap)
 
 		if !ok {
 			services.HttpResponseSender.SendError(
@@ -34,7 +34,7 @@ func (c *OwnerAuthManager) Owner(idParam string) func(res http.ResponseWriter, r
 				userId = mux.Vars(req)[idParam]
 			}
 
-			reqUserId, ok := req.Context().Value("user_id").(string)
+			reqUserId, ok := req.Context().Value(UserId).(string)
 			if !ok || reqUserId != userId {
 				services.HttpResponseSender.SendError(
 					res, req,
@@ -52,11 +52,11 @@ func (c *OwnerAuthManager) Owner(idParam string) func(res http.ResponseWriter, r
 
 func (c *OwnerAuthManager) OwnerOrAdmin(idParam string) func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
 	if idParam == "" {
-		idParam = "user_id"
+		idParam = string(UserId)
 	}
 	return func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
 
-		user, ok := req.Context().Value("user").(cdata.AnyValueMap)
+		user, ok := req.Context().Value(User).(cdata.AnyValueMap)
 
 		if !ok {
 			services.HttpResponseSender.SendError(
@@ -72,17 +72,17 @@ func (c *OwnerAuthManager) OwnerOrAdmin(idParam string) func(res http.ResponseWr
 			if userId == "" {
 				userId = mux.Vars(req)[idParam]
 			}
-			roles := user.GetAsArray("roles")
+			roles := user.GetAsArray(string(Roles))
 			admin := false
 			for _, role := range roles.Value() {
 				r, ok := role.(string)
-				if ok && r == "admin" {
+				if ok && r == string(Admin) {
 					admin = true
 					break
 				}
 			}
 
-			reqUserId, ok := req.Context().Value("user_id").(string)
+			reqUserId, ok := req.Context().Value(UserId).(string)
 			if !ok || reqUserId != userId && !admin {
 				services.HttpResponseSender.SendError(
 					res, req,
