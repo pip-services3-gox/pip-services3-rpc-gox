@@ -19,7 +19,7 @@ func (c *BasicAuthManager) Anybody() func(res http.ResponseWriter, req *http.Req
 
 func (c *BasicAuthManager) Signed() func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
 	return func(res http.ResponseWriter, req *http.Request, next http.HandlerFunc) {
-		_, ok := req.Context().Value(User).(cdata.AnyValueMap)
+		_, ok := req.Context().Value(PipAuthUser).(cdata.AnyValueMap)
 		if !ok {
 			services.HttpResponseSender.SendError(
 				res, req,
