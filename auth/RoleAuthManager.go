@@ -23,7 +23,7 @@ func (c *RoleAuthManager) UserInRoles(roles []string) func(res http.ResponseWrit
 					"User must be signed in to perform this operation").WithStatus(401))
 		} else {
 			authorized := false
-			userRoles := user.GetAsArray("roles")
+			userRoles := user.GetAsArray(string(PipAuthRoles))
 
 			if userRoles == nil {
 				services.HttpResponseSender.SendError(
