@@ -89,7 +89,15 @@ func (c *CommandableHttpClient) CallCommand(ctx context.Context, name string, co
 	params *cdata.AnyValueMap) (*http.Response, error) {
 
 	timing := c.Instrument(ctx, correlationId, c.BaseRoute+"."+name)
-	r, err := c.Call(ctx, http.MethodPost, name, correlationId, nil, params.Value())
+	var (
+		response *http.Response
+		err      error
+	)
+	if params != nil {
+		response, err = c.Call(ctx, http.MethodPost, name, correlationId, nil, params.Value())
+	} else {
+		response, err = c.Call(ctx, http.MethodPost, name, correlationId, nil, nil)
+	}
 	timing.EndTiming(ctx, err)
-	return r, err
+	return response, err
 }
