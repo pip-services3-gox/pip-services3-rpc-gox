@@ -1,5 +1,9 @@
 # <img src="https://uploads-ssl.webflow.com/5ea5d3315186cf5ec60c3ee4/5edf1c94ce4c859f2b188094_logo.svg" alt="Pip.Services Logo" width="200"> <br/> Remote Procedure Calls Golang Changelog
 
+## <a name="1.0.6"></a> 1.0.6 (2022-12-08)
+### Bug fixes
+
+- **clients** fixed HandleHttpResponse for nil values
 ## <a name="1.0.5"></a> 1.0.5 (2022-11-18)
 
 ### Bug fixes

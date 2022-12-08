@@ -1,10 +1,11 @@
 package clients
 
 import (
-	"github.com/pip-services3-gox/pip-services3-commons-gox/convert"
-	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/pip-services3-gox/pip-services3-commons-gox/convert"
+	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
 )
 
 // HandleHttpResponse method helps handle http response body
@@ -13,22 +14,29 @@ import (
 //		- correlationId string (optional) transaction id to trace execution through call chain.
 //	Returns: T any result, err error
 func HandleHttpResponse[T any](r *http.Response, correlationId string) (T, error) {
-	defer r.Body.Close()
+	var defaultValue T
 
-	buffer, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		var defaultValue T
-		return defaultValue, cerr.ApplicationErrorFactory.
-			Create(&cerr.ErrorDescription{
-				Type:          "Application",
-				Category:      "Application",
-				Status:        r.StatusCode,
-				Code:          "",
-				Message:       err.Error(),
-				CorrelationId: correlationId,
-			}).
-			WithCause(err)
+	if r != nil {
+		defer r.Body.Close()
+
+		buffer, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			var defaultValue T
+			return defaultValue, cerr.ApplicationErrorFactory.
+				Create(&cerr.ErrorDescription{
+					Type:          "Application",
+					Category:      "Application",
+					Status:        r.StatusCode,
+					Code:          "",
+					Message:       err.Error(),
+					CorrelationId: correlationId,
+				}).
+				WithCause(err)
+		}
+
+		return convert.NewDefaultCustomTypeJsonConvertor[T]().FromJson(string(buffer))
+
 	}
 
-	return convert.NewDefaultCustomTypeJsonConvertor[T]().FromJson(string(buffer))
+	return defaultValue, nil
 }
