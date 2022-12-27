@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"regexp"
@@ -153,10 +154,10 @@ func (c *_THttpRequestDetector) DetectAddress(req *http.Request) string {
 		if strings.Contains(ip, ":") {
 			res := strings.Split(ip, ":")
 			if len(res) > 0 {
-				ip = string(net.ParseIP(res[0]))
+				ip = fmt.Sprintf("%s", net.ParseIP(res[0]))
 			}
 		} else {
-			ip = string(net.ParseIP(ip))
+			ip = fmt.Sprintf("%s", net.ParseIP(ip))
 		}
 	}
 
