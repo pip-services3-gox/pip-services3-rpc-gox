@@ -14,7 +14,7 @@
 
 
 
-<script>var goVersion = "go1.18.7";</script>
+<script>var goVersion = "go1.18.10";</script>
 <script src="/lib/godoc/godocs.js" defer></script>
 </head>
 <body>
@@ -238,7 +238,7 @@
 		
 			
 			
-			<h2 id="HandleHttpResponse">func <a href="/src/clients/Helpers.go?s=434:515#L5">HandleHttpResponse</a>
+			<h2 id="HandleHttpResponse">func <a href="/src/clients/Helpers.go?s=436:517#L6">HandleHttpResponse</a>
 				<a class="permalink" href="#HandleHttpResponse">&#xb6;</a>
 				
 				
@@ -603,7 +603,7 @@ SetReferences method are sets references to dependent components.
 		
 			
 			
-			<h2 id="RestClient">type <a href="/src/clients/RestClient.go?s=3153:3984#L69">RestClient</a>
+			<h2 id="RestClient">type <a href="/src/clients/RestClient.go?s=3152:3983#L69">RestClient</a>
 				<a class="permalink" href="#RestClient">&#xb6;</a>
 				
 				
@@ -703,7 +703,7 @@ Example:
 
 			
 				
-				<h3 id="NewRestClient">func <a href="/src/clients/RestClient.go?s=4223:4255#L108">NewRestClient</a>
+				<h3 id="NewRestClient">func <a href="/src/clients/RestClient.go?s=4226:4258#L109">NewRestClient</a>
 					<a class="permalink" href="#NewRestClient">&#xb6;</a>
 					
 					
@@ -721,7 +721,7 @@ NewRestClient creates new instance of RestClient
 
 			
 				
-				<h3 id="RestClient.AddCorrelationId">func (*RestClient) <a href="/src/clients/RestClient.go?s=9884:9995#L252">AddCorrelationId</a>
+				<h3 id="RestClient.AddCorrelationId">func (*RestClient) <a href="/src/clients/RestClient.go?s=9923:10034#L262">AddCorrelationId</a>
 					<a class="permalink" href="#RestClient.AddCorrelationId">&#xb6;</a>
 					
 					
@@ -741,7 +741,7 @@ Returns: invocation parameters with added correlation id.
 				
 			
 				
-				<h3 id="RestClient.AddFilterParams">func (*RestClient) <a href="/src/clients/RestClient.go?s=10613:10729#L272">AddFilterParams</a>
+				<h3 id="RestClient.AddFilterParams">func (*RestClient) <a href="/src/clients/RestClient.go?s=10656:10772#L283">AddFilterParams</a>
 					<a class="permalink" href="#RestClient.AddFilterParams">&#xb6;</a>
 					
 					
@@ -762,7 +762,7 @@ Returns: invocation parameters with added filter parameters.
 				
 			
 				
-				<h3 id="RestClient.AddPagingParams">func (*RestClient) <a href="/src/clients/RestClient.go?s=11193:11309#L290">AddPagingParams</a>
+				<h3 id="RestClient.AddPagingParams">func (*RestClient) <a href="/src/clients/RestClient.go?s=11238:11354#L302">AddPagingParams</a>
 					<a class="permalink" href="#RestClient.AddPagingParams">&#xb6;</a>
 					
 					
@@ -784,7 +784,7 @@ Return invocation parameters with added paging parameters.
 				
 			
 				
-				<h3 id="RestClient.Call">func (*RestClient) <a href="/src/clients/RestClient.go?s=12257:12420#L318">Call</a>
+				<h3 id="RestClient.Call">func (*RestClient) <a href="/src/clients/RestClient.go?s=12306:12469#L331">Call</a>
 					<a class="permalink" href="#RestClient.Call">&#xb6;</a>
 					
 					
@@ -810,7 +810,7 @@ Returns: result any, err error result object or error.
 				
 			
 				
-				<h3 id="RestClient.Close">func (*RestClient) <a href="/src/clients/RestClient.go?s=9336:9411#L238">Close</a>
+				<h3 id="RestClient.Close">func (*RestClient) <a href="/src/clients/RestClient.go?s=9371:9446#L247">Close</a>
 					<a class="permalink" href="#RestClient.Close">&#xb6;</a>
 					
 					
@@ -832,7 +832,7 @@ Returns: error or nil no errors occured.
 				
 			
 				
-				<h3 id="RestClient.Configure">func (*RestClient) <a href="/src/clients/RestClient.go?s=5238:5317#L138">Configure</a>
+				<h3 id="RestClient.Configure">func (*RestClient) <a href="/src/clients/RestClient.go?s=5245:5324#L140">Configure</a>
 					<a class="permalink" href="#RestClient.Configure">&#xb6;</a>
 					
 					
@@ -851,7 +851,7 @@ Configure component by passing configuration parameters.
 				
 			
 				
-				<h3 id="RestClient.Instrument">func (*RestClient) <a href="/src/clients/RestClient.go?s=6886:7000#L171">Instrument</a>
+				<h3 id="RestClient.Instrument">func (*RestClient) <a href="/src/clients/RestClient.go?s=6901:7015#L175">Instrument</a>
 					<a class="permalink" href="#RestClient.Instrument">&#xb6;</a>
 					
 					
@@ -873,7 +873,7 @@ Returns: services.InstrumentTiming object to end the time measurement.
 				
 			
 				
-				<h3 id="RestClient.InstrumentError">func (*RestClient) <a href="/src/clients/RestClient.go?s=7799:7939#L188">InstrumentError</a>
+				<h3 id="RestClient.InstrumentError">func (*RestClient) <a href="/src/clients/RestClient.go?s=7818:7958#L193">InstrumentError</a>
 					<a class="permalink" href="#RestClient.InstrumentError">&#xb6;</a>
 					
 					
@@ -896,7 +896,7 @@ Returns: result any, err error an execution result and error
 				
 			
 				
-				<h3 id="RestClient.IsOpen">func (*RestClient) <a href="/src/clients/RestClient.go?s=8250:8284#L199">IsOpen</a>
+				<h3 id="RestClient.IsOpen">func (*RestClient) <a href="/src/clients/RestClient.go?s=8273:8307#L205">IsOpen</a>
 					<a class="permalink" href="#RestClient.IsOpen">&#xb6;</a>
 					
 					
@@ -913,7 +913,7 @@ IsOpen are checks if the component is opened.
 				
 			
 				
-				<h3 id="RestClient.Open">func (*RestClient) <a href="/src/clients/RestClient.go?s=8541:8615#L208">Open</a>
+				<h3 id="RestClient.Open">func (*RestClient) <a href="/src/clients/RestClient.go?s=8568:8642#L215">Open</a>
 					<a class="permalink" href="#RestClient.Open">&#xb6;</a>
 					
 					
@@ -933,7 +933,7 @@ Returns: error or nil no errors occurred.
 				
 			
 				
-				<h3 id="RestClient.SetReferences">func (*RestClient) <a href="/src/clients/RestClient.go?s=6189:6275#L157">SetReferences</a>
+				<h3 id="RestClient.SetReferences">func (*RestClient) <a href="/src/clients/RestClient.go?s=6200:6286#L160">SetReferences</a>
 					<a class="permalink" href="#RestClient.SetReferences">&#xb6;</a>
 					
 					
@@ -963,7 +963,7 @@ SetReferences to dependent components.
 
 
 <div id="footer">
-Build version go1.18.7.<br>
+Build version go1.18.10.<br>
 Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
 the content of this page is licensed under the
 Creative Commons Attribution 3.0 License,

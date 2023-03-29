@@ -55,7 +55,7 @@ import (
 //		...
 //		func (c *MyRestClient) GetData(ctx context.Context, correlationId string, id string) (result *tdata.MyDataPage[MyData], err error) {
 //			timind := c.Instrument(ctx, correlationId, "myData.get_page_by_filter")
-// 			defer timing.EndTiming(ctx)
+//			defer timing.EndTiming(ctx)
 //
 //			params := cdata.NewEmptyStringValueMap()
 //			params.Set("id", id)
@@ -114,6 +114,7 @@ const (
 )
 
 // NewRestClient creates new instance of RestClient
+//
 //	Returns: pointer on NewRestClient
 func NewRestClient() *RestClient {
 	rc := RestClient{}
@@ -142,6 +143,7 @@ func NewRestClient() *RestClient {
 }
 
 // Configure component by passing configuration parameters.
+//
 //	Parameters:
 //		- ctx context.Context
 //		- config *cconf.ConfigParams   configuration parameters to be set.
@@ -161,6 +163,7 @@ func (c *RestClient) Configure(ctx context.Context, config *cconf.ConfigParams) 
 }
 
 // SetReferences to dependent components.
+//
 //	Parameters:
 //		- ctx context.Context
 //		- references  crefer.IReferences	references to locate the component dependencies.
@@ -173,6 +176,7 @@ func (c *RestClient) SetReferences(ctx context.Context, references crefer.IRefer
 
 // Instrument method are adds instrumentation to log calls and measure call time.
 // It returns a services.InstrumentTiming object that is used to end the time measurement.
+//
 //	Parameters:
 //		- ctx context.Context
 //		- correlationId string (optional) transaction id to trace execution through call chain.
@@ -188,6 +192,7 @@ func (c *RestClient) Instrument(ctx context.Context, correlationId string, name 
 }
 
 // InstrumentError method are dds instrumentation to error handling.
+//
 //	Parameters:
 //		- ctx context.Context
 //		- correlationId string  (optional) transaction id to trace execution through call chain.
@@ -205,12 +210,14 @@ func (c *RestClient) InstrumentError(ctx context.Context, correlationId string, 
 }
 
 // IsOpen are checks if the component is opened.
+//
 //	Returns: true if the component has been opened and false otherwise.
 func (c *RestClient) IsOpen() bool {
 	return c.Client != nil
 }
 
 // Open method are opens the component.
+//
 //	Parameters:
 //		- ctx context.Context
 //		- correlationId string	(optional) transaction id to trace execution through call chain.
@@ -241,9 +248,11 @@ func (c *RestClient) Open(ctx context.Context, correlationId string) error {
 }
 
 // Close method are closes component and frees used resources.
+//
 //	Parameters:
 //		- ctx context.Context
 //		- correlationId  string	(optional) transaction id to trace execution through call chain.
+//
 // Returns: error or nil no errors occured.
 func (c *RestClient) Close(ctx context.Context, correlationId string) error {
 	if c.Client != nil {
@@ -255,6 +264,7 @@ func (c *RestClient) Close(ctx context.Context, correlationId string) error {
 }
 
 // AddCorrelationId method are adds a correlation id (correlation_id) to invocation parameter map.
+//
 //	Parameters:
 //		- params    *cdata.StringValueMap        invocation parameters.
 //		- correlationId  string  (optional) a correlation id to be added.
@@ -275,6 +285,7 @@ func (c *RestClient) AddCorrelationId(params *cdata.StringValueMap, correlationI
 
 // AddFilterParams method are adds filter parameters (with the same name as they defined)
 // to invocation parameter map.
+//
 //	Parameters:
 //		- params  *cdata.StringValueMap      invocation parameters.
 //		- filter  *cdata.FilterParams     (optional) filter parameters
@@ -294,8 +305,9 @@ func (c *RestClient) AddFilterParams(params *cdata.StringValueMap, filter *cdata
 
 // AddPagingParams method are adds paging parameters (skip, take, total) to invocation parameter map.
 // Parameters:
-//    - params        invocation parameters.
-//    - paging        (optional) paging parameters
+//   - params        invocation parameters.
+//   - paging        (optional) paging parameters
+//
 // Return invocation parameters with added paging parameters.
 func (c *RestClient) AddPagingParams(params *cdata.StringValueMap, paging *cdata.PagingParams) *cdata.StringValueMap {
 	if params == nil {
@@ -316,6 +328,7 @@ func (c *RestClient) AddPagingParams(params *cdata.StringValueMap, paging *cdata
 }
 
 // Call method are calls a remote method via HTTP/REST protocol.
+//
 //	Parameters:
 //		- ctx context.Context
 //		- prototype reflect.Type type for convert JSON result. Set nil for return raw JSON string
@@ -341,7 +354,7 @@ func (c *RestClient) Call(ctx context.Context, method string, route string, corr
 	url := c.buildURL(route, params)
 
 	if !c.IsOpen() {
-		return nil, nil
+		return nil, cerr.NewError("Client is not open")
 	}
 
 	var jsonStr string

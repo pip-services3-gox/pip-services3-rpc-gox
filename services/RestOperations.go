@@ -33,6 +33,7 @@ func NewRestOperations() *RestOperations {
 }
 
 // Configure method are configures this RestOperations using the given configuration parameters.
+//
 //	Parameters:
 //		- ctx context.Context
 //		- config *cconf.ConfigParams confif parameters
@@ -41,6 +42,7 @@ func (c *RestOperations) Configure(ctx context.Context, config *cconf.ConfigPara
 }
 
 // SetReferences method are sets references to this RestOperations logger, counters, and connection resolver.
+//
 //	Parameters:
 //		- ctx context.Context
 //		- references    an IReferences object, containing references to a logger, counters,
@@ -52,6 +54,7 @@ func (c *RestOperations) SetReferences(ctx context.Context, references crefer.IR
 }
 
 // GetCorrelationId method returns CorrelationId from request
+//
 //	Parameters:
 //		- req *http.Request  request
 //	Returns: string correlation_id or empty string
@@ -64,6 +67,7 @@ func (c *RestOperations) GetCorrelationId(req *http.Request) string {
 }
 
 // GetFilterParams method reruns filter params object from request
+//
 //	Parameters:
 //		- req *http.Request  request
 //	Returns: *cdata.FilterParams filter params object
@@ -80,6 +84,7 @@ func (c *RestOperations) GetFilterParams(req *http.Request) *cdata.FilterParams 
 }
 
 // GetPagingParams method reruns paging params object from request
+//
 //	Parameters:
 //		- req *http.Request  request
 //	Returns: *cdata.PagingParams pagings params object
@@ -99,9 +104,11 @@ func (c *RestOperations) GetPagingParams(req *http.Request) *cdata.PagingParams 
 }
 
 // GetParam methods helps get all params from query
-//	Parameters:
-//   - req  incoming request
-//   - name parameter name
+//
+//		Parameters:
+//	  - req  incoming request
+//	  - name parameter name
+//
 // Returns: value or empty string if param not exists
 func (c *RestOperations) GetParam(req *http.Request, name string) string {
 	param := req.URL.Query().Get(name)
@@ -112,9 +119,11 @@ func (c *RestOperations) GetParam(req *http.Request, name string) string {
 }
 
 // DecodeBody methods helps decode body
+//
 //	Parameters:
 //		- req incoming request
 //		- target pointer on target variable for decode
+//
 // Returns: error
 func (c *RestOperations) DecodeBody(req *http.Request, target any) error {
 	bodyBytes, err := ioutil.ReadAll(req.Body)
