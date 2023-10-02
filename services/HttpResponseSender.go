@@ -1,9 +1,10 @@
 package services
 
 import (
-	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 	"io"
 	"net/http"
+
+	cconv "github.com/pip-services3-gox/pip-services3-commons-gox/convert"
 
 	cerr "github.com/pip-services3-gox/pip-services3-commons-gox/errors"
 )
@@ -17,16 +18,13 @@ type _THttpResponseSender struct {
 // SendError sends error serialized as ErrorDescription object
 // and appropriate HTTP status code.
 // If status code is not defined, it uses 500 status code.
+//
 //	Parameters:
 //		- req  *http.Request     a HTTP request object.
 //		- res  http.ResponseWriter     a HTTP response object.
 //		- err  error     an error object to be sent.
 func (c *_THttpResponseSender) SendError(res http.ResponseWriter, req *http.Request, err error) {
-
-	appErr := cerr.ApplicationError{
-		Status: 500,
-	}
-	appErr = *appErr.Wrap(err)
+	appErr := cerr.ErrorDescriptionFactory.Create(err)
 	res.Header().Add("Content-Type", "application/json")
 	res.WriteHeader(appErr.Status)
 	jsonObjStr, jsonErr := cconv.JsonConverter.ToJson(appErr)
@@ -41,6 +39,7 @@ func (c *_THttpResponseSender) SendError(res http.ResponseWriter, req *http.Requ
 // If object is not nil it returns 200 status code.
 // For nil results it returns 204 status code.
 // If error occur it sends ErrorDescription with approproate status code.
+//
 //	Parameters:
 //		- req  *http.Request     a HTTP request object.
 //		- res  http.ResponseWriter     a HTTP response object.
@@ -65,6 +64,7 @@ func (c *_THttpResponseSender) SendResult(res http.ResponseWriter, req *http.Req
 
 // SendEmptyResult are sends an empty result with 204 status code.
 // If error occur it sends ErrorDescription with appropriate status code.
+//
 //	Parameters:
 //		- req  *http.Request     a HTTP request object.
 //		- res  http.ResponseWriter     a HTTP response object.
@@ -83,6 +83,7 @@ func (c *_THttpResponseSender) SendEmptyResult(res http.ResponseWriter, req *htt
 // If object is not nil it returns 201 status code.
 // For nil results it returns 204 status code.
 // If error occur it sends ErrorDescription with approproate status code.
+//
 //	Parameters:
 //		- req  *http.Request     a HTTP request object.
 //		- res  http.ResponseWriter     a HTTP response object.
@@ -110,6 +111,7 @@ func (c *_THttpResponseSender) SendCreatedResult(res http.ResponseWriter, req *h
 // If object is not nil it returns 200 status code.
 // For nil results it returns 204 status code.
 // If error occur it sends ErrorDescription with approproate status code.
+//
 //	Parameters:
 //		- req  *http.Request     a HTTP request object.
 //		- res  http.ResponseWriter     a HTTP response object.
